@@ -22,7 +22,8 @@
 META-INF/services/**,META-INF/native/**,META-INF/extensions/**,META-INF/MANIFEST.MF,
 messages/**)
 
--outjars '<kotlin-home>/lib/kotlin-compiler.jar'
+-outjars '<kotlin-compiler-jar>'
+#-outjars '<kotlin-home>/lib/kotlin-compiler.jar'
 
 -dontnote **
 -dontwarn com.intellij.util.ui.IsRetina*
@@ -52,12 +53,12 @@ messages/**)
 -dontwarn javaslang.match.annotation.Unapply
 -dontwarn javaslang.match.annotation.Patterns
 
--libraryjars '<rtjar>'
--libraryjars '<jssejar>'
--libraryjars '<bootstrap.runtime>'
--libraryjars '<bootstrap.reflect>'
--libraryjars '<bootstrap.script.runtime>'
--libraryjars '<tools.jar>'
+# -libraryjars '<rtjar>'
+# -libraryjars '<jssejar>'
+# -libraryjars '<bootstrap.runtime>'
+# -libraryjars '<bootstrap.reflect>'
+# -libraryjars '<bootstrap.script.runtime>'
+# -libraryjars '<tools.jar>'
 
 -dontoptimize
 -dontobfuscate
@@ -200,7 +201,3 @@ messages/**)
 
 # for building kotlin-build-common-test
 -keep class org.jetbrains.kotlin.build.SerializationUtilsKt { *; }
-
-# for tools.jar
--keep class com.sun.tools.javac.** { *; }
--keep class com.sun.source.** { *; }
