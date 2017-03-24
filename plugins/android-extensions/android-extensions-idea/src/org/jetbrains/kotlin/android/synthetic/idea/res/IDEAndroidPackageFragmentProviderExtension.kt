@@ -16,8 +16,13 @@
 
 package org.jetbrains.kotlin.android.synthetic.idea.res
 
+import com.android.tools.idea.gradle.parser.GradleBuildFile
+import com.android.tools.idea.gradle.project.facet.gradle.GradleFacet
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleServiceManager
 import com.intellij.openapi.project.Project
+import com.intellij.psi.PsiManager
 import org.jetbrains.android.facet.AndroidFacet
 import org.jetbrains.kotlin.analyzer.ModuleInfo
 import org.jetbrains.kotlin.android.synthetic.AndroidCommandLineProcessor.Companion.ANDROID_COMPILER_PLUGIN_ID
@@ -30,7 +35,8 @@ import org.jetbrains.kotlin.idea.caches.resolve.ModuleSourceInfo
 import org.jetbrains.kotlin.idea.facet.KotlinFacet
 import org.jetbrains.plugins.groovy.lang.psi.GroovyFile
 
-class IDEAndroidPackageFragmentProviderExtension : AndroidPackageFragmentProviderExtension() {
+class IDEAndroidPackageFragmentProviderExtension(val project: Project) : AndroidPackageFragmentProviderExtension() {
+    private val psiManager = PsiManager.getInstance(project)
 
     override fun isExperimental(moduleInfo: ModuleInfo?): Boolean {
         return moduleInfo?.androidExtensionsIsExperimental ?: false
@@ -39,7 +45,7 @@ class IDEAndroidPackageFragmentProviderExtension : AndroidPackageFragmentProvide
     override fun getLayoutXmlFileManager(project: Project, moduleInfo: ModuleInfo?): AndroidLayoutXmlFileManager? {
         val moduleSourceInfo = moduleInfo as? ModuleSourceInfo ?: return null
         val module = moduleSourceInfo.module
-        if (AndroidFacet.getInstance(module) == null) return null
+        if (!isAndroidExtensionsEnabled(module) && !isTestMode(module)) return null
         return ModuleServiceManager.getService(module, AndroidLayoutXmlFileManager::class.java)
     }
 
