@@ -20,6 +20,24 @@
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
       <module name="android-studio" target="1.8" />
+      <module name="build-common_main" target="1.8" />
+      <module name="build-common_test" target="1.8" />
+      <module name="buildSrc_main" target="1.8" />
+      <module name="buildSrc_test" target="1.8" />
+      <module name="compiler.daemon-client_main" target="1.8" />
+      <module name="compiler.daemon-client_test" target="1.8" />
+      <module name="compiler.preloader_main" target="1.8" />
+      <module name="compiler.preloader_test" target="1.8" />
+      <module name="compiler.runner_main" target="1.8" />
+      <module name="compiler.runner_test" target="1.8" />
+      <module name="compiler.standalone_main" target="1.8" />
+      <module name="compiler.standalone_test" target="1.8" />
+      <module name="core.builtins_main" target="1.8" />
+      <module name="core.builtins_test" target="1.8" />
+      <module name="core.reflection_main" target="1.8" />
+      <module name="core.reflection_test" target="1.8" />
+      <module name="core_main" target="1.8" />
+      <module name="core_test" target="1.8" />
       <module name="idea" target="1.8" />
       <module name="idea-analysis" target="1.8" />
       <module name="idea-completion" target="1.8" />
@@ -28,8 +46,43 @@
       <module name="idea-repl" target="1.8" />
       <module name="idea-runner" target="1.8" />
       <module name="idea-test-framework" target="1.8" />
+      <module name="idea.jps-common_main" target="1.8" />
+      <module name="idea.jps-common_test" target="1.8" />
       <module name="j2k" target="1.8" />
       <module name="kannotator-jps-plugin-test" target="1.8" />
+      <module name="kotlin-compiler_main" target="1.8" />
+      <module name="kotlin-compiler_test" target="1.8" />
+      <module name="kotlin-stdlib-common_main" target="1.8" />
+      <module name="kotlin-stdlib-common_test" target="1.8" />
+      <module name="kotlin-stdlib-jre7_main" target="1.6" />
+      <module name="kotlin-stdlib-jre7_test" target="1.6" />
+      <module name="kotlin-stdlib-jre8_main" target="1.6" />
+      <module name="kotlin-stdlib-jre8_test" target="1.6" />
+      <module name="kotlin-stdlib-js_builtins" target="1.8" />
+      <module name="kotlin-stdlib-js_main" target="1.8" />
+      <module name="kotlin-stdlib-js_test" target="1.8" />
+      <module name="kotlin-stdlib_annotations" target="1.6" />
+      <module name="kotlin-stdlib_builtins" target="1.6" />
+      <module name="kotlin-stdlib_main" target="1.6" />
+      <module name="kotlin-stdlib_test" target="1.6" />
+      <module name="kotlin-test-common_main" target="1.8" />
+      <module name="kotlin-test-common_test" target="1.8" />
+      <module name="kotlin-test-js_main" target="1.8" />
+      <module name="kotlin-test-js_test" target="1.8" />
+      <module name="kotlin-test-junit_main" target="1.6" />
+      <module name="kotlin-test-junit_test" target="1.6" />
+      <module name="kotlin-test-jvm_main" target="1.6" />
+      <module name="kotlin-test-jvm_test" target="1.6" />
+      <module name="kotlin-test_main" target="1.8" />
+      <module name="kotlin-test_test" target="1.8" />
+      <module name="kotlin_main" target="1.8" />
+      <module name="kotlin_test" target="1.8" />
+      <module name="script.runtime_main" target="1.8" />
+      <module name="script.runtime_test" target="1.8" />
+      <module name="util.runtime_main" target="1.8" />
+      <module name="util.runtime_test" target="1.8" />
+      <module name="util_main" target="1.8" />
+      <module name="util_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

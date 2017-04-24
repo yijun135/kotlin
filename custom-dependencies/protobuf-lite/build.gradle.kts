@@ -44,7 +44,7 @@ val relocateTask = task<ShadowJar>("prepare-relocated-protobuf") {
     from(mainCfg.files.find { it.name.startsWith("protobuf-java") }?.canonicalPath)
     relocate("com.google.protobuf", "org.jetbrains.kotlin.protobuf" ) {
         // TODO: remove "it." after #KT-12848 get addressed
-        it.exclude("META-INF/maven/com.google.protobuf/protobuf-java/pom.properties")
+        exclude("META-INF/maven/com.google.protobuf/protobuf-java/pom.properties")
     }
 }
 

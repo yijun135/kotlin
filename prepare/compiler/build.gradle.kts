@@ -78,8 +78,8 @@ dependencies {
     embeddableCfg(project(":prepare:reflect", configuration = "default"))
     embeddableCfg(projectDepIntransitive(":core:script.runtime"))
     embeddableCfg(projectDepIntransitive(":build-common"))
-    embeddableCfg(projectDepIntransitive(":libraries:kotlin.test"))
-    embeddableCfg(projectDepIntransitive(":libraries:stdlib"))
+//    embeddableCfg(projectDepIntransitive(":kotlin-test:kotlin-test-jvm"))
+//    embeddableCfg(projectDepIntransitive(":kotlin-stdlib"))
 }
 
 val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
@@ -136,7 +136,7 @@ val embeddableTask = task<ShadowJar>("prepare-embeddable-compiler") {
     archiveName = outputEmbeddableJar
     configurations = listOf(embeddableCfg)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn(mainTask, ":build-common:assemble", ":core:script.runtime:assemble", ":libraries:kotlin.test:assemble", ":libraries:stdlib:assemble")
+    dependsOn(mainTask, ":build-common:assemble", ":core:script.runtime:assemble", ":kotlin-test:kotlin-test-jvm:assemble", ":kotlin-stdlib:assemble")
     from(files(outputJar))
     from(embeddableCfg.files)
     relocate("com.google.protobuf", "org.jetbrains.kotlin.protobuf" )
@@ -147,7 +147,7 @@ val embeddableTask = task<ShadowJar>("prepare-embeddable-compiler") {
     relocate("org.jdom", "$kotlinEmbeddableRootPackage.org.jdom")
     relocate("org.fusesource", "$kotlinEmbeddableRootPackage.org.fusesource") {
         // TODO: remove "it." after #KT-12848 get addressed
-        it.exclude("org.fusesource.jansi.internal.CLibrary")
+        exclude("org.fusesource.jansi.internal.CLibrary")
     }
     relocate("org.picocontainer", "$kotlinEmbeddableRootPackage.org.picocontainer")
     relocate("jline", "$kotlinEmbeddableRootPackage.jline")
