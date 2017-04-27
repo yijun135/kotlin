@@ -32,6 +32,7 @@ configureKotlinProjectSources(
         "compiler/daemon/src",
         "compiler/builtins-serializer/src",
         "compiler/conditional-preprocessor/src",
+        "compiler/incremental-compilation-impl/src",
         "plugins/annotation-collector/src",
         sourcesBaseDir = rootDir)
 configureKotlinProjectNoTests()

@@ -20,8 +20,14 @@ buildscript {
 
 apply { plugin("kotlin") }
 
+repositories {
+    mavenLocal()
+    maven { setUrl(rootProject.extra["repo"]) }
+    mavenCentral()
+}
+
 dependencies {
-    compile(project(":core:util.runtime"))
+    compile(project(":core"))
     compile(fileTree(mapOf("dir" to "$rootDir/ideaSDK/core", "include" to "*.jar")))
     compile(files("$rootDir/ideaSDK/jps/jps-model.jar"))
 }

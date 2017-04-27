@@ -112,6 +112,9 @@ static def configurePublishing(Project project) {
         }
 
         task publish(dependsOn: uploadArchives)
+        task javadocJar(type: Jar) {
+            classifier = 'javadoc'
+        }
     }
 
 }

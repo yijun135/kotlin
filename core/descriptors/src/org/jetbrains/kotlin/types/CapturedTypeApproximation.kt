@@ -63,9 +63,9 @@ private fun TypeArgument.toTypeProjection(): TypeProjection {
 
 private fun TypeProjection.toTypeArgument(typeParameter: TypeParameterDescriptor) =
         when (TypeSubstitutor.combine(typeParameter.variance, this)) {
-            Variance.INVARIANT -> TypeArgument(typeParameter, type, type)
-            Variance.IN_VARIANCE -> TypeArgument(typeParameter, type, typeParameter.builtIns.nullableAnyType)
-            Variance.OUT_VARIANCE -> TypeArgument(typeParameter, typeParameter.builtIns.nothingType, type)
+            org.jetbrains.kotlin.types.Variance.INVARIANT -> TypeArgument(typeParameter, type, type)
+            org.jetbrains.kotlin.types.Variance.IN_VARIANCE -> TypeArgument(typeParameter, type, typeParameter.builtIns.nullableAnyType)
+            org.jetbrains.kotlin.types.Variance.OUT_VARIANCE -> TypeArgument(typeParameter, typeParameter.builtIns.nothingType, type)
         }
 
 fun approximateCapturedTypesIfNecessary(typeProjection: TypeProjection?, approximateContravariant: Boolean): TypeProjection? {

@@ -116,6 +116,9 @@ static def configurePublishing(Project project) {
         }
 
         task publish(dependsOn: uploadArchives)
+        task javadocJar(type: Jar) {
+            classifier = 'javadoc'
+        }
     }
 
 }
@@ -125,6 +128,7 @@ def createPreprocessorTask(Project project, def name, def sourceDir, def targetD
         inputs.dir(sourceDir)
         outputs.dir(targetDir)
         classpath = project.files(bootstrapCompilerFile)
+        println("bootstrapCompilerFile = $bootstrapCompilerFile")
         main = "org.jetbrains.kotlin.preprocessor.PreprocessorCLI"
         args = [sourceDir, targetDir, profile]
     }
@@ -140,8 +144,8 @@ def builtinsSrcDir = "${buildDir}/builtin-sources"
 def builtinsSrcDir2 = "${buildDir}/builtin-sources-for-builtins"
 def commonSrcDir = "${buildDir}/common-sources"
 def commonTestSrcDir = "${buildDir}/common-test-sources"
-def builtinsDir = "${rootDir}/../core/builtins"
-def jsLibrariesDir = "${rootDir}/../js/js.libraries"
+def builtinsDir = "${rootDir}/core/builtins"
+def jsLibrariesDir = "${rootDir}/js/js.libraries"
 def jsSrcDir = "${jsLibrariesDir}/src"
 def jsTestSrcDir = "${jsLibrariesDir}/test"
 def jsSrcJsDir = "${jsSrcDir}/js"
