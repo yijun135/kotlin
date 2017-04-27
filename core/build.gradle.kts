@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     compile(project(":core.builtins"))
-    compile(project(":libraries:stdlib"))
+    compile(project(":kotlin-stdlib"))
     compile(project("util.runtime"))
     compile(protobufLite())
     compile(commonDep("javax.inject"))

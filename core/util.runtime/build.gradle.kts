@@ -22,7 +22,7 @@ apply { plugin("kotlin") }
 
 dependencies {
     compile(project(":core.builtins"))
-    compile(project(":libraries:stdlib"))
+    compile(project(":kotlin-stdlib"))
 }
 
 configure<JavaPluginConvention> {

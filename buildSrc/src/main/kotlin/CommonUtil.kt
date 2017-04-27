@@ -4,6 +4,7 @@ import org.gradle.script.lang.kotlin.*
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
+import org.gradle.api.java.archives.Manifest
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.jvm.tasks.Jar
@@ -29,7 +30,7 @@ fun Jar.setupRuntimeJar(implementationTitle: String): Unit {
         put("Implementation-Title", implementationTitle)
         put("Implementation-Version", project.rootProject.extra["build.number"])
     }
-    from(project.configurations.getByName("build-version").files, action = { into("META-INF/") })
+//    from(project.configurations.getByName("build-version").files, action = { into("META-INF/") })
 }
 
 fun Project.buildVersion(): Dependency {

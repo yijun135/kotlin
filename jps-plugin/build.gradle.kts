@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile(project(":libraries:stdlib"))
+    compile(project(":kotlin-stdlib"))
     compile(project(":build.common"))
     compile(project(":core"))
     compile(project(":compiler"))

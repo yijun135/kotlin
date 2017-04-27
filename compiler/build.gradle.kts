@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
     compile(project(":prepare:runtime", configuration = "default"))
-    compile(project(":libraries:kotlin.test"))
+    compile(project(":kotlin-test:kotlin-test-jvm"))
     compile(project(":prepare:reflect", configuration = "default"))
     compile(project(":core:script.runtime"))
     compile(project(":core:util.runtime"))
@@ -39,6 +39,7 @@ dependencies {
     compile(commonDep("com.google.code.findbugs", "jsr305"))
     compile(commonDep("com.github.spullara.cli-parser", "cli-parser"))
     compile(commonDep("org.fusesource.jansi", "jansi"))
+    compile(commonDep("io.javaslang","javaslang"))
     compile(commonDep("jline"))
     compile(files("$rootDir/ideaSDK/jps/jps-model.jar"))
 }
@@ -57,13 +58,15 @@ configure<JavaPluginConvention> {
                 "compiler/cli/cli-common/src",
                 "compiler/container/src",
                 "compiler/frontend/src",
+                "compiler/frontend.script/src",
                 "compiler/resolution/src",
                 "compiler/frontend.java/src",
                 "compiler/light-classes/src",
                 "compiler/plugin-api/src",
                 "compiler/daemon/daemon-common/src",
+                "build-common/src",
                 "compiler/serialization/src",
-                "js/js.dart-ast/src",
+                "js/js.ast/src",
                 "js/js.translator/src",
                 "js/js.frontend/src",
                 "js/js.inliner/src",
