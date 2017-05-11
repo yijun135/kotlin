@@ -17,10 +17,10 @@ include ':kotlin-script-runtime'
 include "kotlin-test:kotlin-test-common"
 include "kotlin-test:kotlin-test-jvm"
 include "kotlin-test:kotlin-test-junit"
-//include "kotlin-test:kotlin-test-js"
+include "kotlin-test:kotlin-test-js"
 include "kotlin-stdlib-common"
 include "kotlin-stdlib"
-//include "kotlin-stdlib-js"
+include "kotlin-stdlib-js"
 include "kotlin-stdlib-jre7"
 include "kotlin-stdlib-jre8"
 include ':kotlin-stdlib:samples'
@@ -37,10 +37,10 @@ project(':kotlin-script-runtime').projectDir = "$rootDir/libraries/tools/script-
 project(':kotlin-test:kotlin-test-common').projectDir = "$rootDir/libraries/kotlin.test/common" as File
 project(':kotlin-test:kotlin-test-jvm').projectDir = "$rootDir/libraries/kotlin.test/jvm" as File
 project(':kotlin-test:kotlin-test-junit').projectDir = "$rootDir/libraries/kotlin.test/junit" as File
-//project(':kotlin-test:kotlin-test-js').projectDir = "$rootDir/libraries/kotlin.test/js" as File
+project(':kotlin-test:kotlin-test-js').projectDir = "$rootDir/libraries/kotlin.test/js" as File
 project(':kotlin-stdlib-common').projectDir = "$rootDir/libraries/stdlib/common" as File
 project(':kotlin-stdlib').projectDir = "$rootDir/libraries/stdlib" as File
-//project(':kotlin-stdlib-js').projectDir = "$rootDir/libraries/stdlib/js" as File
+project(':kotlin-stdlib-js').projectDir = "$rootDir/libraries/stdlib/js" as File
 project(':kotlin-stdlib-jre7').projectDir = "$rootDir/libraries/stdlib/jre7" as File
 project(':kotlin-stdlib-jre8').projectDir = "$rootDir/libraries/stdlib/jre8" as File
 project(':kotlin-stdlib:samples').projectDir = "$rootDir/stdlib/samples" as File

@@ -34,6 +34,7 @@ extra["JDK_18"] = jdkPath("1.8")
 extra["compilerJar"] = project.file("$distLibDir/kotlin-compiler.jar")
 extra["embeddableCompilerJar"] = project.file("$distLibDir/kotlin-compiler-embeddable.jar")
 extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
+extra["bootstrapCompilerFile"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
 
 extra["versions.protobuf-java"] = "2.6.1"
 extra["versions.javax.inject"] = "1"
