@@ -155,6 +155,36 @@ def createPreprocessorTask(Project project, def name, def sourceDir, def targetD
     }
 }
 
+static def createScriptTask(Project project, def name, Closure<JavaExec> configureClosure = null) {
+    project.configure(project) {
+        configurations {
+            scriptCompile
+            scriptRuntime.extendsFrom(scriptCompile)
+        }
+
+        dependencies {
+            scriptCompile "org.jetbrains.kotlin:kotlin-compiler:${rootProject.ext.kotlinVersion}"
+            scriptRuntime "org.jetbrains.kotlin:kotlin-script-runtime:${rootProject.ext.kotlinVersion}"
+        }
+    }
+
+    JavaExec task = project.tasks.create(name, JavaExec)
+    return project.configure(task) {
+        classpath = project.configurations.scriptCompile
+        main = "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler"
+        args = [
+                "-script",
+                "-version",
+                "-no-stdlib",
+                "-cp", project.configurations.scriptRuntime.asPath]
+
+        if (configureClosure != null) {
+            configureClosure.delegate = it
+            configureClosure.call()
+        }
+    }
+}
+
 
 // ---- End of hared part -------
 
@@ -190,9 +220,10 @@ configurations {
 dependencies {
     proguardDeps project(':kotlin-stdlib')
     shadows 'javax.inject:javax.inject:1'
-    shadows project(path: ':custom-dependencies:protobuf-lite')
+    shadows project(path: ':custom-dependencies:protobuf-lite', configuration: 'default')
 
     compile project(':kotlin-stdlib')
+    compile project(path: ':custom-dependencies:protobuf-lite', configuration: 'default')
 }
 
 task copyAnnotations(type: Sync) {
@@ -213,6 +244,7 @@ compileJava {
 
 compileKotlin {
     dependsOn copyAnnotations
+    dependsOn ':custom-dependencies:protobuf-lite:prepare'
     kotlinOptions {
         freeCompilerArgs = ["-version",
                             "-Xallow-kotlin-package",
@@ -256,36 +288,6 @@ createScriptTask(project, "stripMetadata") {
             inputJar,
             outputJar
     ]
-}
-
-static def createScriptTask(Project project, def name, Closure<JavaExec> configureClosure = null) {
-    project.configure(project) {
-        configurations {
-            scriptCompile
-            scriptRuntime.extendsFrom(scriptCompile)
-        }
-
-        dependencies {
-            scriptCompile "org.jetbrains.kotlin:kotlin-compiler:${rootProject.ext.kotlinVersion}"
-            scriptRuntime "org.jetbrains.kotlin:kotlin-script-runtime:${rootProject.ext.kotlinVersion}"
-        }
-    }
-
-    JavaExec task = project.tasks.create(name, JavaExec)
-    return project.configure(task) {
-        classpath = project.configurations.scriptCompile
-        main = "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler"
-        args = [
-                "-script",
-                "-version",
-                "-no-stdlib",
-                "-cp", project.configurations.scriptRuntime.asPath]
-
-        if (configureClosure != null) {
-            configureClosure.delegate = it
-            configureClosure.call()
-        }
-    }
 }
 
 def mainArchiveName = "${archivesBaseName}-${project.version}.jar"

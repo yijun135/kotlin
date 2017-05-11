@@ -119,3 +119,6 @@ val mainTask = task("prepare") {
 
 defaultTasks(mainTask.name)
 
+tasks.withType<Assemble>() {
+    dependsOn(mainCfg)
+}
