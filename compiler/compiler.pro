@@ -22,7 +22,7 @@
 META-INF/services/**,META-INF/native/**,META-INF/extensions/**,META-INF/MANIFEST.MF,
 messages/**)
 
--outjars '<kotlin-home>/lib/kotlin-compiler.jar'
+-outjars '<kotlin-compiler-jar>'
 
 -dontnote **
 -dontwarn com.intellij.util.ui.IsRetina*
@@ -51,13 +51,15 @@ messages/**)
 -dontwarn org.w3c.dom.ElementTraversal
 -dontwarn javaslang.match.annotation.Unapply
 -dontwarn javaslang.match.annotation.Patterns
+-dontwarn org.jetbrains.annotations.ReadOnly
+-dontwarn org.jetbrains.annotations.Mutable
 
--libraryjars '<rtjar>'
--libraryjars '<jssejar>'
--libraryjars '<bootstrap.runtime>'
--libraryjars '<bootstrap.reflect>'
--libraryjars '<bootstrap.script.runtime>'
--libraryjars '<tools.jar>'
+#-libraryjars '<rtjar>'
+#-libraryjars '<jssejar>'
+#-libraryjars '<bootstrap.runtime>'
+#-libraryjars '<bootstrap.reflect>'
+#-libraryjars '<bootstrap.script.runtime>'
+#-libraryjars '<tools.jar>'
 
 -dontoptimize
 -dontobfuscate

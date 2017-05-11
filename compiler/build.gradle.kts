@@ -26,10 +26,10 @@ repositories {
 }
 
 dependencies {
-    compile(project(":prepare:runtime", configuration = "default"))
-    compile(project(":kotlin-test:kotlin-test-jvm"))
-    compile(project(":prepare:reflect", configuration = "default"))
-    compile(project(":core:script.runtime"))
+//    compile(project(":prepare:runtime", configuration = "default"))
+//    compile(project(":kotlin-test:kotlin-test-jvm"))
+//    compile(project(":prepare:reflect", configuration = "default"))
+//    compile(project(":core:script.runtime"))
     compile(project(":core:util.runtime"))
     compile(project(":compiler:util"))
     compile(fileTree(mapOf("dir" to "$rootDir/ideaSDK/core", "include" to "*.jar")))
@@ -42,14 +42,14 @@ dependencies {
     compile(commonDep("io.javaslang","javaslang"))
     compile(commonDep("jline"))
     compile(files("$rootDir/ideaSDK/jps/jps-model.jar"))
+    compile(kotlinDep("stdlib"))
+    compile(kotlinDep("script-runtime"))
+    compile(kotlinDep("reflect"))
 }
 
 configure<JavaPluginConvention> {
     sourceSets.getByName("main").apply {
-        listOf( "core/descriptor.loader.java/src",
-                "core/descriptors/src",
-                "core/deserialization/src",
-                "compiler/backend/src",
+        listOf( "compiler/backend/src",
                 "compiler/backend-common/src",
                 "compiler/ir/backend.common/src",
                 "compiler/ir/backend.jvm/src",
@@ -81,15 +81,15 @@ configure<JavaPluginConvention> {
     }
 }
 
-tasks.withType<JavaCompile> {
-    // TODO: automatic from deps
-    dependsOn(":prepare:runtime:prepare")
-    dependsOn(":prepare:reflect:prepare")
-}
+//tasks.withType<JavaCompile> {
+//    // TODO: automatic from deps
+//    dependsOn(":prepare:runtime:prepare")
+//    dependsOn(":prepare:reflect:prepare")
+//}
 
 tasks.withType<KotlinCompile> {
-    dependsOn(":prepare:runtime:prepare")
-    dependsOn(":prepare:reflect:prepare")
+//    dependsOn(":prepare:runtime:prepare")
+//    dependsOn(":prepare:reflect:prepare")
     kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", "kotlin-compiler")
 }
 

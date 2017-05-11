@@ -124,6 +124,17 @@ static def configurePublishing(Project project) {
 }
 
 def createPreprocessorTask(Project project, def name, def sourceDir, def targetDir, def profile = "JS") {
+    project.configure(project) {
+        configurations {
+            preprocess
+        }
+
+        dependencies {
+            preprocess "org.jetbrains.kotlin:kotlin-stdlib:${rootProject.ext.kotlinVersion}"
+            preprocess "org.jetbrains.kotlin:kotlin-compiler:${rootProject.ext.kotlinVersion}"
+        }
+    }
+
     return project.tasks.create("preprocessSources$name", JavaExec) {
         inputs.dir(sourceDir)
         outputs.dir(targetDir)

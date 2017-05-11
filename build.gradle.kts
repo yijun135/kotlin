@@ -10,8 +10,13 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 extra["kotlinVersion"] = extra["kotlin_version"]
 extra["build.number"] = "1.1-SNAPSHOT"
-val distDir = "$rootDir/dist"
+
+val distDir = "$rootDir/build/dist"
+val distLibDir = "$distDir/kotlinc/lib"
+
 extra["distDir"] = distDir
+extra["distLibDir"] = project.file(distLibDir)
+extra["libsDir"] = project.file(distLibDir)
 
 Properties().apply {
     load(File("$rootDir/resources/kotlinManifest.properties").reader())
@@ -25,8 +30,10 @@ Properties().apply {
 extra["JDK_16"] = jdkPath("1.6")
 extra["JDK_17"] = jdkPath("1.7")
 extra["JDK_18"] = jdkPath("1.8")
-extra["distLibDir"] = project.file("${distDir}/kotlinc/lib")
-extra["bootstrapCompilerFile"] = project.file("$distDir/kotlin-compiler-for-maven.jar")
+
+extra["compilerJar"] = project.file("$distLibDir/kotlin-compiler.jar")
+extra["embeddableCompilerJar"] = project.file("$distLibDir/kotlin-compiler-embeddable.jar")
+extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
 
 extra["versions.protobuf-java"] = "2.6.1"
 extra["versions.javax.inject"] = "1"
@@ -73,6 +80,12 @@ tasks.matching { task ->
 
 allprojects {
     setBuildDir("$rootDir/build/${project.name}")
+
+    repositories {
+        mavenLocal()
+        maven { setUrl(rootProject.extra["repo"]) }
+        mavenCentral()
+    }
 }
 
 //subprojects {

@@ -41,10 +41,12 @@ val otherDepsCfg = configurations.create("other-deps")
 val proguardLibraryJarsCfg = configurations.create("library-jars")
 val mainCfg = configurations.create("default")
 val embeddableCfg = configurations.create("embeddable")
+val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
 
 val outputBeforeSrinkJar = "$buildDir/libs/kotlin-compiler-before-shrink.jar"
-val outputJar = "$buildDir/libs/kotlin-compiler.jar"
-val outputEmbeddableJar = "$buildDir/libs/kotlin-compiler-embeddable.jar"
+val outputJar = rootProject.extra["compilerJar"].toString()
+val outputEmbeddableJar = rootProject.extra["embeddableCompilerJar"].toString()
+val outputJarWithBootstrapRuntime = rootProject.extra["compilerJarWithBootstrapRuntime"].toString()
 
 val kotlinEmbeddableRootPackage = "org.jetbrains.kotlin"
 
@@ -60,6 +62,7 @@ dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler"))
     compilerClassesCfg(projectDepIntransitive(":compiler.standalone"))
     compilerClassesCfg(projectDepIntransitive(":core:util.runtime"))
+    compilerClassesCfg(projectDepIntransitive(":core.builtins"))
     ideaSdkCoreCfg(files(File("$rootDir/ideaSDK/core").listFiles { f -> f.extension == "jar" && f.name != "util.jar" }))
     ideaSdkCoreCfg(files("$rootDir/ideaSDK/lib/jna-platform.jar"))
     ideaSdkCoreCfg(files("$rootDir/ideaSDK/lib//oromatcher.jar"))
@@ -69,17 +72,25 @@ dependencies {
     otherDepsCfg(protobufFull())
     otherDepsCfg(commonDep("com.github.spullara.cli-parser", "cli-parser"))
     otherDepsCfg(commonDep("com.google.code.findbugs", "jsr305"))
+    otherDepsCfg(commonDep("io.javaslang","javaslang"))
     buildVersion()
-    proguardLibraryJarsCfg(files("$javaHome/lib/rt.jar", "$javaHome/lib/jsse.jar"))
-    proguardLibraryJarsCfg(project(":prepare:runtime", configuration = "default").apply { isTransitive = false })
-    proguardLibraryJarsCfg(project(":prepare:reflect", configuration = "default").apply { isTransitive = false })
-    proguardLibraryJarsCfg(project(":core:script.runtime").apply { isTransitive = false })
-    embeddableCfg(project(":prepare:runtime", configuration = "default"))
-    embeddableCfg(project(":prepare:reflect", configuration = "default"))
-    embeddableCfg(projectDepIntransitive(":core:script.runtime"))
+    proguardLibraryJarsCfg(files("$javaHome/lib/rt.jar".takeIf { File(it).exists() } ?: "$javaHome/../Classes/classes.jar",
+                                 "$javaHome/lib/jsse.jar".takeIf { File(it).exists() } ?: "$javaHome/../Classes/jsse.jar"))
+    proguardLibraryJarsCfg(kotlinDep("stdlib"))
+    proguardLibraryJarsCfg(kotlinDep("script-runtime"))
+    proguardLibraryJarsCfg(kotlinDep("reflect"))
+//    proguardLibraryJarsCfg(project(":prepare:runtime", configuration = "default").apply { isTransitive = false })
+//    proguardLibraryJarsCfg(project(":prepare:reflect", configuration = "default").apply { isTransitive = false })
+//    proguardLibraryJarsCfg(project(":core:script.runtime").apply { isTransitive = false })
+//    embeddableCfg(project(":prepare:runtime", configuration = "default"))
+//    embeddableCfg(project(":prepare:reflect", configuration = "default"))
+//    embeddableCfg(projectDepIntransitive(":core:script.runtime"))
     embeddableCfg(projectDepIntransitive(":build-common"))
 //    embeddableCfg(projectDepIntransitive(":kotlin-test:kotlin-test-jvm"))
 //    embeddableCfg(projectDepIntransitive(":kotlin-stdlib"))
+    withBootstrapRuntimeCfg(kotlinDep("stdlib"))
+    withBootstrapRuntimeCfg(kotlinDep("script-runtime"))
+    withBootstrapRuntimeCfg(kotlinDep("reflect"))
 }
 
 val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
@@ -92,6 +103,7 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
     from(compilerProject.getCompiledClasses())
     from(project(":compiler.standalone").getCompiledClasses())
     from(project(":core:util.runtime").getCompiledClasses())
+    from(project(":core").getCompiledClasses())
     from(ideaSdkCoreCfg.files)
     from(otherDepsCfg.files)
     from(project(":core.builtins").getResourceFiles()) { include("kotlin/**") }
@@ -125,7 +137,7 @@ val proguardTask = task<ProGuardTask>("internal.proguard-compiler") {
     proguardLibraryJarsCfg.files.forEach { jar ->
         libraryjars(jar)
     }
-    printconfiguration("$rootDir/prog.txt")
+    printconfiguration("$buildDir/compiler.pro.dump")
 }
 
 val mainTask = task("prepare") {
@@ -136,7 +148,7 @@ val embeddableTask = task<ShadowJar>("prepare-embeddable-compiler") {
     archiveName = outputEmbeddableJar
     configurations = listOf(embeddableCfg)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn(mainTask, ":build-common:assemble", ":core:script.runtime:assemble", ":kotlin-test:kotlin-test-jvm:assemble", ":kotlin-stdlib:assemble")
+    dependsOn(mainTask, ":build-common:assemble", ":core:script.runtime:assemble") //, ":kotlin-test:kotlin-test-jvm:assemble", ":kotlin-stdlib:assemble")
     from(files(outputJar))
     from(embeddableCfg.files)
     relocate("com.google.protobuf", "org.jetbrains.kotlin.protobuf" )
@@ -155,5 +167,15 @@ val embeddableTask = task<ShadowJar>("prepare-embeddable-compiler") {
     relocate("javax.inject", "$kotlinEmbeddableRootPackage.javax.inject")
 }
 
-defaultTasks(mainTask.name, embeddableTask.name)
+val compilerWithBootstrapRuntimeTask = task<ShadowJar>("prepare-compiler-with-bootstrap-runtime") {
+    archiveName = outputJarWithBootstrapRuntime
+    configurations = listOf(withBootstrapRuntimeCfg)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(embeddableTask)
+    from(files(outputEmbeddableJar))
+    from(withBootstrapRuntimeCfg.files)
+}
 
+defaultTasks(mainTask.name, embeddableTask.name, compilerWithBootstrapRuntimeTask.name)
+
+artifacts.add(mainCfg.name, File(outputJar))

@@ -1,5 +1,6 @@
 
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.serialization.builtins.BuiltInsSerializer
 import java.io.File
@@ -37,6 +38,7 @@ val serialize = task("internal.serialize") {
     outputs.file(outDir)
     inputs.files(*inDirs)
     doLast {
+        System.setProperty("kotlin.colors.enabled", "false")
         BuiltInsSerializer(dependOnOldBuiltIns = false)
                 .serialize(outDir, inDirs.asList(), listOf()) { totalSize, totalFiles ->
                     println("Total bytes written: $totalSize to $totalFiles files")
@@ -44,17 +46,24 @@ val serialize = task("internal.serialize") {
     }
 }
 
-//task("sourcesets") {
-//    doLast {
-//        the<JavaPluginConvention>().sourceSets.all { ss ->
-//            println("--> ${ss.name}.java: ${ss.java.srcDirs.joinToString()}")
-//            ss.resources.srcDirs.let {
-//                if (it.isNotEmpty())
-//                    println("--> ${ss.name}.resources: ${it.joinToString()}")
-//            }
-//        }
-//    }
-//}
+
+configure<JavaPluginConvention> {
+    sourceSets.getByName("main").apply {
+        resources.setSrcDirs(listOf(builtinsSerialized))
+    }
+}
+
+task("sourcesets") {
+    doLast {
+        the<JavaPluginConvention>().sourceSets.forEach { ss ->
+            println("--> ${ss.name}.java: ${ss.java.srcDirs.joinToString()}")
+            ss.resources.srcDirs.let {
+                if (it.isNotEmpty())
+                    println("--> ${ss.name}.resources: ${it.joinToString()}")
+            }
+        }
+    }
+}
 
 tasks.withType<JavaCompile> {
     dependsOn(protobufLiteTask)

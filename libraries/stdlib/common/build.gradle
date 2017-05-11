@@ -122,12 +122,25 @@ static def configurePublishing(Project project) {
 }
 
 def createPreprocessorTask(Project project, def name, def sourceDir, def targetDir, def profile = "JS") {
+    project.configure(project) {
+        configurations {
+            preprocess
+        }
+
+        dependencies {
+            preprocess "org.jetbrains.kotlin:kotlin-stdlib:${rootProject.ext.kotlinVersion}"
+            preprocess "org.jetbrains.kotlin:kotlin-compiler:${rootProject.ext.kotlinVersion}"
+        }
+    }
+
     return project.tasks.create("preprocessSources$name", JavaExec) {
+        dependsOn ":prepare:compiler:prepare"
         inputs.dir(sourceDir)
         outputs.dir(targetDir)
-        classpath = project.files(bootstrapCompilerFile)
+        classpath = configurations.preprocess
         main = "org.jetbrains.kotlin.preprocessor.PreprocessorCLI"
         args = [sourceDir, targetDir, profile]
+        println("preptask cp: " + classpath.asPath)
     }
 }
 
@@ -135,6 +148,10 @@ def createPreprocessorTask(Project project, def name, def sourceDir, def targetD
 // ---- End of hared part -------
 
 ext.commonSrcDir = "${buildDir}/common-sources"
+
+repositories {
+    mavenLocal()
+}
 
 sourceSets {
     main {
@@ -147,7 +164,11 @@ sourceSets {
 
 createPreprocessorTask(project, "Main", "${projectDir}/../src/kotlin", commonSrcDir)
 
-compileKotlinCommon.dependsOn preprocessSourcesMain
+compileKotlinCommon {
+    dependsOn preprocessSourcesMain
+    dependsOn ":prepare:compiler:prepare-compiler-with-bootstrap-runtime"
+    compilerJarFile = compilerJarWithBootstrapRuntime
+}
 
 /*
 // TODO: currently unsupported

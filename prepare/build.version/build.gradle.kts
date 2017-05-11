@@ -12,7 +12,11 @@ val mainTask = task("prepare") {
     val versionFile = File(buildVersionFilePath)
     outputs.file(buildVersionFilePath)
     outputs.upToDateWhen {
-        versionFile.exists() && versionFile.readText().trim() == versionString
+        (versionFile.exists() && versionFile.readText().trim() == versionString).apply {
+            if (!this) {
+                println("!!! not up-to-date $versionFile: ${versionFile.takeIf { it.exists() }?.readText()?.trim()}")
+            }
+        }
     }
     doLast {
         versionFile.parentFile.mkdirs()

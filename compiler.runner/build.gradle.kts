@@ -23,7 +23,8 @@ repositories {
 }
 
 dependencies {
-    compile(project(":kotlin-stdlib"))
+//    compile(project(":kotlin-stdlib"))
+    compile(kotlinDep("stdlib"))
     buildVersion()
 }
 

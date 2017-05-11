@@ -7,6 +7,7 @@ import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.java.archives.Manifest
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.file.SourceDirectorySet
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.jvm.tasks.Jar
 import java.io.File
 
@@ -49,6 +50,17 @@ fun Project.commonDep(coord: String): String {
 }
 
 fun Project.commonDep(group: String, artifact: String): String = "$group:$artifact:${rootProject.extra["versions.$artifact"]}"
+
+fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"): ConfigurableFileCollection {
+    val matchingFiles = File(File(rootDir, "ideaSdk"), subdir).listFiles { file -> artifactBaseNames.any { file.matchMaybeVersionedArtifact(it) }}
+    if (matchingFiles.size < artifactBaseNames.size)
+        throw GradleException("Not all matching artifacts '${artifactBaseNames.joinToString()}' found in the '$rootDir/ideaSDK/$subdir' (found: ${matchingFiles.joinToString { it.name }})")
+    return files(*matchingFiles.map { it.canonicalPath }.toTypedArray())
+}
+
+fun Project.ideaSdkCoreDeps(vararg artifactBaseNames: String): ConfigurableFileCollection = ideaSdkDeps(*artifactBaseNames, subdir = "core")
+
+fun Project.kotlinDep(artifactBaseName: String): String = "org.jetbrains.kotlin:kotlin-$artifactBaseName:${rootProject.extra["kotlinVersion"]}"
 
 fun DependencyHandler.projectDep(name: String): Dependency = project(name, configuration = "default")
 fun DependencyHandler.projectDepIntransitive(name: String): Dependency =
@@ -96,4 +108,9 @@ fun Project.configureKotlinProjectNoTests() {
     configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.getJava() })
     configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.getResources() })
 }
+
+private fun File.matchMaybeVersionedArtifact(baseName: String) =
+        name == baseName ||
+        name.removeSuffix(".jar") == baseName ||
+        name.startsWith(baseName + "-")
 

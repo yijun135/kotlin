@@ -23,6 +23,8 @@ repositories {
 dependencies {
     compile(project(":kotlin-stdlib"))
     compile(project(":core.reflection"))
+    compile(project(":compiler"))
+    compile(ideaSdkCoreDeps("intellij-core", "util"))
     buildVersion()
 }
 

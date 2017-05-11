@@ -27,9 +27,9 @@ repositories {
 }
 
 dependencies {
-    compile(project(":prepare:runtime", configuration = "default"))
-    compile(project(":prepare:reflect", configuration = "default"))
-    compile(project(":core:script.runtime"))
+//    compile(project(":prepare:runtime", configuration = "default"))
+//    compile(project(":prepare:reflect", configuration = "default"))
+//    compile(project(":core:script.runtime"))
     compile(project(":compiler"))
     compile(files("$rootDir/ideaSDK/lib/util.jar"))
     buildVersion()
