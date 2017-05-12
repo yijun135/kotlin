@@ -48,6 +48,7 @@ val compilerProject = project(":compiler")
 
 dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler:util"))
+    compilerClassesCfg(projectDepIntransitive(":compiler:container"))
     compilerClassesCfg(projectDepIntransitive(":compiler"))
     compilerClassesCfg(projectDepIntransitive(":compiler.standalone"))
     compilerClassesCfg(projectDepIntransitive(":core:util.runtime"))
@@ -81,13 +82,20 @@ dependencies {
     withBootstrapRuntimeCfg(kotlinDep("reflect"))
 }
 
+//fun ShadowJar
+
 val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
     configurations = listOf(mainCfg)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveName = if (shrink) outputBeforeSrinkJar else outputJar
-    dependsOn(":compiler:util:classes", compilerProject.path + ":classes", ":compiler.standalone:classes", protobufFullTask)
+    dependsOn(":compiler:util:classes",
+              ":compiler:container:classes",
+              compilerProject.path + ":classes",
+              ":compiler.standalone:classes",
+              protobufFullTask)
     setupRuntimeJar("Kotlin Compiler")
     from(project(":compiler:util").getCompiledClasses())
+    from(project(":compiler:container").getCompiledClasses())
     from(compilerProject.getCompiledClasses())
     from(project(":compiler.standalone").getCompiledClasses())
     from(project(":core:util.runtime").getCompiledClasses())

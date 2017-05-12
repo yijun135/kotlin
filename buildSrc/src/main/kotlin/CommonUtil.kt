@@ -111,6 +111,11 @@ fun Project.configureKotlinProjectNoTests() {
     configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.getResources() })
 }
 
+fun Project.configureKotlinProjectTests(vararg srcs: String, sourcesBaseDir: File? = null) =
+        configureKotlinProjectSourceSet(*srcs, sourceSetName = "test", getSources = { this.getJava() }, sourcesBaseDir = sourcesBaseDir)
+
+fun Project.configureKotlinProjectTestsDefault(sourcesBaseDir: File? = null) = configureKotlinProjectTests("tests", sourcesBaseDir = sourcesBaseDir)
+
 private fun File.matchMaybeVersionedArtifact(baseName: String) =
         name == baseName ||
         name.removeSuffix(".jar") == baseName ||
