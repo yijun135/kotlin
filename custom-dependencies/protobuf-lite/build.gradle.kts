@@ -19,10 +19,6 @@ buildscript {
 
 apply { plugin("com.github.johnrengelman.shadow") }
 
-repositories {
-    mavenCentral()
-}
-
 val mainCfg = configurations.create("default")
 val relocatedCfg = configurations.create("relocated")
 

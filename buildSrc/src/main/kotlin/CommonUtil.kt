@@ -1,3 +1,5 @@
+@file:Suppress("unused") // usages in build scripts are not tracked properly
+
 import org.gradle.api.*
 import org.gradle.api.tasks.*
 import org.gradle.script.lang.kotlin.*

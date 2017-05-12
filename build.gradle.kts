@@ -10,13 +10,9 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
-extra["kotlinVersion"] = extra["kotlin_version"]
-extra["build.number"] = "1.1-SNAPSHOT"
-
-extra["kotlin_root"] = rootDir
-
 buildscript {
     extra["kotlin_version"] = project.properties["deployVersion"] ?: "1.1-SNAPSHOT"
+    extra["kotlinVersion"] = extra["kotlin_version"]
     extra["kotlin_language_version"] = "1.1"
     extra["kotlin_gradle_plugin_version"] = "1.1-SNAPSHOT"
     extra["repo"] = "https://repo.gradle.org/gradle/repo"
@@ -27,13 +23,17 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${extra["kotlin_version"]}")
+        classpath(kotlinDep("gradle-plugin"))
     }
 }
 
 plugins {
     java // so we can benefit from the `java()` accessor below
 }
+
+extra["build.number"] = "1.1-SNAPSHOT"
+
+extra["kotlin_root"] = rootDir
 
 val bootstrapCfg = configurations.create("bootstrap")
 val scriptCompileCfg = configurations.create("scriptCompile")
@@ -77,6 +77,9 @@ extra["versions.jansi"] = "1.11"
 extra["versions.jline"] = "2.12.1"
 extra["versions.javaslang"] = "2.0.6"
 
+extra["ideaCoreSdkJars"] = arrayOf("annotations", "asm-all", "guava", "intellij-core", "jdom", "jna", "log4j", "picocontainer",
+                                   "snappy-in-java", "trove4j", "xpp3-1.1.4-min", "xstream")
+
 applyFrom("libraries/commonConfiguration.gradle")
 
 val importedAntTasksPrefix = "imported-ant-update-"
@@ -99,6 +102,7 @@ val prepareBootstrapTask = task("prepareBootstrap") {
 }
 
 allprojects {
+
     setBuildDir("$rootDir/build/${project.name}")
 
     repositories {
@@ -109,17 +113,15 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         dependsOn(prepareBootstrapTask)
-//        println(rootProject.extra["bootstrapCompilerFile"].toString())
         compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
+        kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", project.name)
     }
 
     tasks.withType<Kotlin2JsCompile> {
         dependsOn(prepareBootstrapTask)
         compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
+        kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", project.name)
     }
-}
-
-subprojects {
 
     task<Jar>("javadocJar") {
         classifier = "javadoc"

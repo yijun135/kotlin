@@ -1,12 +1,7 @@
 
-import org.gradle.api.Project
-import org.gradle.api.artifacts.Dependency
-import org.gradle.api.artifacts.dsl.DependencyHandler
-import org.gradle.api.tasks.bundling.Jar
 import java.io.File
 import proguard.gradle.ProGuardTask
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.file.DuplicatesStrategy
 
 buildscript {
@@ -19,12 +14,6 @@ buildscript {
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
         classpath("net.sf.proguard:proguard-gradle:5.3.1")
     }
-}
-
-repositories {
-    mavenLocal()
-    maven { setUrl(rootProject.extra["repo"]) }
-    mavenCentral()
 }
 
 // Set to false to disable proguard run on kotlin-compiler.jar. Speeds up the build
@@ -63,10 +52,9 @@ dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler.standalone"))
     compilerClassesCfg(projectDepIntransitive(":core:util.runtime"))
     compilerClassesCfg(projectDepIntransitive(":core:builtins"))
-    ideaSdkCoreCfg(files(File("$rootDir/ideaSDK/core").listFiles { f -> f.extension == "jar" && f.name != "util.jar" }))
-    ideaSdkCoreCfg(files("$rootDir/ideaSDK/lib/jna-platform.jar"))
-    ideaSdkCoreCfg(files("$rootDir/ideaSDK/lib//oromatcher.jar"))
-    ideaSdkCoreCfg(files("$rootDir/ideaSDK/jps/jps-model.jar"))
+    ideaSdkCoreCfg(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
+    ideaSdkCoreCfg(ideaSdkDeps("jna-platform", "oromatcher"))
+    ideaSdkCoreCfg(ideaSdkDeps("jps-model.jar", subdir = "jps"))
     otherDepsCfg(commonDep("javax.inject"))
     otherDepsCfg(commonDep("jline"))
     otherDepsCfg(protobufFull())

@@ -1,17 +1,6 @@
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.gradle.api.artifacts.Dependency
-import org.gradle.api.artifacts.dsl.DependencyHandler
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.bundling.AbstractArchiveTask
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.org.objectweb.asm.*
-import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.util.jar.JarEntry
-import java.util.jar.JarFile
-import java.util.zip.ZipOutputStream
 
 buildscript {
     repositories {
@@ -20,12 +9,8 @@ buildscript {
 
     dependencies {
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
-        classpath(files("$rootDir/ideaSDK/lib/asm-all.jar"))
+        classpath(ideaSdkDeps("asm-all"))
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 apply { plugin("com.github.johnrengelman.shadow") }

@@ -13,7 +13,7 @@ include "core:script.runtime"
 include "core:util.runtime"
 include "custom-dependencies:protobuf-lite"
 include "idea:idea-jps-common"
-include ':kotlin-script-runtime'
+include "kotlin-script-runtime"
 include "kotlin-test:kotlin-test-common"
 include "kotlin-test:kotlin-test-jvm"
 include "kotlin-test:kotlin-test-junit"
@@ -23,12 +23,12 @@ include "kotlin-stdlib"
 include "kotlin-stdlib-js"
 include "kotlin-stdlib-jre7"
 include "kotlin-stdlib-jre8"
-include ':kotlin-stdlib:samples'
+include "kotlin-stdlib:samples"
 include "prepare:build.version"
 include "prepare:compiler"
 //include "prepare:reflect"
 //include "prepare:runtime"
-include ':kotlin-reflect'
+include "kotlin-reflect"
 
 rootProject.name = "kotlin"
 

@@ -1,20 +1,8 @@
 
 import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.serialization.builtins.BuiltInsSerializer
 import java.io.File
-
-buildscript {
-    repositories {
-        mavenLocal()
-        maven { setUrl(rootProject.extra["repo"]) }
-    }
-
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.extra["kotlinVersion"]}")
-    }
-}
 
 apply { plugin("kotlin") }
 
@@ -73,7 +61,6 @@ tasks.withType<JavaCompile> {
 tasks.withType<KotlinCompile> {
     dependsOn(protobufLiteTask)
     dependsOn(serialize)
-    kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", "kotlin-builtins")
 }
 
 fixKotlinTaskDependencies()

@@ -16,12 +16,8 @@ buildscript {
 
     dependencies {
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
-        classpath(files("$rootDir/ideaSDK/lib/asm-all.jar"))
+        classpath(ideaSdkDeps("asm-all"))
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 apply { plugin("com.github.johnrengelman.shadow") }
@@ -39,12 +35,6 @@ val coreProjectName = ":core"
 val reflectionProjectName = ":core:reflection.jvm"
 
 artifacts.add(mainCfg.name, File(outputReflectJarFileBase + ".jar"))
-
-repositories {
-    mavenLocal()
-    maven { setUrl(rootProject.extra["repo"]) }
-    mavenCentral()
-}
 
 dependencies {
     classesFromProjectsCfg.name(projectDepIntransitive(coreProjectName))

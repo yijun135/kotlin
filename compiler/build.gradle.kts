@@ -1,29 +1,8 @@
 
-import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.tasks.compile.JavaCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.File
 
-buildscript {
-    repositories {
-        mavenLocal()
-        maven { setUrl(rootProject.extra["repo"]) }
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.extra["kotlinVersion"]}")
-    }
-}
-
 apply { plugin("kotlin") }
-
-repositories {
-    mavenLocal()
-    maven { setUrl(rootProject.extra["repo"]) }
-    mavenCentral()
-}
 
 dependencies {
 //    compile(project(":prepare:runtime", configuration = "default"))
@@ -32,7 +11,7 @@ dependencies {
 //    compile(project(":core:script.runtime"))
     compile(project(":core:util.runtime"))
     compile(project(":compiler:util"))
-    compile(fileTree(mapOf("dir" to "$rootDir/ideaSDK/core", "include" to "*.jar")))
+    compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     compile(commonDep("com.google.protobuf:protobuf-java"))
 //    compile(fileTree(mapOf("dir" to "$rootDir/lib", "include" to "*.jar"))) // direct references below
     compile(commonDep("javax.inject"))
@@ -41,7 +20,7 @@ dependencies {
     compile(commonDep("org.fusesource.jansi", "jansi"))
     compile(commonDep("io.javaslang","javaslang"))
     compile(commonDep("jline"))
-    compile(files("$rootDir/ideaSDK/jps/jps-model.jar"))
+    compile(ideaSdkDeps("jps-model.jar", subdir = "jps"))
     compile(kotlinDep("stdlib"))
     compile(kotlinDep("script-runtime"))
     compile(kotlinDep("reflect"))
@@ -79,18 +58,6 @@ configure<JavaPluginConvention> {
     sourceSets.getByName("test").apply {
         java.setSrcDirs(emptyList<File>())
     }
-}
-
-//tasks.withType<JavaCompile> {
-//    // TODO: automatic from deps
-//    dependsOn(":prepare:runtime:prepare")
-//    dependsOn(":prepare:reflect:prepare")
-//}
-
-tasks.withType<KotlinCompile> {
-//    dependsOn(":prepare:runtime:prepare")
-//    dependsOn(":prepare:reflect:prepare")
-    kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", "kotlin-compiler")
 }
 
 fixKotlinTaskDependencies()

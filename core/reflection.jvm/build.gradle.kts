@@ -20,20 +20,15 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.extra["kotlinVersion"]}")
+        classpath(kotlinDep("gradle-plugin"))
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
-        classpath(files("$rootDir/ideaSDK/lib/asm-all.jar"))
+        classpath(ideaSdkDeps("asm-all"))
     }
 }
 
 apply {
     plugin("kotlin")
     plugin("com.github.johnrengelman.shadow")
-}
-
-repositories {
-    mavenLocal()
-    maven { setUrl(rootProject.extra["repo"]) }
 }
 
 configure<JavaPluginConvention> {
@@ -58,7 +53,6 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<KotlinCompile> {
     dependsOn(protobufLiteTask)
-    kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", "kotlin-reflection")
 }
 
 fixKotlinTaskDependencies()

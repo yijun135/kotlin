@@ -10,7 +10,6 @@ buildscript {
 
 apply {
     plugin("kotlin")
-    plugin("groovy")
 }
 
 dependencies {

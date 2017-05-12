@@ -1,26 +1,7 @@
 
 import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.io.File
-
-buildscript {
-    repositories {
-        mavenLocal()
-        maven { setUrl(rootProject.extra["repo"]) }
-    }
-
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.extra["kotlinVersion"]}")
-    }
-}
 
 apply { plugin("kotlin") }
-
-repositories {
-    mavenLocal()
-    maven { setUrl(rootProject.extra["repo"]) }
-    mavenCentral()
-}
 
 dependencies {
     compile(project(":kotlin-stdlib"))
@@ -34,10 +15,6 @@ dependencies {
 
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.freeCompilerArgs = listOf("-module-name", "kotlin-idea-jps-plugin")
-}
 
 tasks.withType<Jar> {
     setupRuntimeJar("Kotlin Preloader")
