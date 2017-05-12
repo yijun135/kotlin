@@ -52,6 +52,10 @@
       <module name="kannotator-jps-plugin-test" target="1.8" />
       <module name="kotlin-compiler_main" target="1.8" />
       <module name="kotlin-compiler_test" target="1.8" />
+      <module name="kotlin-reflect_main" target="1.6" />
+      <module name="kotlin-reflect_test" target="1.6" />
+      <module name="kotlin-script-runtime_main" target="1.6" />
+      <module name="kotlin-script-runtime_test" target="1.6" />
       <module name="kotlin-stdlib-common_main" target="1.8" />
       <module name="kotlin-stdlib-common_test" target="1.8" />
       <module name="kotlin-stdlib-jre7_main" target="1.6" />
