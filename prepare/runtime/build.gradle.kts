@@ -37,7 +37,7 @@ val outputRuntimeJarFileBase = "$buildDir/libs/kotlin-runtime"
 artifacts.add(mainCfg.name, File(outputRuntimeJarFileBase + ".jar"))
 
 dependencies {
-    mainCfg.name(projectDepIntransitive(":core.builtins"))
+    mainCfg.name(projectDepIntransitive(":core:builtins"))
     mainCfg.name(projectDepIntransitive(":kotlin-stdlib"))
     buildVersion()
 }
@@ -45,7 +45,7 @@ dependencies {
 val mainTask = task<ShadowJar>("prepare") {
     classifier = outputRuntimeJarFileBase
     configurations = listOf(mainCfg)
-    dependsOn(":core.builtins:assemble", ":kotlin-stdlib:assemble")
+    dependsOn(":core:builtins:assemble", ":kotlin-stdlib:assemble")
     setupRuntimeJar("Kotlin Runtime")
     from(mainCfg.files)
 }

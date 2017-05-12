@@ -24,6 +24,10 @@
       <module name="build-common_test" target="1.8" />
       <module name="buildSrc_main" target="1.8" />
       <module name="buildSrc_test" target="1.8" />
+      <module name="builtins_main" target="1.8" />
+      <module name="builtins_test" target="1.8" />
+      <module name="compiler-runner_main" target="1.8" />
+      <module name="compiler-runner_test" target="1.8" />
       <module name="compiler.daemon-client_main" target="1.8" />
       <module name="compiler.daemon-client_test" target="1.8" />
       <module name="compiler.preloader_main" target="1.8" />
@@ -38,10 +42,14 @@
       <module name="core.reflection_test" target="1.8" />
       <module name="core_main" target="1.8" />
       <module name="core_test" target="1.8" />
+      <module name="daemon-client_main" target="1.8" />
+      <module name="daemon-client_test" target="1.8" />
       <module name="idea" target="1.8" />
       <module name="idea-analysis" target="1.8" />
       <module name="idea-completion" target="1.8" />
       <module name="idea-core" target="1.8" />
+      <module name="idea-jps-common_main" target="1.8" />
+      <module name="idea-jps-common_test" target="1.8" />
       <module name="idea-live-templates" target="1.8" />
       <module name="idea-repl" target="1.8" />
       <module name="idea-runner" target="1.8" />
@@ -81,6 +89,10 @@
       <module name="kotlin-test_test" target="1.8" />
       <module name="kotlin_main" target="1.8" />
       <module name="kotlin_test" target="1.8" />
+      <module name="preloader_main" target="1.8" />
+      <module name="preloader_test" target="1.8" />
+      <module name="reflection.jvm_main" target="1.8" />
+      <module name="reflection.jvm_test" target="1.8" />
       <module name="script.runtime_main" target="1.8" />
       <module name="script.runtime_test" target="1.8" />
       <module name="util.runtime_main" target="1.8" />

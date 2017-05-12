@@ -62,7 +62,7 @@ dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler"))
     compilerClassesCfg(projectDepIntransitive(":compiler.standalone"))
     compilerClassesCfg(projectDepIntransitive(":core:util.runtime"))
-    compilerClassesCfg(projectDepIntransitive(":core.builtins"))
+    compilerClassesCfg(projectDepIntransitive(":core:builtins"))
     ideaSdkCoreCfg(files(File("$rootDir/ideaSDK/core").listFiles { f -> f.extension == "jar" && f.name != "util.jar" }))
     ideaSdkCoreCfg(files("$rootDir/ideaSDK/lib/jna-platform.jar"))
     ideaSdkCoreCfg(files("$rootDir/ideaSDK/lib//oromatcher.jar"))
@@ -106,7 +106,7 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
     from(project(":core").getCompiledClasses())
     from(ideaSdkCoreCfg.files)
     from(otherDepsCfg.files)
-    from(project(":core.builtins").getResourceFiles()) { include("kotlin/**") }
+    from(project(":core:builtins").getResourceFiles()) { include("kotlin/**") }
     from(fileTree("${project(":core").projectDir}/descriptor.loader.java/src")) { include("META-INF/services/**") }
     from(fileTree("${compilerProject.projectDir}/frontend.java/src")) { include("META-INF/services/**") }
     from(fileTree("${compilerProject.projectDir}/backend/src")) { include("META-INF/services/**") }

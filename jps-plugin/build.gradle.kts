@@ -27,7 +27,7 @@ dependencies {
     compile(project(":build.common"))
     compile(project(":core"))
     compile(project(":compiler"))
-    compile(project(":compiler.preloader"))
+    compile(project(":compiler:preloader"))
     compile(project(":daemon.client"))
     buildVersion()
 }

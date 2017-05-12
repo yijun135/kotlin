@@ -21,7 +21,7 @@ buildscript {
 apply { plugin("kotlin") }
 
 dependencies {
-    compile(project(":core.builtins"))
+    compile(project(":core:builtins"))
 //    compile(project(":kotlin-stdlib"))
     compile(kotlinDep("stdlib"))
 }

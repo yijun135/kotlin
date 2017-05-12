@@ -33,7 +33,7 @@ configure<JavaPluginConvention> {
 }
 
 dependencies {
-    compile(project(":core.builtins"))
+    compile(project(":core:builtins"))
     compile("junit:junit:4.11")
 }
 

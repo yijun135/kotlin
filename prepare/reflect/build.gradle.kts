@@ -36,7 +36,7 @@ val mainCfg = configurations.create("default")
 val outputReflectJarFileBase = "$buildDir/libs/kotlin-reflect"
 
 val coreProjectName = ":core"
-val reflectionProjectName = ":core.reflection"
+val reflectionProjectName = ":core:reflection.jvm"
 
 artifacts.add(mainCfg.name, File(outputReflectJarFileBase + ".jar"))
 

@@ -47,9 +47,8 @@ configure<JavaPluginConvention> {
 }
 
 dependencies {
-    compile(project(":core.builtins"))
+    compile(project(":core:builtins"))
     compile(project(":core"))
-//    compile(project(":kotlin-stdlib"))
     compile(protobufLite())
 }
 

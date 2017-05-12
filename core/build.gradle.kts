@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile(project(":core.builtins"))
+    compile(project(":core:builtins"))
 //    compile(project(":kotlin-stdlib"))
     compile(project("util.runtime"))
     compile(protobufLite())

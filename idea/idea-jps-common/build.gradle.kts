@@ -22,13 +22,13 @@ repositories {
 
 dependencies {
     compile(project(":kotlin-stdlib"))
-    compile(project(":core.reflection"))
+    compile(project(":core:reflection.jvm"))
     compile(project(":compiler"))
     compile(ideaSdkCoreDeps("intellij-core", "util"))
     buildVersion()
 }
 
-configureKotlinProjectSources("idea/idea-jps-common/src", sourcesBaseDir = rootDir)
+//configureKotlinProjectSources("idea/idea-jps-common/src", sourcesBaseDir = rootDir)
 configureKotlinProjectNoTests()
 
 tasks.withType<KotlinCompile> {
