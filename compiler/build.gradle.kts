@@ -12,6 +12,9 @@ dependencies {
     compile(project(":core:util.runtime"))
     compile(project(":compiler:util"))
     compile(project(":compiler:container"))
+    compile(project(":compiler:resolution"))
+    compile(project(":compiler:frontend"))
+    compile(project(":compiler:frontend.java"))
     compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     compile(commonDep("com.google.protobuf:protobuf-java"))
 //    compile(fileTree(mapOf("dir" to "$rootDir/lib", "include" to "*.jar"))) // direct references below
@@ -36,9 +39,7 @@ configure<JavaPluginConvention> {
                 "compiler/ir/ir.psi2ir/src",
                 "compiler/ir/ir.tree/src",
                 "compiler/cli/cli-common/src",
-                "compiler/frontend/src",
                 "compiler/frontend.script/src",
-                "compiler/resolution/src",
                 "compiler/frontend.java/src",
                 "compiler/light-classes/src",
                 "compiler/plugin-api/src",

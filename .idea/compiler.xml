@@ -26,6 +26,8 @@
       <module name="buildSrc_test" target="1.8" />
       <module name="builtins_main" target="1.8" />
       <module name="builtins_test" target="1.8" />
+      <module name="cli-runner_main" target="1.8" />
+      <module name="cli-runner_test" target="1.8" />
       <module name="compiler-runner_main" target="1.8" />
       <module name="compiler-runner_test" target="1.8" />
       <module name="compiler.daemon-client_main" target="1.8" />
@@ -36,6 +38,8 @@
       <module name="compiler.runner_test" target="1.8" />
       <module name="compiler.standalone_main" target="1.8" />
       <module name="compiler.standalone_test" target="1.8" />
+      <module name="container_main" target="1.8" />
+      <module name="container_test" target="1.8" />
       <module name="core.builtins_main" target="1.8" />
       <module name="core.builtins_test" target="1.8" />
       <module name="core.reflection_main" target="1.8" />
@@ -44,6 +48,10 @@
       <module name="core_test" target="1.8" />
       <module name="daemon-client_main" target="1.8" />
       <module name="daemon-client_test" target="1.8" />
+      <module name="frontend.java_main" target="1.8" />
+      <module name="frontend.java_test" target="1.8" />
+      <module name="frontend_main" target="1.8" />
+      <module name="frontend_test" target="1.8" />
       <module name="idea" target="1.8" />
       <module name="idea-analysis" target="1.8" />
       <module name="idea-completion" target="1.8" />
@@ -93,6 +101,8 @@
       <module name="preloader_test" target="1.8" />
       <module name="reflection.jvm_main" target="1.8" />
       <module name="reflection.jvm_test" target="1.8" />
+      <module name="resolution_main" target="1.8" />
+      <module name="resolution_test" target="1.8" />
       <module name="script.runtime_main" target="1.8" />
       <module name="script.runtime_test" target="1.8" />
       <module name="util.runtime_main" target="1.8" />

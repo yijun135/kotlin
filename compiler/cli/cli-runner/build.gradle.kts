@@ -8,11 +8,11 @@ dependencies {
     buildVersion()
 }
 
-configureKotlinProjectSources("compiler/cli/cli-runner/src", sourcesBaseDir = rootDir)
+configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 
 tasks.withType<Jar> {
-    setupRuntimeJar("Kotlin Preloader")
+    setupRuntimeJar("Kotlin Runner")
     manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.runner.Main")
     manifest.attributes.put("Class-Path", "kotlin-runtime.jar")
     archiveName = "kotlin-runner.jar"
