@@ -9,7 +9,7 @@ dependencies {
     buildVersion()
 }
 
-configureKotlinProjectSources()
+configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()

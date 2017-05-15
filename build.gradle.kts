@@ -75,6 +75,7 @@ extra["versions.jsr305"] = "1.3.9"
 extra["versions.cli-parser"] = "1.1.2"
 extra["versions.jansi"] = "1.11"
 extra["versions.jline"] = "2.12.1"
+extra["versions.junit"] = "4.12"
 extra["versions.javaslang"] = "2.0.6"
 
 extra["ideaCoreSdkJars"] = arrayOf("annotations", "asm-all", "guava", "intellij-core", "jdom", "jna", "log4j", "picocontainer",

@@ -77,9 +77,9 @@ fun KotlinDependencyHandler.protobufFull(): ProjectDependency =
         project(protobufLiteProject, configuration = "relocated").apply { isTransitive = false }
 val protobufFullTask = "$protobufLiteProject:prepare-relocated-protobuf"
 
-fun Project.getCompiledClasses() = the<JavaPluginConvention>().sourceSets.getByName("main").output
-fun Project.getSources() = the<JavaPluginConvention>().sourceSets.getByName("main").allSource
-fun Project.getResourceFiles() = the<JavaPluginConvention>().sourceSets.getByName("main").resources
+fun Project.getCompiledClasses(): SourceSetOutput? = the<JavaPluginConvention>().sourceSets.getByName("main").output
+fun Project.getSources(): SourceDirectorySet? = the<JavaPluginConvention>().sourceSets.getByName("main").allSource
+fun Project.getResourceFiles(): SourceDirectorySet? = the<JavaPluginConvention>().sourceSets.getByName("main").resources
 
 
 private fun Project.configureKotlinProjectSourceSet(srcs: Iterable<File>, sourceSetName: String, getSources: SourceSet.() -> SourceDirectorySet) =
@@ -93,28 +93,31 @@ private fun Project.configureKotlinProjectSourceSet(vararg srcs: String, sourceS
         configureKotlinProjectSourceSet(srcs.map { File(sourcesBaseDir ?: projectDir, it) }, sourceSetName, getSources)
 
 fun Project.configureKotlinProjectSources(vararg srcs: String, sourcesBaseDir: File? = null) =
-        configureKotlinProjectSourceSet(*srcs, sourceSetName = "main", getSources = { this.getJava() }, sourcesBaseDir = sourcesBaseDir)
+        configureKotlinProjectSourceSet(*srcs, sourceSetName = "main", getSources = { this.java }, sourcesBaseDir = sourcesBaseDir)
 
 fun Project.configureKotlinProjectSources(srcs: Iterable<File>) =
-        configureKotlinProjectSourceSet(srcs, sourceSetName = "main", getSources = { this.getJava() })
+        configureKotlinProjectSourceSet(srcs, sourceSetName = "main", getSources = { this.java })
 
 fun Project.configureKotlinProjectSourcesDefault(sourcesBaseDir: File? = null) = configureKotlinProjectSources("src", sourcesBaseDir = sourcesBaseDir)
 
 fun Project.configureKotlinProjectResources(vararg srcs: String, sourcesBaseDir: File? = null) =
-        configureKotlinProjectSourceSet(*srcs, sourceSetName = "main", getSources = { this.getResources() }, sourcesBaseDir = sourcesBaseDir)
+        configureKotlinProjectSourceSet(*srcs, sourceSetName = "main", getSources = { this.resources }, sourcesBaseDir = sourcesBaseDir)
 
 fun Project.configureKotlinProjectResources(srcs: Iterable<File>) =
-        configureKotlinProjectSourceSet(srcs, sourceSetName = "main", getSources = { this.getResources() })
+        configureKotlinProjectSourceSet(srcs, sourceSetName = "main", getSources = { this.resources })
 
 fun Project.configureKotlinProjectNoTests() {
-    configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.getJava() })
-    configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.getResources() })
+    configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.java })
+    configureKotlinProjectSourceSet(sourceSetName = "test", getSources = { this.resources })
 }
 
 fun Project.configureKotlinProjectTests(vararg srcs: String, sourcesBaseDir: File? = null) =
-        configureKotlinProjectSourceSet(*srcs, sourceSetName = "test", getSources = { this.getJava() }, sourcesBaseDir = sourcesBaseDir)
+        configureKotlinProjectSourceSet(*srcs, sourceSetName = "test", getSources = { this.java }, sourcesBaseDir = sourcesBaseDir)
 
 fun Project.configureKotlinProjectTestsDefault(sourcesBaseDir: File? = null) = configureKotlinProjectTests("tests", sourcesBaseDir = sourcesBaseDir)
+
+fun Project.configureKotlinProjectTestResources(vararg srcs: String, sourcesBaseDir: File? = null) =
+        configureKotlinProjectSourceSet(*srcs, sourceSetName = "test", getSources = { this.resources }, sourcesBaseDir = sourcesBaseDir)
 
 private fun File.matchMaybeVersionedArtifact(baseName: String) =
         name == baseName ||

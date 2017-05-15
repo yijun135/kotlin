@@ -1,7 +1,8 @@
 
-import java.io.File
-
-apply { plugin("kotlin") }
+apply {
+    plugin("java")
+    plugin("kotlin")
+}
 
 dependencies {
     compile(project(":core:builtins"))

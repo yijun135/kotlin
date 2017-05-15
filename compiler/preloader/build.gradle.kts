@@ -4,10 +4,11 @@ import org.gradle.jvm.tasks.Jar
 apply { plugin("kotlin") }
 
 dependencies {
+    compile(ideaSdkDeps("asm-all"))
     buildVersion()
 }
 
-configureKotlinProjectSources("compiler/preloader/src", sourcesBaseDir = rootDir)
+configureKotlinProjectSources("src", "instrumentation/src")
 configureKotlinProjectNoTests()
 
 tasks.withType<Jar> {
