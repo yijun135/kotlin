@@ -2,6 +2,7 @@
 include "build-common"
 include "compiler"
 include "compiler:util"
+include "compiler:daemon.daemon-common"
 include "compiler:daemon.daemon-client"
 include "compiler:preloader"
 include "compiler:cli.cli-runner"
@@ -52,6 +53,7 @@ project(':kotlin-stdlib:samples').projectDir = "$rootDir/libraries/stdlib/sample
 project(':kotlin-reflect').projectDir = "$rootDir/libraries/tools/kotlin-reflect" as File
 project(':compiler:cli.cli-common').projectDir = "$rootDir/compiler/cli/cli-common" as File
 project(':compiler:cli.cli-runner').projectDir = "$rootDir/compiler/cli/cli-runner" as File
+project(':compiler:daemon.daemon-common').projectDir = "$rootDir/compiler/daemon/daemon-common" as File
 project(':compiler:daemon.daemon-client').projectDir = "$rootDir/compiler/daemon/daemon-client" as File
 
 def setBuildFile(ProjectDescriptor project) {

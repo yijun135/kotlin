@@ -99,7 +99,9 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
            ":compiler:frontend.java",
            ":compiler:frontend.script",
            ":compiler:cli.cli-common",
+           ":compiler:daemon.daemon-common",
            compilerProject.path,
+           ":build-common",
            ":compiler.standalone",
            ":core:util.runtime",
            ":core").forEach {

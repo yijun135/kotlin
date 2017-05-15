@@ -17,6 +17,8 @@ dependencies {
     compile(project(":compiler:frontend.java"))
     compile(project(":compiler:frontend.script"))
     compile(project(":compiler:cli.cli-common"))
+    compile(project(":compiler:daemon.daemon-common"))
+    compile(project(":build-common"))
     compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     compile(commonDep("com.google.protobuf:protobuf-java"))
 //    compile(fileTree(mapOf("dir" to "$rootDir/lib", "include" to "*.jar"))) // direct references below
@@ -40,11 +42,8 @@ configure<JavaPluginConvention> {
                 "compiler/ir/backend.jvm/src",
                 "compiler/ir/ir.psi2ir/src",
                 "compiler/ir/ir.tree/src",
-                "compiler/cli/cli-common/src",
                 "compiler/light-classes/src",
                 "compiler/plugin-api/src",
-                "compiler/daemon/daemon-common/src",
-                "build-common/src",
                 "compiler/serialization/src",
                 "js/js.ast/src",
                 "js/js.translator/src",

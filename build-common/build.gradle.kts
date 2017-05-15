@@ -1,23 +1,19 @@
 
 import org.gradle.jvm.tasks.Jar
-import java.io.File
 
 apply { plugin("kotlin") }
 
 dependencies {
-    compile(project(":compiler"))
+    compile(project(":core:util.runtime"))
+    compile(project(":compiler:util"))
+    compile(project(":compiler:cli.cli-common"))
+    compile(project(":compiler:frontend.java"))
     compile(ideaSdkDeps("util"))
     buildVersion()
 }
 
-configure<JavaPluginConvention> {
-    sourceSets.getByName("main").apply {
-        java.setSrcDirs(listOf(File(projectDir, "src")))
-    }
-    sourceSets.getByName("test").apply {
-        java.setSrcDirs(emptyList<File>())
-    }
-}
+configureKotlinProjectSourcesDefault()
+configureKotlinProjectNoTests()
 
 tasks.withType<Jar> {
     setupRuntimeJar("Kotlin Build Common")

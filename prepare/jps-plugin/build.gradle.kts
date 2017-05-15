@@ -14,10 +14,10 @@ val mainCfg = configurations.create("default")
 val projectsClassesToPack = listOf(
     //android-extensions-jps
     ":build-common",
-    //cli-common
+    ":compiler:cli.cli-common",
     //compiler-runner
     ":compiler:daemon.daemon-client",
-    //daemon-common
+    ":compiler:daemon.daemon-common",
     //deserialization
     //idea-jps-common
     //jps-plugin
