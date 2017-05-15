@@ -101,6 +101,11 @@ val prepareBootstrapTask = task("prepareBootstrap") {
     dependsOn(bootstrapCfg, scriptCompileCfg, scriptRuntimeCfg)
 }
 
+fun Project.allprojectsRecursive(body: Project.() -> Unit) {
+    this.body()
+    this.subprojects { allprojectsRecursive(body) }
+}
+
 allprojects {
 
     setBuildDir("$rootDir/build/${project.name}")

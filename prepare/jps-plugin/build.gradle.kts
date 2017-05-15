@@ -16,7 +16,7 @@ val projectsClassesToPack = listOf(
     ":build-common",
     //cli-common
     //compiler-runner
-    ":compiler:daemon:daemon-client",
+    ":compiler:daemon.daemon-client",
     //daemon-common
     //deserialization
     //idea-jps-common
