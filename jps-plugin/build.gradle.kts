@@ -53,7 +53,11 @@ tasks.withType<Jar> {
     archiveName = "kotlin-jps-plugin.jar"
     projectsToShadow.forEach {
         dependsOn("$it:classes")
-//        from(project(it).the<JavaPluginConvention>().sourceSets.getByName("main").output)
+        project(it).let { p ->
+            p.pluginManager.withPlugin("java") {
+                from(p.the<JavaPluginConvention>().sourceSets.getByName("main").output)
+            }
+        }
     }
     from(fileTree("$projectDir/src")) { include("META-INF/**") }
     from(files("$rootDir/resources/kotlinManifest.properties"))

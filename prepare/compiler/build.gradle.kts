@@ -52,6 +52,7 @@ dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler:frontend"))
     compilerClassesCfg(projectDepIntransitive(":compiler:frontend.java"))
     compilerClassesCfg(projectDepIntransitive(":compiler:frontend.script"))
+    compilerClassesCfg(projectDepIntransitive(":compiler:plugin-api"))
     compilerClassesCfg(projectDepIntransitive(":compiler:cli.cli-common"))
     compilerClassesCfg(projectDepIntransitive(":compiler"))
     compilerClassesCfg(projectDepIntransitive(":compiler.standalone"))
@@ -100,6 +101,7 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
            ":compiler:frontend.script",
            ":compiler:cli.cli-common",
            ":compiler:daemon.daemon-common",
+           ":compiler:plugin-api",
            compilerProject.path,
            ":build-common",
            ":compiler.standalone",

@@ -18,6 +18,7 @@ dependencies {
     compile(project(":compiler:frontend.script"))
     compile(project(":compiler:cli.cli-common"))
     compile(project(":compiler:daemon.daemon-common"))
+    compile(project(":compiler:plugin-api"))
     compile(project(":build-common"))
     compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     compile(commonDep("com.google.protobuf:protobuf-java"))
@@ -43,7 +44,6 @@ configure<JavaPluginConvention> {
                 "compiler/ir/ir.psi2ir/src",
                 "compiler/ir/ir.tree/src",
                 "compiler/light-classes/src",
-                "compiler/plugin-api/src",
                 "compiler/serialization/src",
                 "js/js.ast/src",
                 "js/js.translator/src",
