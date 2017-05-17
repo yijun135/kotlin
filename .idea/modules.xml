@@ -92,6 +92,9 @@
       <module fileurl="file://$PROJECT_DIR$/idea/idea-android/idea-android-output-parser/idea-android-output-parser.iml" filepath="$PROJECT_DIR$/idea/idea-android/idea-android-output-parser/idea-android-output-parser.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-completion/idea-completion.iml" filepath="$PROJECT_DIR$/idea/idea-completion/idea-completion.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-core/idea-core.iml" filepath="$PROJECT_DIR$/idea/idea-core/idea-core.iml" group="ide" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter.iml" group="idea/formatter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_main.iml" group="idea/formatter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_test.iml" group="idea/formatter" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-jps-common/idea-jps-common.iml" filepath="$PROJECT_DIR$/idea/idea-jps-common/idea-jps-common.iml" group="idea/idea-jps-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_main.iml" group="idea/idea-jps-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_test.iml" group="idea/idea-jps-common" />
@@ -185,6 +188,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/preloader/preloader_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/preloader/preloader_test.iml" group="compiler/preloader" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/prepare.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/prepare.iml" group="prepare" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/compiler/prepare-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/compiler/prepare-compiler.iml" group="prepare/compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter.iml" group="prepare/formatter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_main.iml" group="prepare/formatter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_test.iml" group="prepare/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin.iml" group="prepare/jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_main.iml" group="prepare/jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_test.iml" group="prepare/jps-plugin" />

@@ -74,6 +74,8 @@
       <module name="idea-analysis" target="1.8" />
       <module name="idea-completion" target="1.8" />
       <module name="idea-core" target="1.8" />
+      <module name="idea-formatter_main" target="1.8" />
+      <module name="idea-formatter_test" target="1.8" />
       <module name="idea-jps-common_main" target="1.8" />
       <module name="idea-jps-common_test" target="1.8" />
       <module name="idea-live-templates" target="1.8" />
@@ -127,6 +129,8 @@
       <module name="plugin-api_test" target="1.8" />
       <module name="preloader_main" target="1.8" />
       <module name="preloader_test" target="1.8" />
+      <module name="prepare-formatter_main" target="1.8" />
+      <module name="prepare-formatter_test" target="1.8" />
       <module name="prepare-jps-plugin_main" target="1.8" />
       <module name="prepare-jps-plugin_test" target="1.8" />
       <module name="reflection.jvm_main" target="1.8" />

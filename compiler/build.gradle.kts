@@ -22,6 +22,10 @@ dependencies {
     compile(project(":compiler:backend"))
     compile(project(":compiler:plugin-api"))
     compile(project(":build-common"))
+    compile(project(":js:js.ast"))
+    compile(project(":js:js.serializer"))
+    compile(project(":js:js.parser"))
+    compile(project(":js:js.frontend"))
     compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     compile(commonDep("com.google.protobuf:protobuf-java"))
 //    compile(fileTree(mapOf("dir" to "$rootDir/lib", "include" to "*.jar"))) // direct references below
@@ -40,12 +44,8 @@ dependencies {
 configure<JavaPluginConvention> {
     sourceSets.getByName("main").apply {
         listOf( "compiler/light-classes/src",
-                "js/js.ast/src",
                 "js/js.translator/src",
-                "js/js.frontend/src",
-                "js/js.inliner/src",
-                "js/js.parser/src",
-                "js/js.serializer/src")
+                "js/js.inliner/src")
         .map { File(rootDir, it) }
         .let { java.setSrcDirs(it) }
 //        println(compileClasspath.joinToString("\n    ", prefix = "classpath =\n    ") { it.canonicalFile.relativeTo(rootDir).path })
