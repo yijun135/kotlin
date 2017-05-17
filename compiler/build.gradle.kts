@@ -13,11 +13,13 @@ dependencies {
     compile(project(":compiler:util"))
     compile(project(":compiler:container"))
     compile(project(":compiler:resolution"))
+    compile(project(":compiler:serialization"))
     compile(project(":compiler:frontend"))
     compile(project(":compiler:frontend.java"))
     compile(project(":compiler:frontend.script"))
     compile(project(":compiler:cli.cli-common"))
     compile(project(":compiler:daemon.daemon-common"))
+    compile(project(":compiler:backend"))
     compile(project(":compiler:plugin-api"))
     compile(project(":build-common"))
     compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
@@ -37,14 +39,7 @@ dependencies {
 
 configure<JavaPluginConvention> {
     sourceSets.getByName("main").apply {
-        listOf( "compiler/backend/src",
-                "compiler/backend-common/src",
-                "compiler/ir/backend.common/src",
-                "compiler/ir/backend.jvm/src",
-                "compiler/ir/ir.psi2ir/src",
-                "compiler/ir/ir.tree/src",
-                "compiler/light-classes/src",
-                "compiler/serialization/src",
+        listOf( "compiler/light-classes/src",
                 "js/js.ast/src",
                 "js/js.translator/src",
                 "js/js.frontend/src",

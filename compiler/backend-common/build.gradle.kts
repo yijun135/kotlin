@@ -5,9 +5,10 @@ dependencies {
     compile(project(":core"))
     compile(project(":compiler:util"))
     compile(project(":compiler:frontend"))
+    compile(project(":compiler:ir.tree"))
 }
 
-configureKotlinProjectSourcesDefault()
+configureKotlinProjectSources("backend-common/src", "ir/backend.common/src", sourcesBaseDir = File(rootDir, "compiler"))
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()

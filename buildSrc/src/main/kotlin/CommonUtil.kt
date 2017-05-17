@@ -84,9 +84,12 @@ fun Project.getResourceFiles(): SourceDirectorySet? = the<JavaPluginConvention>(
 
 private fun Project.configureKotlinProjectSourceSet(srcs: Iterable<File>, sourceSetName: String, getSources: SourceSet.() -> SourceDirectorySet) =
         configure<JavaPluginConvention> {
-            sourceSets.getByName(sourceSetName).apply {
-                getSources().setSrcDirs(srcs)
-            }
+//            if (srcs.none()) {
+//                sourceSets.removeIf { it.name == sourceSetName }
+//            }
+//            else {
+                sourceSets.matching { it.name == sourceSetName }.forEach { it.getSources().setSrcDirs(srcs) }
+//            }
         }
 
 private fun Project.configureKotlinProjectSourceSet(vararg srcs: String, sourceSetName: String, getSources: SourceSet.() -> SourceDirectorySet, sourcesBaseDir: File? = null) =

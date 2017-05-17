@@ -19,7 +19,13 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <bytecodeTargetLevel>
+      <module name="android-extensions-compiler_main" target="1.8" />
+      <module name="android-extensions-compiler_test" target="1.8" />
       <module name="android-studio" target="1.8" />
+      <module name="backend-common_main" target="1.8" />
+      <module name="backend-common_test" target="1.8" />
+      <module name="backend_main" target="1.8" />
+      <module name="backend_test" target="1.8" />
       <module name="build-common_main" target="1.8" />
       <module name="build-common_test" target="1.8" />
       <module name="buildSrc_main" target="1.8" />
@@ -54,6 +60,8 @@
       <module name="daemon-client_test" target="1.8" />
       <module name="daemon.daemon-client_main" target="1.8" />
       <module name="daemon.daemon-client_test" target="1.8" />
+      <module name="daemon.daemon-common_main" target="1.8" />
+      <module name="daemon.daemon-common_test" target="1.8" />
       <module name="frontend.java_main" target="1.8" />
       <module name="frontend.java_test" target="1.8" />
       <module name="frontend.script_main" target="1.8" />
@@ -72,7 +80,13 @@
       <module name="idea-test-framework" target="1.8" />
       <module name="idea.jps-common_main" target="1.8" />
       <module name="idea.jps-common_test" target="1.8" />
+      <module name="ir.psi2ir_main" target="1.8" />
+      <module name="ir.psi2ir_test" target="1.8" />
+      <module name="ir.tree_main" target="1.8" />
+      <module name="ir.tree_test" target="1.8" />
       <module name="j2k" target="1.8" />
+      <module name="jps-plugin_main" target="1.8" />
+      <module name="jps-plugin_test" target="1.8" />
       <module name="kannotator-jps-plugin-test" target="1.8" />
       <module name="kotlin-compiler_main" target="1.8" />
       <module name="kotlin-compiler_test" target="1.8" />
@@ -105,6 +119,8 @@
       <module name="kotlin-test_test" target="1.8" />
       <module name="kotlin_main" target="1.8" />
       <module name="kotlin_test" target="1.8" />
+      <module name="plugin-api_main" target="1.8" />
+      <module name="plugin-api_test" target="1.8" />
       <module name="preloader_main" target="1.8" />
       <module name="preloader_test" target="1.8" />
       <module name="reflection.jvm_main" target="1.8" />
@@ -115,6 +131,8 @@
       <module name="samples_test" target="1.8" />
       <module name="script.runtime_main" target="1.8" />
       <module name="script.runtime_test" target="1.8" />
+      <module name="serialization_main" target="1.8" />
+      <module name="serialization_test" target="1.8" />
       <module name="util.runtime_main" target="1.8" />
       <module name="util.runtime_test" target="1.8" />
       <module name="util_main" target="1.8" />
