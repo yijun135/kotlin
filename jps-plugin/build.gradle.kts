@@ -1,6 +1,4 @@
 
-import org.gradle.jvm.tasks.Jar
-
 apply {
     plugin("kotlin")
 }
@@ -45,23 +43,5 @@ configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 //configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
 //configureKotlinProjectTestResources("testData")
-
-tasks.withType<Jar> {
-    setupRuntimeJar("Kotlin JPS plugin")
-    manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.runner.Main")
-    manifest.attributes.put("Class-Path", "kotlin-runtime.jar")
-    archiveName = "kotlin-jps-plugin.jar"
-    projectsToShadow.forEach {
-        dependsOn("$it:classes")
-        project(it).let { p ->
-            p.pluginManager.withPlugin("java") {
-                from(p.the<JavaPluginConvention>().sourceSets.getByName("main").output)
-            }
-        }
-    }
-    from(fileTree("$projectDir/src")) { include("META-INF/**") }
-    from(files("$rootDir/resources/kotlinManifest.properties"))
-    from(zipTree("$rootDir/dependencies/native-platform-uberjar.jar"))
-}
 
 fixKotlinTaskDependencies()

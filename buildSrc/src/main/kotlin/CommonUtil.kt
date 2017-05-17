@@ -55,8 +55,8 @@ fun Project.commonDep(group: String, artifact: String): String = "$group:$artifa
 
 fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"): ConfigurableFileCollection {
     val matchingFiles = File(File(rootDir, "ideaSdk"), subdir).listFiles { file -> artifactBaseNames.any { file.matchMaybeVersionedArtifact(it) }}
-    if (matchingFiles.size < artifactBaseNames.size)
-        throw GradleException("Not all matching artifacts '${artifactBaseNames.joinToString()}' found in the '$rootDir/ideaSDK/$subdir' (found: ${matchingFiles.joinToString { it.name }})")
+    if (matchingFiles == null || matchingFiles.size < artifactBaseNames.size)
+        throw GradleException("Not all matching artifacts '${artifactBaseNames.joinToString()}' found in the '$rootDir/ideaSDK/$subdir' (found: ${matchingFiles?.joinToString { it.name }})")
     return files(*matchingFiles.map { it.canonicalPath }.toTypedArray())
 }
 

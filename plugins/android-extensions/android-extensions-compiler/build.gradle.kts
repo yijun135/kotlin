@@ -7,6 +7,7 @@ dependencies {
     compile(project(":compiler:plugin-api"))
     compile(project(":compiler:frontend"))
     compile(project(":compiler:frontend.java"))
+    compile(project(":compiler:backend"))
 }
 
 configureKotlinProjectSourcesDefault()

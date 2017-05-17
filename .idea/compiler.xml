@@ -21,6 +21,8 @@
     <bytecodeTargetLevel>
       <module name="android-extensions-compiler_main" target="1.8" />
       <module name="android-extensions-compiler_test" target="1.8" />
+      <module name="android-extensions-jps_main" target="1.8" />
+      <module name="android-extensions-jps_test" target="1.8" />
       <module name="android-studio" target="1.8" />
       <module name="backend-common_main" target="1.8" />
       <module name="backend-common_test" target="1.8" />
@@ -90,6 +92,8 @@
       <module name="kannotator-jps-plugin-test" target="1.8" />
       <module name="kotlin-compiler_main" target="1.8" />
       <module name="kotlin-compiler_test" target="1.8" />
+      <module name="kotlin-jps-plugin_main" target="1.8" />
+      <module name="kotlin-jps-plugin_test" target="1.8" />
       <module name="kotlin-reflect_main" target="1.6" />
       <module name="kotlin-reflect_test" target="1.6" />
       <module name="kotlin-script-runtime_main" target="1.6" />
@@ -123,6 +127,8 @@
       <module name="plugin-api_test" target="1.8" />
       <module name="preloader_main" target="1.8" />
       <module name="preloader_test" target="1.8" />
+      <module name="prepare-jps-plugin_main" target="1.8" />
+      <module name="prepare-jps-plugin_test" target="1.8" />
       <module name="reflection.jvm_main" target="1.8" />
       <module name="reflection.jvm_test" target="1.8" />
       <module name="resolution_main" target="1.8" />

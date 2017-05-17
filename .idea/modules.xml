@@ -10,7 +10,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-compiler/android-extensions-compiler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-compiler/android-extensions-compiler_main.iml" group="plugins/android-extensions-compiler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-compiler/android-extensions-compiler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-compiler/android-extensions-compiler_test.iml" group="plugins/android-extensions-compiler" />
       <module fileurl="file://$PROJECT_DIR$/plugins/android-extensions/android-extensions-idea/android-extensions-idea.iml" filepath="$PROJECT_DIR$/plugins/android-extensions/android-extensions-idea/android-extensions-idea.iml" group="plugins/android-extensions" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/android-extensions/android-extensions-jps/android-extensions-jps.iml" filepath="$PROJECT_DIR$/plugins/android-extensions/android-extensions-jps/android-extensions-jps.iml" group="plugins/android-extensions" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/android-extensions/android-extensions-jps/android-extensions-jps.iml" filepath="$PROJECT_DIR$/plugins/android-extensions/android-extensions-jps/android-extensions-jps.iml" group="plugins/android-extensions-jps" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-jps/android-extensions-jps_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-jps/android-extensions-jps_main.iml" group="plugins/android-extensions-jps" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-jps/android-extensions-jps_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/android-extensions/android-extensions-jps/android-extensions-jps_test.iml" group="plugins/android-extensions-jps" />
       <module fileurl="file://$PROJECT_DIR$/android-studio/android-studio.iml" filepath="$PROJECT_DIR$/android-studio/android-studio.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/compiler/android-tests/android-tests.iml" filepath="$PROJECT_DIR$/compiler/android-tests/android-tests.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/plugins/annotation-based-compiler-plugins-ide-support/annotation-based-compiler-plugins-ide-support.iml" filepath="$PROJECT_DIR$/plugins/annotation-based-compiler-plugins-ide-support/annotation-based-compiler-plugins-ide-support.iml" group="plugins" />
@@ -109,9 +111,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/ir/ir.tree/ir.tree_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/ir/ir.tree/ir.tree_test.iml" group="compiler/ir.tree" />
       <module fileurl="file://$PROJECT_DIR$/j2k/j2k.iml" filepath="$PROJECT_DIR$/j2k/j2k.iml" group="j2k" />
       <module fileurl="file://$PROJECT_DIR$/plugins/java-model-wrappers/java-model-wrappers.iml" filepath="$PROJECT_DIR$/plugins/java-model-wrappers/java-model-wrappers.iml" group="plugins" />
-      <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-plugin.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-plugin.iml" group="jps-plugin" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/jps-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/jps-plugin_main.iml" group="jps-plugin" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/jps-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/jps-plugin_test.iml" group="jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-tests/jps-tests.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-tests/jps-tests.iml" group="ide/jps" />
       <module fileurl="file://$PROJECT_DIR$/js/js.ast/js.ast.iml" filepath="$PROJECT_DIR$/js/js.ast/js.ast.iml" group="compiler/js" />
       <module fileurl="file://$PROJECT_DIR$/js/js.frontend/js.frontend.iml" filepath="$PROJECT_DIR$/js/js.frontend/js.frontend.iml" group="compiler/js" />
@@ -127,6 +126,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_main.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_test.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/idea/kotlin-gradle-tooling/kotlin-gradle-tooling.iml" filepath="$PROJECT_DIR$/idea/kotlin-gradle-tooling/kotlin-gradle-tooling.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin.iml" group="jps-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_main.iml" group="jps-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_test.iml" group="jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libraries/tools/kotlin-reflect/kotlin-reflect.iml" filepath="$PROJECT_DIR$/.idea/modules/libraries/tools/kotlin-reflect/kotlin-reflect.iml" group="kotlin-reflect" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libraries/tools/kotlin-reflect/kotlin-reflect_main.iml" filepath="$PROJECT_DIR$/.idea/modules/libraries/tools/kotlin-reflect/kotlin-reflect_main.iml" group="kotlin-reflect" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libraries/tools/kotlin-reflect/kotlin-reflect_test.iml" filepath="$PROJECT_DIR$/.idea/modules/libraries/tools/kotlin-reflect/kotlin-reflect_test.iml" group="kotlin-reflect" />
@@ -183,6 +185,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/preloader/preloader_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/preloader/preloader_test.iml" group="compiler/preloader" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/prepare.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/prepare.iml" group="prepare" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/compiler/prepare-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/compiler/prepare-compiler.iml" group="prepare/compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin.iml" group="prepare/jps-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_main.iml" group="prepare/jps-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_test.iml" group="prepare/jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/custom-dependencies/protobuf-lite/protobuf-lite.iml" filepath="$PROJECT_DIR$/.idea/modules/custom-dependencies/protobuf-lite/protobuf-lite.iml" group="custom-dependencies/protobuf-lite" />
       <module fileurl="file://$PROJECT_DIR$/core/reflection.jvm/reflection.jvm.iml" filepath="$PROJECT_DIR$/core/reflection.jvm/reflection.jvm.iml" group="core/reflection.jvm" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/reflection.jvm/reflection.jvm_main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/reflection.jvm/reflection.jvm_main.iml" group="core/reflection.jvm" />
