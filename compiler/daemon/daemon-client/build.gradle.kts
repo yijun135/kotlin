@@ -11,13 +11,23 @@ dependencies {
     buildVersion()
 }
 
-configureKotlinProjectSources("compiler/daemon/daemon-client/src", sourcesBaseDir = rootDir)
+configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 
-tasks.withType<Jar> {
+val jar: Jar by tasks
+jar.apply {
     setupRuntimeJar("Kotlin Daemon Client")
     from(zipTree(nativePlatformUberjar))
     archiveName = "kotlin-daemon-client.jar"
+}
+
+val sourcesJar by task<Jar> {
+    setupSourceJar("Kotlin Daemon Client")
+    archiveName = "kotlin-daemon-client-sources.jar"
+}
+
+dist {
+    from(jar)
 }
 
 fixKotlinTaskDependencies()

@@ -13,8 +13,17 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.jvm.tasks.Jar
 import java.io.File
 
+inline fun <reified T : Task> Project.task(noinline configuration: T.() -> Unit) = tasks.creating(T::class, configuration)
 
-fun Project.fixKotlinTaskDependencies() {
+fun Project.dist(body: Copy.() -> Unit) {
+    task<Copy>("dist") {
+        dependsOn("assemble")
+        body()
+        into(rootProject.extra["distLibDir"].toString())
+    }
+}
+
+fun Project.fixKotlinTaskDependencies(): Unit {
     the<JavaPluginConvention>().sourceSets.all { sourceset ->
         val taskName = if (sourceset.name == "main") "classes" else (sourceset.name + "Classes")
         tasks.withType<Task> {
@@ -34,6 +43,16 @@ fun Jar.setupRuntimeJar(implementationTitle: String): Unit {
         put("Implementation-Version", project.rootProject.extra["build.number"])
     }
 //    from(project.configurations.getByName("build-version").files, action = { into("META-INF/") })
+}
+
+fun Jar.setupSourceJar(implementationTitle: String): Unit {
+    dependsOn("classes")
+    setupRuntimeJar(implementationTitle + " Sources")
+    project.pluginManager.withPlugin("java") {
+        from(project.the<JavaPluginConvention>().sourceSets["main"].allSource)
+    }
+    classifier = "sources"
+    project.artifacts.add("archives", this)
 }
 
 fun Project.buildVersion(): Dependency {

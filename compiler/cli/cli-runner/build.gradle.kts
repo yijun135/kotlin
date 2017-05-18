@@ -11,11 +11,16 @@ dependencies {
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 
-tasks.withType<Jar> {
+val jar: Jar by tasks
+jar.apply {
     setupRuntimeJar("Kotlin Runner")
     manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.runner.Main")
     manifest.attributes.put("Class-Path", "kotlin-runtime.jar")
     archiveName = "kotlin-runner.jar"
+}
+
+dist {
+    from(jar)
 }
 
 fixKotlinTaskDependencies()

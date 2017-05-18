@@ -1,4 +1,6 @@
 
+import org.gradle.jvm.tasks.Jar
+
 apply { plugin("kotlin") }
 
 dependencies {
@@ -12,5 +14,14 @@ dependencies {
 
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
+
+val jar: Jar by tasks
+jar.apply {
+    setupRuntimeJar("Kotlin Android Extensions Compiler")
+}
+
+dist {
+    from(jar)
+}
 
 fixKotlinTaskDependencies()
