@@ -18,7 +18,9 @@
       <module fileurl="file://$PROJECT_DIR$/plugins/annotation-based-compiler-plugins-ide-support/annotation-based-compiler-plugins-ide-support.iml" filepath="$PROJECT_DIR$/plugins/annotation-based-compiler-plugins-ide-support/annotation-based-compiler-plugins-ide-support.iml" group="plugins" />
       <module fileurl="file://$PROJECT_DIR$/plugins/annotation-collector/annotation-collector.iml" filepath="$PROJECT_DIR$/plugins/annotation-collector/annotation-collector.iml" group="plugins" />
       <module fileurl="file://$PROJECT_DIR$/plugins/annotation-processing/annotation-processing.iml" filepath="$PROJECT_DIR$/plugins/annotation-processing/annotation-processing.iml" group="plugins" />
-      <module fileurl="file://$PROJECT_DIR$/ant/ant.iml" filepath="$PROJECT_DIR$/ant/ant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ant/ant.iml" filepath="$PROJECT_DIR$/ant/ant.iml" group="ant" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ant/ant_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ant/ant_main.iml" group="ant" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ant/ant_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ant/ant_test.iml" group="ant" />
       <module fileurl="file://$PROJECT_DIR$/compiler/backend/backend.iml" filepath="$PROJECT_DIR$/compiler/backend/backend.iml" group="compiler/backend" />
       <module fileurl="file://$PROJECT_DIR$/compiler/backend-common/backend-common.iml" filepath="$PROJECT_DIR$/compiler/backend-common/backend-common.iml" group="compiler/backend-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/backend-common/backend-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/backend-common/backend-common_main.iml" group="compiler/backend-common" />

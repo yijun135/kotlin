@@ -24,6 +24,8 @@
       <module name="android-extensions-jps_main" target="1.8" />
       <module name="android-extensions-jps_test" target="1.8" />
       <module name="android-studio" target="1.8" />
+      <module name="ant_main" target="1.8" />
+      <module name="ant_test" target="1.8" />
       <module name="backend-common_main" target="1.8" />
       <module name="backend-common_test" target="1.8" />
       <module name="backend_main" target="1.8" />

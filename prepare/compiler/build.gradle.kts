@@ -112,6 +112,8 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
            ":compiler:backend-common",
            ":compiler:backend",
            ":compiler:plugin-api",
+           ":compiler:light-classes",
+           ":compiler:cli",
            ":js:js.ast",
            ":js:js.serializer",
            ":js:js.parser",
