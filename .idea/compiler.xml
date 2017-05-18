@@ -76,6 +76,8 @@
       <module name="idea-core" target="1.8" />
       <module name="idea-formatter_main" target="1.8" />
       <module name="idea-formatter_test" target="1.8" />
+      <module name="idea-ide-common_main" target="1.8" />
+      <module name="idea-ide-common_test" target="1.8" />
       <module name="idea-jps-common_main" target="1.8" />
       <module name="idea-jps-common_test" target="1.8" />
       <module name="idea-live-templates" target="1.8" />
@@ -91,6 +93,14 @@
       <module name="j2k" target="1.8" />
       <module name="jps-plugin_main" target="1.8" />
       <module name="jps-plugin_test" target="1.8" />
+      <module name="js.ast_main" target="1.8" />
+      <module name="js.ast_test" target="1.8" />
+      <module name="js.frontend_main" target="1.8" />
+      <module name="js.frontend_test" target="1.8" />
+      <module name="js.parser_main" target="1.8" />
+      <module name="js.parser_test" target="1.8" />
+      <module name="js.serializer_main" target="1.8" />
+      <module name="js.serializer_test" target="1.8" />
       <module name="kannotator-jps-plugin-test" target="1.8" />
       <module name="kotlin-compiler_main" target="1.8" />
       <module name="kotlin-compiler_test" target="1.8" />
@@ -131,6 +141,8 @@
       <module name="preloader_test" target="1.8" />
       <module name="prepare-formatter_main" target="1.8" />
       <module name="prepare-formatter_test" target="1.8" />
+      <module name="prepare-ide-common_main" target="1.8" />
+      <module name="prepare-ide-common_test" target="1.8" />
       <module name="prepare-jps-plugin_main" target="1.8" />
       <module name="prepare-jps-plugin_test" target="1.8" />
       <module name="reflection.jvm_main" target="1.8" />

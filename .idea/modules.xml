@@ -95,6 +95,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter.iml" group="idea/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_main.iml" group="idea/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_test.iml" group="idea/formatter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/ide-common/idea-ide-common.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/ide-common/idea-ide-common.iml" group="idea/ide-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/ide-common/idea-ide-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/ide-common/idea-ide-common_main.iml" group="idea/ide-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/ide-common/idea-ide-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/ide-common/idea-ide-common_test.iml" group="idea/ide-common" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-jps-common/idea-jps-common.iml" filepath="$PROJECT_DIR$/idea/idea-jps-common/idea-jps-common.iml" group="idea/idea-jps-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_main.iml" group="idea/idea-jps-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea-jps-common/idea-jps-common_test.iml" group="idea/idea-jps-common" />
@@ -115,11 +118,20 @@
       <module fileurl="file://$PROJECT_DIR$/j2k/j2k.iml" filepath="$PROJECT_DIR$/j2k/j2k.iml" group="j2k" />
       <module fileurl="file://$PROJECT_DIR$/plugins/java-model-wrappers/java-model-wrappers.iml" filepath="$PROJECT_DIR$/plugins/java-model-wrappers/java-model-wrappers.iml" group="plugins" />
       <module fileurl="file://$PROJECT_DIR$/jps-plugin/jps-tests/jps-tests.iml" filepath="$PROJECT_DIR$/jps-plugin/jps-tests/jps-tests.iml" group="ide/jps" />
-      <module fileurl="file://$PROJECT_DIR$/js/js.ast/js.ast.iml" filepath="$PROJECT_DIR$/js/js.ast/js.ast.iml" group="compiler/js" />
-      <module fileurl="file://$PROJECT_DIR$/js/js.frontend/js.frontend.iml" filepath="$PROJECT_DIR$/js/js.frontend/js.frontend.iml" group="compiler/js" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.iml" group="js" />
+      <module fileurl="file://$PROJECT_DIR$/js/js.ast/js.ast.iml" filepath="$PROJECT_DIR$/js/js.ast/js.ast.iml" group="js/js.ast" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.ast/js.ast_main.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.ast/js.ast_main.iml" group="js/js.ast" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.ast/js.ast_test.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.ast/js.ast_test.iml" group="js/js.ast" />
+      <module fileurl="file://$PROJECT_DIR$/js/js.frontend/js.frontend.iml" filepath="$PROJECT_DIR$/js/js.frontend/js.frontend.iml" group="js/js.frontend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.frontend/js.frontend_main.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.frontend/js.frontend_main.iml" group="js/js.frontend" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.frontend/js.frontend_test.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.frontend/js.frontend_test.iml" group="js/js.frontend" />
       <module fileurl="file://$PROJECT_DIR$/js/js.inliner/js.inliner.iml" filepath="$PROJECT_DIR$/js/js.inliner/js.inliner.iml" group="compiler/js" />
-      <module fileurl="file://$PROJECT_DIR$/js/js.parser/js.parser.iml" filepath="$PROJECT_DIR$/js/js.parser/js.parser.iml" group="compiler/js" />
-      <module fileurl="file://$PROJECT_DIR$/js/js.serializer/js.serializer.iml" filepath="$PROJECT_DIR$/js/js.serializer/js.serializer.iml" group="compiler/js" />
+      <module fileurl="file://$PROJECT_DIR$/js/js.parser/js.parser.iml" filepath="$PROJECT_DIR$/js/js.parser/js.parser.iml" group="js/js.parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.parser/js.parser_main.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.parser/js.parser_main.iml" group="js/js.parser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.parser/js.parser_test.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.parser/js.parser_test.iml" group="js/js.parser" />
+      <module fileurl="file://$PROJECT_DIR$/js/js.serializer/js.serializer.iml" filepath="$PROJECT_DIR$/js/js.serializer/js.serializer.iml" group="js/js.serializer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.serializer/js.serializer_main.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.serializer/js.serializer_main.iml" group="js/js.serializer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/js/js.serializer/js.serializer_test.iml" filepath="$PROJECT_DIR$/.idea/modules/js/js.serializer/js.serializer_test.iml" group="js/js.serializer" />
       <module fileurl="file://$PROJECT_DIR$/js/js.tests/js.tests.iml" filepath="$PROJECT_DIR$/js/js.tests/js.tests.iml" group="compiler/js" />
       <module fileurl="file://$PROJECT_DIR$/js/js.translator/js.translator.iml" filepath="$PROJECT_DIR$/js/js.translator/js.translator.iml" group="compiler/js" />
       <module fileurl="file://$PROJECT_DIR$/jps-plugin/kannotator-jps-plugin-test/kannotator-jps-plugin-test.iml" filepath="$PROJECT_DIR$/jps-plugin/kannotator-jps-plugin-test/kannotator-jps-plugin-test.iml" group="ide/jps" />
@@ -191,6 +203,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter.iml" group="prepare/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_main.iml" group="prepare/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/formatter/prepare-formatter_test.iml" group="prepare/formatter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/ide-common/prepare-ide-common.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/ide-common/prepare-ide-common.iml" group="prepare/ide-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/ide-common/prepare-ide-common_main.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/ide-common/prepare-ide-common_main.iml" group="prepare/ide-common" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/ide-common/prepare-ide-common_test.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/ide-common/prepare-ide-common_test.iml" group="prepare/ide-common" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin.iml" group="prepare/jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_main.iml" group="prepare/jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/prepare/jps-plugin/prepare-jps-plugin_test.iml" group="prepare/jps-plugin" />
