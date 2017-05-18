@@ -6,6 +6,7 @@ import java.io.FileOutputStream
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.zip.ZipOutputStream
+import org.gradle.language.assembler.tasks.Assemble
 
 buildscript {
     repositories {
