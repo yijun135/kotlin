@@ -272,6 +272,8 @@ public abstract class KotlinBuiltIns {
 
         public final FqNameUnsafe _enum = fqNameUnsafe("Enum");
 
+        public final FqNameUnsafe functionSupertype = fqNameUnsafe("Function");
+
 
 
         public final FqName throwable = fqName("Throwable");
@@ -1113,6 +1115,10 @@ public abstract class KotlinBuiltIns {
         }
 
         return false;
+    }
+
+    public static boolean isNotNullOrNullableFunctionSupertype(@NotNull KotlinType type) {
+        return isConstructedFromGivenClass(type, FQ_NAMES.functionSupertype);
     }
 
     public static FqName getPrimitiveFqName(@NotNull PrimitiveType primitiveType) {
