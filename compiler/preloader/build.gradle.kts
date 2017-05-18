@@ -11,10 +11,15 @@ dependencies {
 configureKotlinProjectSources("src", "instrumentation/src")
 configureKotlinProjectNoTests()
 
-tasks.withType<Jar> {
+val jar: Jar by tasks
+jar.apply {
     setupRuntimeJar("Kotlin Preloader")
     manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.preloading.Preloader")
     archiveName = "kotlin-preloader.jar"
+}
+
+dist {
+    from(jar)
 }
 
 fixKotlinTaskDependencies()

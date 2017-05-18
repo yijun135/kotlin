@@ -77,6 +77,7 @@ extra["versions.jansi"] = "1.11"
 extra["versions.jline"] = "2.12.1"
 extra["versions.junit"] = "4.12"
 extra["versions.javaslang"] = "2.0.6"
+extra["versions.ant"] = "1.8.2"
 
 extra["ideaCoreSdkJars"] = arrayOf("annotations", "asm-all", "guava", "intellij-core", "jdom", "jna", "log4j", "picocontainer",
                                    "snappy-in-java", "trove4j", "xpp3-1.1.4-min", "xstream")
