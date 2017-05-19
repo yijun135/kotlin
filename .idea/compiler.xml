@@ -24,6 +24,8 @@
       <module name="android-extensions-jps_main" target="1.8" />
       <module name="android-extensions-jps_test" target="1.8" />
       <module name="android-studio" target="1.8" />
+      <module name="annotation-processing_main" target="1.8" />
+      <module name="annotation-processing_test" target="1.8" />
       <module name="ant_main" target="1.8" />
       <module name="ant_test" target="1.8" />
       <module name="backend-common_main" target="1.8" />
@@ -42,6 +44,8 @@
       <module name="cli.cli-common_test" target="1.8" />
       <module name="cli.cli-runner_main" target="1.8" />
       <module name="cli.cli-runner_test" target="1.8" />
+      <module name="cli_main" target="1.8" />
+      <module name="cli_test" target="1.8" />
       <module name="compiler-runner_main" target="1.8" />
       <module name="compiler-runner_test" target="1.8" />
       <module name="compiler.daemon-client_main" target="1.8" />
@@ -93,6 +97,8 @@
       <module name="ir.tree_main" target="1.8" />
       <module name="ir.tree_test" target="1.8" />
       <module name="j2k" target="1.8" />
+      <module name="java-model-wrappers_main" target="1.8" />
+      <module name="java-model-wrappers_test" target="1.8" />
       <module name="jps-plugin_main" target="1.8" />
       <module name="jps-plugin_test" target="1.8" />
       <module name="js.ast_main" target="1.8" />
@@ -137,6 +143,8 @@
       <module name="kotlin-test_test" target="1.8" />
       <module name="kotlin_main" target="1.8" />
       <module name="kotlin_test" target="1.8" />
+      <module name="light-classes_main" target="1.8" />
+      <module name="light-classes_test" target="1.8" />
       <module name="plugin-api_main" target="1.8" />
       <module name="plugin-api_test" target="1.8" />
       <module name="preloader_main" target="1.8" />
