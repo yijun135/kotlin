@@ -6,7 +6,6 @@ import org.gradle.script.lang.kotlin.*
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency
-import org.gradle.api.java.archives.Manifest
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.file.ConfigurableFileCollection
@@ -72,12 +71,17 @@ fun Project.commonDep(coord: String): String {
 
 fun Project.commonDep(group: String, artifact: String): String = "$group:$artifact:${rootProject.extra["versions.$artifact"]}"
 
-fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"): ConfigurableFileCollection {
-    val matchingFiles = File(File(rootDir, "ideaSdk"), subdir).listFiles { file -> artifactBaseNames.any { file.matchMaybeVersionedArtifact(it) }}
+fun Project.preloadedDep(vararg artifactBaseNames: String, baseDir: File = File(rootDir, "dependencies"), subdir: String? = null): ConfigurableFileCollection {
+    val dir = if (subdir != null) File(baseDir, subdir) else baseDir
+    if (!dir.exists() || !dir.isDirectory) throw GradleException("Invalid base directory $dir")
+    val matchingFiles = dir.listFiles { file -> artifactBaseNames.any { file.matchMaybeVersionedArtifact(it) } }
     if (matchingFiles == null || matchingFiles.size < artifactBaseNames.size)
-        throw GradleException("Not all matching artifacts '${artifactBaseNames.joinToString()}' found in the '$rootDir/ideaSDK/$subdir' (found: ${matchingFiles?.joinToString { it.name }})")
+        throw GradleException("Not all matching artifacts '${artifactBaseNames.joinToString()}' found in the '$dir' (found: ${matchingFiles?.joinToString { it.name }})")
     return files(*matchingFiles.map { it.canonicalPath }.toTypedArray())
 }
+
+fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"): ConfigurableFileCollection =
+        preloadedDep(*artifactBaseNames, baseDir = File(rootDir, "ideaSdk"), subdir = subdir)
 
 fun Project.ideaSdkCoreDeps(vararg artifactBaseNames: String): ConfigurableFileCollection = ideaSdkDeps(*artifactBaseNames, subdir = "core")
 
