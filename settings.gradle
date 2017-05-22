@@ -2,10 +2,10 @@
 include "build-common"
 include "compiler"
 include "compiler:util"
-include "compiler:daemon.daemon-common"
-include "compiler:daemon.daemon-client"
+include "compiler:daemon-common"
+include "compiler:daemon-client"
 include "compiler:preloader"
-include "compiler:cli.cli-runner"
+include "compiler:cli-runner"
 include "compiler:container"
 include "compiler:resolution"
 include "compiler:serialization"
@@ -13,7 +13,7 @@ include "compiler:frontend"
 include "compiler:frontend.java"
 include "compiler:frontend.script"
 include "compiler:compiler-runner"
-include "compiler:cli.cli-common"
+include "compiler:cli-common"
 include "compiler:ir.tree"
 include "compiler:ir.psi2ir"
 include "compiler:backend-common"
@@ -87,10 +87,10 @@ project(':kotlin-stdlib-jre7').projectDir = "$rootDir/libraries/stdlib/jre7" as 
 project(':kotlin-stdlib-jre8').projectDir = "$rootDir/libraries/stdlib/jre8" as File
 project(':kotlin-stdlib:samples').projectDir = "$rootDir/libraries/stdlib/samples" as File
 project(':kotlin-reflect').projectDir = "$rootDir/libraries/tools/kotlin-reflect" as File
-project(':compiler:cli.cli-common').projectDir = "$rootDir/compiler/cli/cli-common" as File
-project(':compiler:cli.cli-runner').projectDir = "$rootDir/compiler/cli/cli-runner" as File
-project(':compiler:daemon.daemon-common').projectDir = "$rootDir/compiler/daemon/daemon-common" as File
-project(':compiler:daemon.daemon-client').projectDir = "$rootDir/compiler/daemon/daemon-client" as File
+project(':compiler:cli-common').projectDir = "$rootDir/compiler/cli/cli-common" as File
+project(':compiler:cli-runner').projectDir = "$rootDir/compiler/cli/cli-runner" as File
+project(':compiler:daemon-common').projectDir = "$rootDir/compiler/daemon/daemon-common" as File
+project(':compiler:daemon-client').projectDir = "$rootDir/compiler/daemon/daemon-client" as File
 project(':compiler:ir.tree').projectDir = "$rootDir/compiler/ir/ir.tree" as File
 project(':compiler:ir.psi2ir').projectDir = "$rootDir/compiler/ir/ir.psi2ir" as File
 project(':plugins:android-extensions-compiler').projectDir = "$rootDir/plugins/android-extensions/android-extensions-compiler" as File

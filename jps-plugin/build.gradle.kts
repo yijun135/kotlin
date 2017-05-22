@@ -8,10 +8,10 @@ apply {
 val projectsToShadow = listOf(
         //android-extensions-jps
            ":build-common",
-           ":compiler:cli.cli-common",
+           ":compiler:cli-common",
            ":compiler:compiler-runner",
-           ":compiler:daemon.daemon-client",
-           ":compiler:daemon.daemon-common",
+           ":compiler:daemon-client",
+           ":compiler:daemon-common",
            ":core",
            ":idea:idea-jps-common",
            ":compiler:preloader",
@@ -22,8 +22,8 @@ dependencies {
     compile(project(":build-common"))
     compile(project(":core"))
     compile(project(":compiler:compiler-runner"))
-    compile(project(":compiler:daemon.daemon-common"))
-    compile(project(":compiler:daemon.daemon-client"))
+    compile(project(":compiler:daemon-common"))
+    compile(project(":compiler:daemon-client"))
     compile(project(":compiler:frontend.java"))
     compile(project(":compiler:preloader"))
     compile(project(":idea:idea-jps-common"))

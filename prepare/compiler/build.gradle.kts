@@ -54,7 +54,7 @@ dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler:frontend.java"))
     compilerClassesCfg(projectDepIntransitive(":compiler:frontend.script"))
     compilerClassesCfg(projectDepIntransitive(":compiler:plugin-api"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:cli.cli-common"))
+    compilerClassesCfg(projectDepIntransitive(":compiler:cli-common"))
     compilerClassesCfg(projectDepIntransitive(":compiler:ir.tree"))
     compilerClassesCfg(projectDepIntransitive(":compiler:ir.psi2ir"))
     compilerClassesCfg(projectDepIntransitive(":compiler:backend-common"))
@@ -105,8 +105,8 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
            ":compiler:frontend",
            ":compiler:frontend.java",
            ":compiler:frontend.script",
-           ":compiler:cli.cli-common",
-           ":compiler:daemon.daemon-common",
+           ":compiler:cli-common",
+           ":compiler:daemon-common",
            ":compiler:ir.tree",
            ":compiler:ir.psi2ir",
            ":compiler:backend-common",

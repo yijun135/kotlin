@@ -5,10 +5,10 @@ apply { plugin("java") }
 
 val projectsToShadow = listOf(
         ":build-common",
-        ":compiler:cli.cli-common",
+        ":compiler:cli-common",
         ":compiler:compiler-runner",
-        ":compiler:daemon.daemon-client",
-        ":compiler:daemon.daemon-common",
+        ":compiler:daemon-client",
+        ":compiler:daemon-common",
         ":core",
         ":idea:idea-jps-common",
         ":jps-plugin",
