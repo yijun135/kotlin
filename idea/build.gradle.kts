@@ -40,14 +40,11 @@ dependencies {
     buildVersion()
 }
 
-configureKotlinProjectSources("idea/src",
-                              "idea/idea-maven/src",
-                              "idea/idea-completion/src",
-                              "idea/idea-live-templates/src",
-                              "idea/lint-idea/src",
-                              "idea/idea-repl/src",
-                              "plugins/lint-checks/src",
-                              sourcesBaseDir = rootDir)
+configureKotlinProjectSources("src",
+                              "idea-maven/src",
+                              "idea-completion/src",
+                              "idea-live-templates/src",
+                              "idea-repl/src")
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()
