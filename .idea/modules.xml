@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Kotlin.iml" filepath="$PROJECT_DIR$/Kotlin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/allopen/allopen-cli/allopen-cli.iml" filepath="$PROJECT_DIR$/plugins/allopen/allopen-cli/allopen-cli.iml" group="plugins/allopen" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/allopen/allopen-cli/allopen-cli.iml" filepath="$PROJECT_DIR$/plugins/allopen/allopen-cli/allopen-cli.iml" group="plugins/allopen-cli" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/allopen/allopen-cli/allopen-cli_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/allopen/allopen-cli/allopen-cli_main.iml" group="plugins/allopen-cli" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/allopen/allopen-cli/allopen-cli_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/allopen/allopen-cli/allopen-cli_test.iml" group="plugins/allopen-cli" />
       <module fileurl="file://$PROJECT_DIR$/plugins/allopen/allopen-ide/allopen-ide.iml" filepath="$PROJECT_DIR$/plugins/allopen/allopen-ide/allopen-ide.iml" group="plugins/allopen" />
       <module fileurl="file://$PROJECT_DIR$/plugins/lint/android-annotations/android-annotations.iml" filepath="$PROJECT_DIR$/plugins/lint/android-annotations/android-annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/plugins/android-extensions/android-extensions-compiler/android-extensions-compiler.iml" filepath="$PROJECT_DIR$/plugins/android-extensions/android-extensions-compiler/android-extensions-compiler.iml" group="plugins/android-extensions-compiler" />
@@ -79,7 +81,9 @@
       <module fileurl="file://$PROJECT_DIR$/core/descriptors/descriptors.iml" filepath="$PROJECT_DIR$/core/descriptors/descriptors.iml" group="core" />
       <module fileurl="file://$PROJECT_DIR$/core/descriptors.runtime/descriptors.runtime.iml" filepath="$PROJECT_DIR$/core/descriptors.runtime/descriptors.runtime.iml" group="core" />
       <module fileurl="file://$PROJECT_DIR$/core/deserialization/deserialization.iml" filepath="$PROJECT_DIR$/core/deserialization/deserialization.iml" group="core" />
-      <module fileurl="file://$PROJECT_DIR$/eval4j/eval4j.iml" filepath="$PROJECT_DIR$/eval4j/eval4j.iml" group="ide" />
+      <module fileurl="file://$PROJECT_DIR$/eval4j/eval4j.iml" filepath="$PROJECT_DIR$/eval4j/eval4j.iml" group="eval4j" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eval4j/eval4j_main.iml" filepath="$PROJECT_DIR$/.idea/modules/eval4j/eval4j_main.iml" group="eval4j" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/eval4j/eval4j_test.iml" filepath="$PROJECT_DIR$/.idea/modules/eval4j/eval4j_test.iml" group="eval4j" />
       <module fileurl="file://$PROJECT_DIR$/idea/formatter/formatter.iml" filepath="$PROJECT_DIR$/idea/formatter/formatter.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/compiler/frontend/frontend.iml" filepath="$PROJECT_DIR$/compiler/frontend/frontend.iml" group="compiler/frontend" />
       <module fileurl="file://$PROJECT_DIR$/compiler/frontend.java/frontend.java.iml" filepath="$PROJECT_DIR$/compiler/frontend.java/frontend.java.iml" group="compiler/frontend.java" />
@@ -98,7 +102,9 @@
       <module fileurl="file://$PROJECT_DIR$/idea/idea-android/idea-android.iml" filepath="$PROJECT_DIR$/idea/idea-android/idea-android.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-android/idea-android-output-parser/idea-android-output-parser.iml" filepath="$PROJECT_DIR$/idea/idea-android/idea-android-output-parser/idea-android-output-parser.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-completion/idea-completion.iml" filepath="$PROJECT_DIR$/idea/idea-completion/idea-completion.iml" group="ide" />
-      <module fileurl="file://$PROJECT_DIR$/idea/idea-core/idea-core.iml" filepath="$PROJECT_DIR$/idea/idea-core/idea-core.iml" group="ide" />
+      <module fileurl="file://$PROJECT_DIR$/idea/idea-core/idea-core.iml" filepath="$PROJECT_DIR$/idea/idea-core/idea-core.iml" group="idea/idea-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea-core/idea-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea-core/idea-core_main.iml" group="idea/idea-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea-core/idea-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea-core/idea-core_test.iml" group="idea/idea-core" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter.iml" group="idea/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_main.iml" group="idea/formatter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/formatter/idea-formatter_test.iml" group="idea/formatter" />
@@ -113,6 +119,8 @@
       <module fileurl="file://$PROJECT_DIR$/idea/idea-repl/idea-repl.iml" filepath="$PROJECT_DIR$/idea/idea-repl/idea-repl.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/idea-runner/idea-runner.iml" filepath="$PROJECT_DIR$/idea-runner/idea-runner.iml" group="ide" />
       <module fileurl="file://$PROJECT_DIR$/idea/idea-test-framework/idea-test-framework.iml" filepath="$PROJECT_DIR$/idea/idea-test-framework/idea-test-framework.iml" group="ide" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea_main.iml" group="idea" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/idea_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/idea_test.iml" group="idea" />
       <module fileurl="file://$PROJECT_DIR$/compiler/incremental-compilation-impl/incremental-compilation-impl.iml" filepath="$PROJECT_DIR$/compiler/incremental-compilation-impl/incremental-compilation-impl.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler/preloader/instrumentation/instrumentation.iml" filepath="$PROJECT_DIR$/compiler/preloader/instrumentation/instrumentation.iml" group="compiler/cli" />
       <module fileurl="file://$PROJECT_DIR$/compiler/ir/ir.ir2cfg/ir.ir2cfg.iml" filepath="$PROJECT_DIR$/compiler/ir/ir.ir2cfg/ir.ir2cfg.iml" group="compiler/ir" />
@@ -123,6 +131,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/ir/ir.tree/ir.tree_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/ir/ir.tree/ir.tree_main.iml" group="compiler/ir.tree" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/ir/ir.tree/ir.tree_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/ir/ir.tree/ir.tree_test.iml" group="compiler/ir.tree" />
       <module fileurl="file://$PROJECT_DIR$/j2k/j2k.iml" filepath="$PROJECT_DIR$/j2k/j2k.iml" group="j2k" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/j2k/j2k_main.iml" filepath="$PROJECT_DIR$/.idea/modules/j2k/j2k_main.iml" group="j2k" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/j2k/j2k_test.iml" filepath="$PROJECT_DIR$/.idea/modules/j2k/j2k_test.iml" group="j2k" />
       <module fileurl="file://$PROJECT_DIR$/plugins/java-model-wrappers/java-model-wrappers.iml" filepath="$PROJECT_DIR$/plugins/java-model-wrappers/java-model-wrappers.iml" group="plugins/java-model-wrappers" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/java-model-wrappers/java-model-wrappers_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/java-model-wrappers/java-model-wrappers_main.iml" group="plugins/java-model-wrappers" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/java-model-wrappers/java-model-wrappers_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/java-model-wrappers/java-model-wrappers_test.iml" group="plugins/java-model-wrappers" />
@@ -149,7 +159,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_main.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/kotlin-compiler_test.iml" group="compiler" />
-      <module fileurl="file://$PROJECT_DIR$/idea/kotlin-gradle-tooling/kotlin-gradle-tooling.iml" filepath="$PROJECT_DIR$/idea/kotlin-gradle-tooling/kotlin-gradle-tooling.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea/kotlin-gradle-tooling/kotlin-gradle-tooling.iml" filepath="$PROJECT_DIR$/idea/kotlin-gradle-tooling/kotlin-gradle-tooling.iml" group="idea/kotlin-gradle-tooling" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/kotlin-gradle-tooling/kotlin-gradle-tooling_main.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/kotlin-gradle-tooling/kotlin-gradle-tooling_main.iml" group="idea/kotlin-gradle-tooling" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/idea/kotlin-gradle-tooling/kotlin-gradle-tooling_test.iml" filepath="$PROJECT_DIR$/.idea/modules/idea/kotlin-gradle-tooling/kotlin-gradle-tooling_test.iml" group="idea/kotlin-gradle-tooling" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin.iml" group="jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_main.iml" group="jps-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jps-plugin/kotlin-jps-plugin_test.iml" group="jps-plugin" />
@@ -198,7 +210,9 @@
       <module fileurl="file://$PROJECT_DIR$/plugins/lint/lint-api/lint-api.iml" filepath="$PROJECT_DIR$/plugins/lint/lint-api/lint-api.iml" group="plugins/lint" />
       <module fileurl="file://$PROJECT_DIR$/plugins/lint/lint-checks/lint-checks.iml" filepath="$PROJECT_DIR$/plugins/lint/lint-checks/lint-checks.iml" group="plugins/lint" />
       <module fileurl="file://$PROJECT_DIR$/plugins/lint/lint-idea/lint-idea.iml" filepath="$PROJECT_DIR$/plugins/lint/lint-idea/lint-idea.iml" group="plugins/lint" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/noarg/noarg-cli/noarg-cli.iml" filepath="$PROJECT_DIR$/plugins/noarg/noarg-cli/noarg-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/noarg/noarg-cli/noarg-cli.iml" filepath="$PROJECT_DIR$/plugins/noarg/noarg-cli/noarg-cli.iml" group="plugins/noarg-cli" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/noarg/noarg-cli/noarg-cli_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/noarg/noarg-cli/noarg-cli_main.iml" group="plugins/noarg-cli" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/noarg/noarg-cli/noarg-cli_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/noarg/noarg-cli/noarg-cli_test.iml" group="plugins/noarg-cli" />
       <module fileurl="file://$PROJECT_DIR$/plugins/noarg/noarg-ide/noarg-ide.iml" filepath="$PROJECT_DIR$/plugins/noarg/noarg-ide/noarg-ide.iml" />
       <module fileurl="file://$PROJECT_DIR$/non-compiler-tests/non-compiler-tests.iml" filepath="$PROJECT_DIR$/non-compiler-tests/non-compiler-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler/plugin-api/plugin-api.iml" filepath="$PROJECT_DIR$/compiler/plugin-api/plugin-api.iml" group="compiler/plugin-api" />
@@ -228,7 +242,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/resolution/resolution_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/resolution/resolution_main.iml" group="compiler/resolution" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/resolution/resolution_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/resolution/resolution_test.iml" group="compiler/resolution" />
       <module fileurl="file://$PROJECT_DIR$/core/runtime.jvm/runtime.jvm.iml" filepath="$PROJECT_DIR$/core/runtime.jvm/runtime.jvm.iml" group="core" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli.iml" filepath="$PROJECT_DIR$/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli.iml" filepath="$PROJECT_DIR$/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli.iml" group="plugins/sam-with-receiver-cli" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli_main.iml" group="plugins/sam-with-receiver-cli" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/sam-with-receiver/sam-with-receiver-cli/sam-with-receiver-cli_test.iml" group="plugins/sam-with-receiver-cli" />
       <module fileurl="file://$PROJECT_DIR$/plugins/sam-with-receiver/sam-with-receiver-ide/sam-with-receiver-ide.iml" filepath="$PROJECT_DIR$/plugins/sam-with-receiver/sam-with-receiver-ide/sam-with-receiver-ide.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libraries/stdlib/samples/samples_main.iml" filepath="$PROJECT_DIR$/.idea/modules/libraries/stdlib/samples/samples_main.iml" group="kotlin-stdlib/samples" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libraries/stdlib/samples/samples_test.iml" filepath="$PROJECT_DIR$/.idea/modules/libraries/stdlib/samples/samples_test.iml" group="kotlin-stdlib/samples" />
@@ -238,12 +254,18 @@
       <module fileurl="file://$PROJECT_DIR$/compiler/serialization/serialization.iml" filepath="$PROJECT_DIR$/compiler/serialization/serialization.iml" group="compiler/serialization" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/serialization/serialization_main.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/serialization/serialization_main.iml" group="compiler/serialization" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/compiler/serialization/serialization_test.iml" filepath="$PROJECT_DIR$/.idea/modules/compiler/serialization/serialization_test.iml" group="compiler/serialization" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/source-sections/source-sections-compiler/source-sections-compiler.iml" filepath="$PROJECT_DIR$/plugins/source-sections/source-sections-compiler/source-sections-compiler.iml" group="plugins" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/source-sections/source-sections-compiler/source-sections-compiler.iml" filepath="$PROJECT_DIR$/plugins/source-sections/source-sections-compiler/source-sections-compiler.iml" group="plugins/source-sections-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/source-sections/source-sections-compiler/source-sections-compiler_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/source-sections/source-sections-compiler/source-sections-compiler_main.iml" group="plugins/source-sections-compiler" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/source-sections/source-sections-compiler/source-sections-compiler_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/source-sections/source-sections-compiler/source-sections-compiler_test.iml" group="plugins/source-sections-compiler" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/libraries/stdlib/samples/stdlib-samples.iml" filepath="$PROJECT_DIR$/.idea/modules/libraries/stdlib/samples/stdlib-samples.iml" group="kotlin-stdlib/samples" />
       <module fileurl="file://$PROJECT_DIR$/compiler/tests-common/tests-common.iml" filepath="$PROJECT_DIR$/compiler/tests-common/tests-common.iml" group="compiler" />
       <module fileurl="file://$PROJECT_DIR$/compiler/tests-ir-jvm/tests-ir-jvm.iml" filepath="$PROJECT_DIR$/compiler/tests-ir-jvm/tests-ir-jvm.iml" group="compiler/ir" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/uast-kotlin/uast-kotlin.iml" filepath="$PROJECT_DIR$/plugins/uast-kotlin/uast-kotlin.iml" group="plugins/lint" />
-      <module fileurl="file://$PROJECT_DIR$/plugins/uast-kotlin-idea/uast-kotlin-idea.iml" filepath="$PROJECT_DIR$/plugins/uast-kotlin-idea/uast-kotlin-idea.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/uast-kotlin/uast-kotlin.iml" filepath="$PROJECT_DIR$/plugins/uast-kotlin/uast-kotlin.iml" group="plugins/uast-kotlin" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/uast-kotlin-idea/uast-kotlin-idea.iml" filepath="$PROJECT_DIR$/plugins/uast-kotlin-idea/uast-kotlin-idea.iml" group="plugins/uast-kotlin-idea" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin-idea/uast-kotlin-idea_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin-idea/uast-kotlin-idea_main.iml" group="plugins/uast-kotlin-idea" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin-idea/uast-kotlin-idea_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin-idea/uast-kotlin-idea_test.iml" group="plugins/uast-kotlin-idea" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin/uast-kotlin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin/uast-kotlin_main.iml" group="plugins/uast-kotlin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin/uast-kotlin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/uast-kotlin/uast-kotlin_test.iml" group="plugins/uast-kotlin" />
       <module fileurl="file://$PROJECT_DIR$/compiler/util/util.iml" filepath="$PROJECT_DIR$/compiler/util/util.iml" group="compiler/util" />
       <module fileurl="file://$PROJECT_DIR$/core/util.runtime/util.runtime.iml" filepath="$PROJECT_DIR$/core/util.runtime/util.runtime.iml" group="core/util.runtime" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/util.runtime/util.runtime_main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/util.runtime/util.runtime_main.iml" group="core/util.runtime" />
