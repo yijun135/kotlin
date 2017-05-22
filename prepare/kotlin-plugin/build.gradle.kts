@@ -59,7 +59,7 @@ dependencies {
     packedJars(preloadedDep("protobuf-${rootProject.extra["versions.protobuf-java"]}"))
 }
 
-val shadowTask by task<ShadowJar> {
+val shadowTask = task<ShadowJar>("shadowJar") {
     setupRuntimeJar("Kotlin IDEA plugin")
     archiveName = "kotlin-plugin.jar"
     projectsToShadow.forEach {
