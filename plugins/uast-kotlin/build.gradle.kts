@@ -8,7 +8,7 @@ dependencies {
     compile(project(":compiler:frontend"))
     compile(project(":compiler:frontend.java"))
     compile(project(":compiler:light-classes"))
-    compile(preloadedDep("uast-common", "uast-java"))
+    compile(preloadedDeps("uast-common", "uast-java"))
     buildVersion()
 }
 

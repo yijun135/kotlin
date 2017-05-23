@@ -51,6 +51,7 @@ val ideaPluginDir = "$rootDir/build/idea-plugin"
 extra["distDir"] = distDir
 extra["distLibDir"] = project.file(distLibDir)
 extra["libsDir"] = project.file(distLibDir)
+extra["ideaPluginDir"] = project.file(ideaPluginDir)
 
 Properties().apply {
     load(File("$rootDir/resources/kotlinManifest.properties").reader())
@@ -163,30 +164,17 @@ allprojects {
 //    }
 //}
 
+
 val compilerCopyTask = task<Copy>("idea-plugin-copy-compiler") {
-    val thisTask = this
-    fun Project.dependsOnDistRec() {
-        tasks.firstOrNull { it.name == "dist" }?.let { thisTask.dependsOn(it) }
-        subprojects { dependsOnDistRec() }
-    }
+    dependsOnTaskIfExistRec("dist")
     into(ideaPluginDir)
     from(distDir) { include("kotlinc/**") }
 }
 
-task<Copy>("idea-plugin") {
-    val thisTask = this
+task<Copy>("dist-plugin") {
     dependsOn(compilerCopyTask)
-    fun depFrom(p: String) {
-        val proj = project(p)
-        listOf("shadowTask", "assemble").asSequence().mapNotNull { name -> proj.tasks.firstOrNull { it.name == name } }.firstOrNull()?.let {
-            thisTask.dependsOn(it)
-        } ?: println("w: no appropriate task found in $p")
-        listOf("default", "archives").asSequence().mapNotNull { name -> proj.configurations.firstOrNull { it.name == name } }.firstOrNull()?.let {
-            thisTask.from(it.files)
-        } ?: println("w: no appropriate archives config found in $p")
-    }
+    dependsOnTaskIfExistRec("idea-plugin")
     into("$ideaPluginDir/lib")
-    depFrom(":prepare:kotlin-plugin")
 }
 
 fun jdkPath(version: String): String {

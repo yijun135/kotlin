@@ -15,7 +15,7 @@ dependencies {
     compile(ideaSdkCoreDeps("intellij-core", "util"))
     compile(ideaSdkDeps("openapi", "idea"))
     compile(ideaSdkDeps("gradle-tooling-api", "gradle", subdir = "plugins/gradle/lib"))
-    compile(preloadedDep("uast-common", "kotlinx-coroutines-core"))
+    compile(preloadedDeps("uast-common", "kotlinx-coroutines-core"))
     buildVersion()
 }
 

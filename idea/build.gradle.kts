@@ -36,7 +36,7 @@ dependencies {
     compile(ideaSdkDeps("Groovy", subdir = "plugins/Groovy/lib"))
     compile(ideaSdkDeps("maven", subdir = "plugins/maven/lib"))
     compile(ideaSdkDeps("coverage", "coverage-agent", subdir = "plugins/coverage/lib"))
-    compile(preloadedDep("markdown", "kotlinx-coroutines-core"))
+    compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
     buildVersion()
 }
 

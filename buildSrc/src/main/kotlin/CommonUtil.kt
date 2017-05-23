@@ -9,16 +9,37 @@ import org.gradle.api.artifacts.ProjectDependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.internal.AbstractTask
 import org.gradle.jvm.tasks.Jar
 import java.io.File
 
 inline fun <reified T : Task> Project.task(noinline configuration: T.() -> Unit) = tasks.creating(T::class, configuration)
+
+
+fun AbstractTask.dependsOnTaskIfExist(task: String) {
+    project.tasks.firstOrNull { it.name == task }?.let { dependsOn(it) }
+}
+
+fun AbstractTask.dependsOnTaskIfExistRec(task: String, project: Project? = null) {
+    dependsOnTaskIfExist(task)
+    (project ?: this.project).subprojects.forEach {
+        dependsOnTaskIfExistRec(task, it)
+    }
+}
 
 fun Project.dist(body: Copy.() -> Unit) {
     task<Copy>("dist") {
         dependsOn("assemble")
         body()
         into(rootProject.extra["distLibDir"].toString())
+    }
+}
+
+fun Project.ideaPlugin(subdir: String = "lib", body: Copy.() -> Unit) {
+    task<Copy>("idea-plugin") {
+        dependsOnTaskIfExist("assemble")
+        body()
+        into(File(rootProject.extra["ideaPluginDir"].toString(), subdir).path)
     }
 }
 
@@ -71,7 +92,7 @@ fun Project.commonDep(coord: String): String {
 
 fun Project.commonDep(group: String, artifact: String): String = "$group:$artifact:${rootProject.extra["versions.$artifact"]}"
 
-fun Project.preloadedDep(vararg artifactBaseNames: String, baseDir: File = File(rootDir, "dependencies"), subdir: String? = null): ConfigurableFileCollection {
+fun Project.preloadedDeps(vararg artifactBaseNames: String, baseDir: File = File(rootDir, "dependencies"), subdir: String? = null): ConfigurableFileCollection {
     val dir = if (subdir != null) File(baseDir, subdir) else baseDir
     if (!dir.exists() || !dir.isDirectory) throw GradleException("Invalid base directory $dir")
     val matchingFiles = dir.listFiles { file -> artifactBaseNames.any { file.matchMaybeVersionedArtifact(it) } }
@@ -81,7 +102,7 @@ fun Project.preloadedDep(vararg artifactBaseNames: String, baseDir: File = File(
 }
 
 fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"): ConfigurableFileCollection =
-        preloadedDep(*artifactBaseNames, baseDir = File(rootDir, "ideaSdk"), subdir = subdir)
+        preloadedDeps(*artifactBaseNames, baseDir = File(rootDir, "ideaSdk"), subdir = subdir)
 
 fun Project.ideaSdkCoreDeps(vararg artifactBaseNames: String): ConfigurableFileCollection = ideaSdkDeps(*artifactBaseNames, subdir = "core")
 

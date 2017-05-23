@@ -13,7 +13,7 @@ dependencies {
     compile(ideaSdkDeps("openapi", "idea"))
     compile(ideaSdkDeps("gradle-tooling-api", subdir = "plugins/gradle/lib"))
     compile(ideaSdkDeps("android", "common", "sdk-common", "layoutlib-api", subdir = "plugins/android/lib"))
-    compile(preloadedDep("uast-common", "uast-java"))
+    compile(preloadedDeps("uast-common", "uast-java"))
 }
 
 configureKotlinProjectSourcesDefault()

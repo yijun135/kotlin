@@ -1,5 +1,4 @@
 
-import org.gradle.jvm.tasks.Jar
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 buildscript {
@@ -9,11 +8,10 @@ buildscript {
 
     dependencies {
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
-        classpath("net.sf.proguard:proguard-gradle:5.3.1")
     }
 }
 
-apply { plugin("java") }
+//apply { plugin("java") }
 
 val projectsToShadow = listOf(
         ":core:builtins",
@@ -53,10 +51,14 @@ val projectsToShadow = listOf(
         ":core:util.runtime")
 
 val packedJars = configurations.create("packedJars")
+val sideJars = configurations.create("sideJars")
 
 dependencies {
     packedJars(commonDep("com.github.spullara.cli-parser", "cli-parser"))
-    packedJars(preloadedDep("protobuf-${rootProject.extra["versions.protobuf-java"]}"))
+    packedJars(preloadedDeps("protobuf-${rootProject.extra["versions.protobuf-java"]}"))
+    sideJars(commonDep("io.javaslang","javaslang"))
+    sideJars(commonDep("javax.inject"))
+    sideJars(preloadedDeps("markdown", "kotlinx-coroutines-core", "uast-java"))
 }
 
 val shadowTask = task<ShadowJar>("shadowJar") {
@@ -74,11 +76,11 @@ val shadowTask = task<ShadowJar>("shadowJar") {
     from(packedJars.files)
 }
 
-tasks.withType<Assemble> {
+ideaPlugin {
     dependsOn(shadowTask)
+    from(shadowTask)
+    from(sideJars.files)
 }
 
-artifacts.add("default", shadowTask)
-
-configureKotlinProjectSources() // no sources
-configureKotlinProjectNoTests()
+//configureKotlinProjectSources() // no sources
+//configureKotlinProjectNoTests()

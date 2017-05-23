@@ -8,7 +8,7 @@ dependencies {
     compile(project(":compiler:frontend.java"))
     compile(project(":idea:ide-common"))
     compile(project(":plugins:uast-kotlin"))
-    compile(preloadedDep("uast-common", "uast-java"))
+    compile(preloadedDeps("uast-common", "uast-java"))
     buildVersion()
 }
 
