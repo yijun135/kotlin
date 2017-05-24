@@ -24,3 +24,8 @@ tasks.withType<Jar> {
 configureKotlinProjectSources() // no sources
 configureKotlinProjectNoTests()
 
+val jar: Jar by tasks
+
+ideaPlugin {
+    from(jar)
+}

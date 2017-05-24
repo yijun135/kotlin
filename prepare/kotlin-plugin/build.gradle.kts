@@ -56,6 +56,7 @@ val sideJars = configurations.create("sideJars")
 dependencies {
     packedJars(commonDep("com.github.spullara.cli-parser", "cli-parser"))
     packedJars(preloadedDeps("protobuf-${rootProject.extra["versions.protobuf-java"]}"))
+    sideJars(project(":kotlin-script-runtime"))
     sideJars(commonDep("io.javaslang","javaslang"))
     sideJars(commonDep("javax.inject"))
     sideJars(preloadedDeps("markdown", "kotlinx-coroutines-core", "uast-java"))
@@ -79,6 +80,7 @@ val shadowTask = task<ShadowJar>("shadowJar") {
 ideaPlugin {
     dependsOn(shadowTask)
     from(shadowTask)
+    dependsOn(":kotlin-script-runtime:jar")
     from(sideJars.files)
 }
 

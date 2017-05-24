@@ -166,14 +166,14 @@ allprojects {
 
 
 val compilerCopyTask = task<Copy>("idea-plugin-copy-compiler") {
-    dependsOnTaskIfExistRec("dist")
+    dependsOnTaskIfExistsRec("dist")
     into(ideaPluginDir)
     from(distDir) { include("kotlinc/**") }
 }
 
 task<Copy>("dist-plugin") {
     dependsOn(compilerCopyTask)
-    dependsOnTaskIfExistRec("idea-plugin")
+    dependsOnTaskIfExistsRec("idea-plugin")
     into("$ideaPluginDir/lib")
 }
 

@@ -1,31 +1,25 @@
-
 import org.gradle.jvm.tasks.Jar
 
 apply { plugin("kotlin") }
 
 dependencies {
-    compile(ideaSdkCoreDeps("intellij-core"))
+    compile(project(":plugins:sam-with-receiver-cli"))
     compile(project(":compiler:util"))
-    compile(project(":compiler:plugin-api"))
     compile(project(":compiler:frontend"))
     compile(project(":compiler:frontend.java"))
-    compile(project(":compiler:backend"))
+    compile(project(":idea:idea-core"))
+    compile(project(":idea:idea-android"))
+    compile(project(":idea"))
 }
 
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 
-val jar: Jar by tasks
-jar.apply {
-    setupRuntimeJar("Kotlin Android Extensions Compiler")
-}
+fixKotlinTaskDependencies()
 
-dist {
-    from(jar)
-}
+val jar: Jar by tasks
 
 ideaPlugin {
     from(jar)
 }
 
-fixKotlinTaskDependencies()

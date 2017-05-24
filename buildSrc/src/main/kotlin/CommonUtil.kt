@@ -16,14 +16,14 @@ import java.io.File
 inline fun <reified T : Task> Project.task(noinline configuration: T.() -> Unit) = tasks.creating(T::class, configuration)
 
 
-fun AbstractTask.dependsOnTaskIfExist(task: String) {
+fun AbstractTask.dependsOnTaskIfExists(task: String) {
     project.tasks.firstOrNull { it.name == task }?.let { dependsOn(it) }
 }
 
-fun AbstractTask.dependsOnTaskIfExistRec(task: String, project: Project? = null) {
-    dependsOnTaskIfExist(task)
+fun AbstractTask.dependsOnTaskIfExistsRec(task: String, project: Project? = null) {
+    dependsOnTaskIfExists(task)
     (project ?: this.project).subprojects.forEach {
-        dependsOnTaskIfExistRec(task, it)
+        dependsOnTaskIfExistsRec(task, it)
     }
 }
 
@@ -37,7 +37,7 @@ fun Project.dist(body: Copy.() -> Unit) {
 
 fun Project.ideaPlugin(subdir: String = "lib", body: Copy.() -> Unit) {
     task<Copy>("idea-plugin") {
-        dependsOnTaskIfExist("assemble")
+        dependsOnTaskIfExists("assemble")
         body()
         into(File(rootProject.extra["ideaPluginDir"].toString(), subdir).path)
     }
@@ -169,5 +169,5 @@ fun Project.configureKotlinProjectTestResources(vararg srcs: String, sourcesBase
 private fun File.matchMaybeVersionedArtifact(baseName: String) =
         name == baseName ||
         name.removeSuffix(".jar") == baseName ||
-        name.startsWith(baseName + "-")
+        name.matches(Regex("${Regex.escape(baseName)}-\\d.*")) // TODO: consider more precise version part of the regex
 

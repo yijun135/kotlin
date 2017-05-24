@@ -34,8 +34,8 @@ dependencies {
     compile(ideaSdkDeps("java-i18n", subdir = "plugins/java-i18n/lib"))
     compile(ideaSdkDeps("java-decompiler", subdir = "plugins/java-decompiler/lib"))
     compile(ideaSdkDeps("Groovy", subdir = "plugins/Groovy/lib"))
-    compile(ideaSdkDeps("maven", subdir = "plugins/maven/lib"))
-    compile(ideaSdkDeps("coverage", "coverage-agent", subdir = "plugins/coverage/lib"))
+    compile(ideaSdkDeps("maven", "maven-server-api", subdir = "plugins/maven/lib"))
+    compile(ideaSdkDeps("coverage", subdir = "plugins/coverage/lib"))
     compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
     buildVersion()
 }

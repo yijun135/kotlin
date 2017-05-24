@@ -23,4 +23,8 @@ dist {
     from(jar)
 }
 
+ideaPlugin {
+    from(jar)
+}
+
 fixKotlinTaskDependencies()

@@ -44,8 +44,4 @@ configureKotlinProjectNoTests()
 //configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
 //configureKotlinProjectTestResources("testData")
 
-ideaPlugin("lib/jps") {
-    from("jar")
-}
-
 fixKotlinTaskDependencies()

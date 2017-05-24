@@ -19,7 +19,8 @@ val projectsToShadow = listOf(
 
 dependencies {}
 
-tasks.withType<Jar> {
+val jar: Jar by tasks
+jar.apply {
     setupRuntimeJar("Kotlin JPS plugin")
     manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.runner.Main")
     manifest.attributes.put("Class-Path", "kotlin-runtime.jar")
@@ -39,3 +40,8 @@ tasks.withType<Jar> {
 
 configureKotlinProjectSources() // no sources
 configureKotlinProjectNoTests()
+
+ideaPlugin("lib/jps") {
+    from(jar)
+}
+
