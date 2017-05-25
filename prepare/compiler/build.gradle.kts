@@ -59,8 +59,7 @@ dependencies {
     compilerClassesCfg(projectDepIntransitive(":compiler:ir.psi2ir"))
     compilerClassesCfg(projectDepIntransitive(":compiler:backend-common"))
     compilerClassesCfg(projectDepIntransitive(":compiler:backend"))
-    compilerClassesCfg(projectDepIntransitive(":compiler"))
-    compilerClassesCfg(projectDepIntransitive(":compiler.standalone"))
+    compilerClassesCfg(projectDepIntransitive(compilerProject.path))
     compilerClassesCfg(projectDepIntransitive(":core:util.runtime"))
     compilerClassesCfg(projectDepIntransitive(":core:builtins"))
     ideaSdkCoreCfg(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
@@ -118,9 +117,9 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
            ":js:js.serializer",
            ":js:js.parser",
            ":js:js.frontend",
+           ":js:js.translator",
            compilerProject.path,
            ":build-common",
-           ":compiler.standalone",
            ":core:util.runtime",
            ":core").forEach {
         dependsOn("$it:classes")

@@ -6,7 +6,9 @@ apply { plugin("kotlin") }
 val nativePlatformUberjar = "$rootDir/dependencies/native-platform-uberjar.jar"
 
 dependencies {
-    compile(project(":compiler"))
+    compile(project(":compiler:util"))
+    compile(project(":compiler:cli-common"))
+    compile(project(":compiler:daemon-common"))
     compile(files(nativePlatformUberjar))
     buildVersion()
 }
