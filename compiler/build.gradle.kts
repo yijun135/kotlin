@@ -8,6 +8,9 @@ dependencies {
     compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     compile(commonDep("org.fusesource.jansi", "jansi"))
     compile(commonDep("jline"))
+    testCompile(project(":compiler.tests-common"))
+    testCompile(project(":compiler:ir.ir2cfg"))
+    testCompile(ideaSdkDeps("openapi", "idea", "commons-httpclient-3.1-patched"))
 }
 
 configureKotlinProjectSources(

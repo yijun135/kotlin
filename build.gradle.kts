@@ -44,9 +44,9 @@ dependencies {
     scriptCompileCfg(kotlinDep("compiler-embeddable"))
 }
 
-val distDir = "$rootDir/build/dist"
+val distDir = "$rootDir/dist"
 val distLibDir = "$distDir/kotlinc/lib"
-val ideaPluginDir = "$rootDir/build/idea-plugin"
+val ideaPluginDir = "$distDir/idea-plugin"
 
 extra["distDir"] = distDir
 extra["distLibDir"] = project.file(distLibDir)
@@ -164,6 +164,10 @@ allprojects {
 //    }
 //}
 
+task<Copy>("dist") {
+    into(distDir)
+    from(files("compiler/cli/bin")) { into("kotlinc/bin") }
+}
 
 val compilerCopyTask = task<Copy>("idea-plugin-copy-compiler") {
     dependsOnTaskIfExistsRec("dist")

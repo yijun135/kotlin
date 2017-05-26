@@ -23,11 +23,11 @@ val compilerManifestClassPath =
     if (bootstrapBuild) "kotlin-runtime-internal-bootstrap.jar kotlin-reflect-internal-bootstrap.jar kotlin-script-runtime-internal-bootstrap.jar"
     else "kotlin-runtime.jar kotlin-reflect.jar kotlin-script-runtime.jar"
 
-val compilerClassesCfg = configurations.create("compiler-classes")
 val ideaSdkCoreCfg = configurations.create("ideaSdk-core")
 val otherDepsCfg = configurations.create("other-deps")
 val proguardLibraryJarsCfg = configurations.create("library-jars")
 val mainCfg = configurations.create("default")
+val packedCfg = configurations.create("packed")
 val embeddableCfg = configurations.create("embeddable")
 val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
 
@@ -46,22 +46,6 @@ val javaHome = System.getProperty("java.home")
 val compilerProject = project(":compiler")
 
 dependencies {
-    compilerClassesCfg(projectDepIntransitive(":compiler:util"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:container"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:resolution"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:serialization"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:frontend"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:frontend.java"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:frontend.script"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:plugin-api"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:cli-common"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:ir.tree"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:ir.psi2ir"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:backend-common"))
-    compilerClassesCfg(projectDepIntransitive(":compiler:backend"))
-    compilerClassesCfg(projectDepIntransitive(compilerProject.path))
-    compilerClassesCfg(projectDepIntransitive(":core:util.runtime"))
-    compilerClassesCfg(projectDepIntransitive(":core:builtins"))
     ideaSdkCoreCfg(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
     ideaSdkCoreCfg(ideaSdkDeps("jna-platform", "oromatcher"))
     ideaSdkCoreCfg(ideaSdkDeps("jps-model.jar", subdir = "jps"))
@@ -200,3 +184,5 @@ val compilerWithBootstrapRuntimeTask = task<ShadowJar>("prepare-compiler-with-bo
 defaultTasks(mainTask.name, embeddableTask.name, compilerWithBootstrapRuntimeTask.name)
 
 artifacts.add(mainCfg.name, File(outputJar))
+artifacts.add(packedCfg.name, File(if (shrink) outputBeforeSrinkJar else outputJar))
+

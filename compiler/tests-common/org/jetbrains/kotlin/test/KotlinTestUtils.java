@@ -344,8 +344,9 @@ public class KotlinTestUtils {
 
     @NotNull
     public static String getHomeDirectory() {
-        File resourceRoot = PathUtil.getResourcePathForClass(KotlinTestUtils.class);
-        return FileUtil.toSystemIndependentName(resourceRoot.getParentFile().getParentFile().getParent());
+        return ".";
+        //File resourceRoot = PathUtil.getResourcePathForClass(KotlinTestUtils.class);
+        //return FileUtil.toSystemIndependentName(resourceRoot.getParentFile().getParentFile().getParent());
     }
 
     public static File findMockJdkRtJar() {
@@ -527,6 +528,14 @@ public class KotlinTestUtils {
         }
 
         JvmContentRootsKt.addJvmClasspathRoots(configuration, classpath);
+
+
+        System.err.println("!!! jdkKind: " + jdkKind.toString());
+
+        List<ContentRoot> crs = configuration.get(JVMConfigurationKeys.CONTENT_ROOTS);
+        for (ContentRoot root: crs) {
+            System.err.println("!!! root: " + root.toString());
+        }
 
         return configuration;
     }
