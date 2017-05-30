@@ -19,11 +19,10 @@ package org.jetbrains.kotlin.idea.core
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.codeStyle.CodeEditUtil
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.descriptors.*
+import org.jetbrains.kotlin.extensions.DeclarationAttributeAltererExtension
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptor
 import org.jetbrains.kotlin.idea.util.IdeDescriptorRenderers
@@ -37,6 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.hasBody
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 import org.jetbrains.kotlin.psi.typeRefHelpers.setReceiverTypeReference
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.ModifiersChecker
 import org.jetbrains.kotlin.resolve.OverridingUtil
 import org.jetbrains.kotlin.resolve.calls.callUtil.getValueArgumentsInParentheses
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
@@ -232,7 +232,83 @@ fun KtModifierListOwner.canBeProtected(): Boolean {
     }
 }
 
+fun KtClass.isInheritable(): Boolean {
+    return when (getModalityFromDescriptor()) {
+        KtTokens.ABSTRACT_KEYWORD, KtTokens.OPEN_KEYWORD, KtTokens.SEALED_KEYWORD -> true
+        else -> false
+    }
+}
+
+fun KtDeclaration.isOverridable(): Boolean {
+    val parent = parent
+    if (!(parent is KtClassBody || parent is KtParameterList)) return false
+
+    val klass = if (parent.parent is KtPrimaryConstructor)
+        parent.parent.parent as? KtClass
+    else
+        parent.parent as? KtClass
+    if (klass == null || (!klass.isInheritable() && !klass.isEnum())) return false
+
+    if (this.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
+        // 'private' is incompatible with 'open'
+        return false
+    }
+
+    return when (getModalityFromDescriptor()) {
+        KtTokens.ABSTRACT_KEYWORD, KtTokens.OPEN_KEYWORD -> true
+        else -> false
+    }
+}
+
+fun KtDeclaration.getModalityFromDescriptor(): KtModifierKeywordToken? {
+    val descriptor = this.resolveToDescriptor(BodyResolveMode.PARTIAL)
+    if (descriptor is MemberDescriptor) {
+        return mapModality(descriptor.modality)
+    }
+
+    return null
+}
+
 fun KtDeclaration.implicitModality(): KtModifierKeywordToken {
+    val predictedModality = predictImplicitModality()
+    val bindingContext = analyze(BodyResolveMode.PARTIAL)
+    val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this] ?: return predictedModality
+    val containingDescriptor = descriptor.containingDeclaration ?: return predictedModality
+
+    val extensions = DeclarationAttributeAltererExtension.getInstances(this.project)
+    for (extension in extensions) {
+        val newModality = extension.refineDeclarationModality(
+                this,
+                null,
+                containingDescriptor,
+                mapModality(predictedModality),
+                bindingContext,
+                isImplicitModality = true)
+
+        if (newModality != null) {
+            return mapModality(newModality)
+        }
+    }
+
+    return predictedModality
+}
+
+fun mapModality(accurateModality: Modality): KtModifierKeywordToken = when (accurateModality) {
+    Modality.FINAL -> KtTokens.FINAL_KEYWORD
+    Modality.SEALED -> KtTokens.SEALED_KEYWORD
+    Modality.OPEN -> KtTokens.OPEN_KEYWORD
+    Modality.ABSTRACT -> KtTokens.ABSTRACT_KEYWORD
+}
+
+private fun mapModality(modalityToken: IElementType): Modality = when (modalityToken) {
+    KtTokens.FINAL_KEYWORD -> Modality.FINAL
+    KtTokens.SEALED_KEYWORD -> Modality.SEALED
+    KtTokens.OPEN_KEYWORD -> Modality.OPEN
+    KtTokens.ABSTRACT_KEYWORD -> Modality.ABSTRACT
+    else -> error("Unexpected modality keyword $modalityToken")
+}
+
+private fun KtDeclaration.predictImplicitModality(): KtModifierKeywordToken {
     if (this is KtClassOrObject) {
         if (this is KtClass && this.isInterface()) return KtTokens.ABSTRACT_KEYWORD
         return KtTokens.FINAL_KEYWORD
