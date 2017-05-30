@@ -104,44 +104,38 @@ public class PathUtil {
     private static File getCompilerPathForCompilerJar() {
         File jar = getPathUtilJar();
 
-        if (!jar.exists()) return NO_PATH;
-
-        if (jar.getName().equals(KOTLIN_COMPILER_JAR)) {
+        if (jar.exists() && jar.getName().equals(KOTLIN_COMPILER_JAR)) {
             File lib = jar.getParentFile();
             return lib.getParentFile();
         }
 
-        return NO_PATH;
+        throw new IllegalStateException("Cannot find PathUtil in the compiler jar " + jar);
     }
 
     @NotNull
     private static File getCompilerPathForJpsPlugin() {
         File jar = getPathUtilJar();
 
-        if (!jar.exists()) return NO_PATH;
-
-        if (jar.getName().equals("kotlin-jps-plugin.jar")) {
+        if (jar.exists() && jar.getName().equals("kotlin-jps-plugin.jar")) {
             File pluginHome = jar.getParentFile().getParentFile().getParentFile();
             return new File(pluginHome, HOME_FOLDER_NAME);
         }
 
-        return NO_PATH;
+        throw new IllegalStateException("Cannot find PathUtil in the JPS plugin jar " + jar);
     }
 
     @NotNull
     private static File getCompilerPathForIdeaPlugin() {
         File jar = getPathUtilJar();
 
-        if (!jar.exists()) return NO_PATH;
-
-        if (jar.getName().equals("kotlin-plugin.jar")) {
+        if (!jar.exists() && jar.getName().equals("kotlin-plugin.jar")) {
             File lib = jar.getParentFile();
             File pluginHome = lib.getParentFile();
 
             return new File(pluginHome, HOME_FOLDER_NAME);
         }
 
-        return NO_PATH;
+        throw new IllegalStateException("Cannot find PathUtil in the kotlin plugin jar " + jar);
     }
 
     @NotNull

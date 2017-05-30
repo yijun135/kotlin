@@ -184,5 +184,5 @@ val compilerWithBootstrapRuntimeTask = task<ShadowJar>("prepare-compiler-with-bo
 defaultTasks(mainTask.name, embeddableTask.name, compilerWithBootstrapRuntimeTask.name)
 
 artifacts.add(mainCfg.name, File(outputJar))
-artifacts.add(packedCfg.name, File(if (shrink) outputBeforeSrinkJar else outputJar))
+artifacts.add(packedCfg.name, File(if (shrink) outputJar else outputBeforeSrinkJar))
 

@@ -113,11 +113,11 @@ fun DependencyHandler.projectDepIntransitive(name: String): Dependency =
         project(name, configuration = "default").apply { isTransitive = false }
 
 val protobufLiteProject = ":custom-dependencies:protobuf-lite"
-fun KotlinDependencyHandler.protobufLite(): ProjectDependency =
+fun DependencyHandler.protobufLite(): ProjectDependency =
         project(protobufLiteProject, configuration = "default").apply { isTransitive = false }
 val protobufLiteTask = "$protobufLiteProject:prepare"
 
-fun KotlinDependencyHandler.protobufFull(): ProjectDependency =
+fun DependencyHandler.protobufFull(): ProjectDependency =
         project(protobufLiteProject, configuration = "relocated").apply { isTransitive = false }
 val protobufFullTask = "$protobufLiteProject:prepare-relocated-protobuf"
 
