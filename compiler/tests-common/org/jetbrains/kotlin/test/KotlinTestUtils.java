@@ -529,14 +529,6 @@ public class KotlinTestUtils {
 
         JvmContentRootsKt.addJvmClasspathRoots(configuration, classpath);
 
-
-        System.err.println("!!! jdkKind: " + jdkKind.toString());
-
-        List<ContentRoot> crs = configuration.get(JVMConfigurationKeys.CONTENT_ROOTS);
-        for (ContentRoot root: crs) {
-            System.err.println("!!! root: " + root.toString());
-        }
-
         return configuration;
     }
 
