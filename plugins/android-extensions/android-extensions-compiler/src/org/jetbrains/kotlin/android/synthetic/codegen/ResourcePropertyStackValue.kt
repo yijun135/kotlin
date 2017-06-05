@@ -17,6 +17,8 @@
 package org.jetbrains.kotlin.android.synthetic.codegen
 
 import org.jetbrains.kotlin.android.synthetic.AndroidConst
+import org.jetbrains.kotlin.android.synthetic.codegen.AndroidExpressionCodegenExtension.Companion.shouldCacheResource
+import org.jetbrains.kotlin.android.synthetic.descriptors.AndroidEntityOptionsProxy
 import org.jetbrains.kotlin.android.synthetic.res.AndroidSyntheticProperty
 import org.jetbrains.kotlin.codegen.StackValue
 import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
@@ -29,22 +31,23 @@ import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter
 class ResourcePropertyStackValue(
         val receiver: StackValue,
         val typeMapper: KotlinTypeMapper,
-        val propertyDescriptor: PropertyDescriptor,
-        val receiverDescriptor: ClassDescriptor,
-        val androidClassType: AndroidClassType,
+        val resource: PropertyDescriptor,
+        val container: ClassDescriptor,
+        val entityOptions: AndroidEntityOptionsProxy,
         val androidPackage: String
-) : StackValue(typeMapper.mapType(propertyDescriptor.returnType!!)) {
+) : StackValue(typeMapper.mapType(resource.returnType!!)) {
+    private val androidClassType get() = entityOptions.classType
 
     override fun putSelector(type: Type, v: InstructionAdapter) {
-        val returnTypeString = typeMapper.mapType(propertyDescriptor.type.lowerIfFlexible()).className
+        val returnTypeString = typeMapper.mapType(resource.type.lowerIfFlexible()).className
         if (AndroidConst.FRAGMENT_FQNAME == returnTypeString || AndroidConst.SUPPORT_FRAGMENT_FQNAME == returnTypeString) {
             return putSelectorForFragment(v)
         }
 
-        val syntheticProperty = propertyDescriptor as AndroidSyntheticProperty
+        val syntheticProperty = resource as AndroidSyntheticProperty
 
-        if (androidClassType.supportsCache && AndroidExpressionCodegenExtension.shouldCacheResource(receiverDescriptor, propertyDescriptor)) {
-            val declarationDescriptorType = typeMapper.mapType(receiverDescriptor)
+        if (entityOptions.cache.hasCache && shouldCacheResource(resource)) {
+            val declarationDescriptorType = typeMapper.mapType(container)
             receiver.put(declarationDescriptorType, v)
 
             val resourceId = syntheticProperty.resource.id
@@ -99,6 +102,6 @@ class ResourcePropertyStackValue(
     }
 
     fun getResourceId(v: InstructionAdapter) {
-        v.getstatic(androidPackage.replace(".", "/") + "/R\$id", propertyDescriptor.name.asString(), "I")
+        v.getstatic(androidPackage.replace(".", "/") + "/R\$id", resource.name.asString(), "I")
     }
 }

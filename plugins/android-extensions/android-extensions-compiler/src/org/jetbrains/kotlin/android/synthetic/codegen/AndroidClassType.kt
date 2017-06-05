@@ -22,19 +22,19 @@ import org.jetbrains.kotlin.load.java.lazy.descriptors.LazyJavaClassDescriptor
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 
-enum class AndroidClassType(className: String, val supportsCache: Boolean = false, val fragment: Boolean = false) {
-    ACTIVITY(AndroidConst.ACTIVITY_FQNAME, supportsCache = true),
-    FRAGMENT(AndroidConst.FRAGMENT_FQNAME, supportsCache = true, fragment = true),
-    DIALOG(AndroidConst.DIALOG_FQNAME, supportsCache = false),
-    SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, supportsCache = true),
-    SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, supportsCache = true, fragment = true),
-    VIEW(AndroidConst.VIEW_FQNAME, supportsCache = true),
+enum class AndroidClassType(className: String, val doesSupportCache: Boolean = false, val isFragment: Boolean = false) {
+    ACTIVITY(AndroidConst.ACTIVITY_FQNAME, doesSupportCache = true),
+    FRAGMENT(AndroidConst.FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
+    DIALOG(AndroidConst.DIALOG_FQNAME, doesSupportCache = false),
+    SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, doesSupportCache = true),
+    SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
+    VIEW(AndroidConst.VIEW_FQNAME, doesSupportCache = true),
     UNKNOWN("");
 
     val internalClassName: String = className.replace('.', '/')
 
     companion object {
-        fun getClassType(descriptor: ClassifierDescriptor): AndroidClassType {
+        fun get(descriptor: ClassifierDescriptor): AndroidClassType {
             fun getClassTypeInternal(name: String): AndroidClassType? = when (name) {
                 AndroidConst.ACTIVITY_FQNAME -> AndroidClassType.ACTIVITY
                 AndroidConst.FRAGMENT_FQNAME -> AndroidClassType.FRAGMENT
@@ -57,7 +57,7 @@ enum class AndroidClassType(className: String, val supportsCache: Boolean = fals
             for (supertype in descriptor.typeConstructor.supertypes) {
                 val declarationDescriptor = supertype.constructor.declarationDescriptor
                 if (declarationDescriptor != null) {
-                    val androidClassType = getClassType(declarationDescriptor)
+                    val androidClassType = get(declarationDescriptor)
                     if (androidClassType != AndroidClassType.UNKNOWN) return androidClassType
                 }
             }
