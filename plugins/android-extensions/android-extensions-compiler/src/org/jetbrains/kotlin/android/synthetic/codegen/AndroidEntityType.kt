@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.load.java.lazy.descriptors.LazyJavaClassDescriptor
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 
-enum class AndroidClassType(className: String, val doesSupportCache: Boolean = false, val isFragment: Boolean = false) {
+enum class AndroidEntityType(className: String, val doesSupportCache: Boolean = false, val isFragment: Boolean = false) {
     ACTIVITY(AndroidConst.ACTIVITY_FQNAME, doesSupportCache = true),
     FRAGMENT(AndroidConst.FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
     DIALOG(AndroidConst.DIALOG_FQNAME, doesSupportCache = false),
@@ -34,14 +34,14 @@ enum class AndroidClassType(className: String, val doesSupportCache: Boolean = f
     val internalClassName: String = className.replace('.', '/')
 
     companion object {
-        fun get(descriptor: ClassifierDescriptor): AndroidClassType {
-            fun getClassTypeInternal(name: String): AndroidClassType? = when (name) {
-                AndroidConst.ACTIVITY_FQNAME -> AndroidClassType.ACTIVITY
-                AndroidConst.FRAGMENT_FQNAME -> AndroidClassType.FRAGMENT
-                AndroidConst.DIALOG_FQNAME -> AndroidClassType.DIALOG
-                AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME -> AndroidClassType.SUPPORT_FRAGMENT_ACTIVITY
-                AndroidConst.SUPPORT_FRAGMENT_FQNAME -> AndroidClassType.SUPPORT_FRAGMENT
-                AndroidConst.VIEW_FQNAME -> AndroidClassType.VIEW
+        fun get(descriptor: ClassifierDescriptor): AndroidEntityType {
+            fun getClassTypeInternal(name: String): AndroidEntityType? = when (name) {
+                AndroidConst.ACTIVITY_FQNAME -> AndroidEntityType.ACTIVITY
+                AndroidConst.FRAGMENT_FQNAME -> AndroidEntityType.FRAGMENT
+                AndroidConst.DIALOG_FQNAME -> AndroidEntityType.DIALOG
+                AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME -> AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY
+                AndroidConst.SUPPORT_FRAGMENT_FQNAME -> AndroidEntityType.SUPPORT_FRAGMENT
+                AndroidConst.VIEW_FQNAME -> AndroidEntityType.VIEW
                 else -> null
             }
 
@@ -58,11 +58,11 @@ enum class AndroidClassType(className: String, val doesSupportCache: Boolean = f
                 val declarationDescriptor = supertype.constructor.declarationDescriptor
                 if (declarationDescriptor != null) {
                     val androidClassType = get(declarationDescriptor)
-                    if (androidClassType != AndroidClassType.UNKNOWN) return androidClassType
+                    if (androidClassType != AndroidEntityType.UNKNOWN) return androidClassType
                 }
             }
 
-            return AndroidClassType.UNKNOWN
+            return AndroidEntityType.UNKNOWN
         }
     }
 }

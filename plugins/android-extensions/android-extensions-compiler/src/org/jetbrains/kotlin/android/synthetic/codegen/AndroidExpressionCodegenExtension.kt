@@ -93,8 +93,8 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
             return StackValue.functionCall(Type.VOID_TYPE) {}
         }
 
-        val androidClassType = AndroidClassType.get(container)
-        if (androidClassType == AndroidClassType.UNKNOWN) return null
+        val androidClassType = AndroidEntityType.get(container)
+        if (androidClassType == AndroidEntityType.UNKNOWN) return null
 
         return StackValue.functionCall(Type.VOID_TYPE) {
             val bytecodeClassName = c.typeMapper.mapType(container).internalName
@@ -137,7 +137,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         context.generateCachedFindViewByIdFunction()
         context.generateClearCacheFunction()
 
-        if (entityOptions.classType.isFragment) {
+        if (entityOptions.entityType.isFragment) {
             val classMembers = container.unsubstitutedMemberScope.getContributedDescriptors()
             val onDestroy = classMembers.firstOrNull { it is FunctionDescriptor && it.isOnDestroyFunction() }
             if (onDestroy == null) {
@@ -198,8 +198,8 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
     }
 
     private fun SyntheticPartsGenerateContext.generateCachedFindViewByIdFunction() {
-        val classType = state.typeMapper.mapClass(descriptor)
-        val className = classType.internalName
+        val containerType = state.typeMapper.mapClass(descriptor)
+        val containerClassName = containerType.internalName
 
         val viewType = Type.getObjectType("android/view/View")
 
@@ -209,8 +209,8 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val iv = InstructionAdapter(methodVisitor)
 
         fun loadCache() {
-            iv.load(0, classType)
-            iv.getfield(className, PROPERTY_NAME, "Ljava/util/HashMap;")
+            iv.load(0, containerType)
+            iv.getfield(containerClassName, PROPERTY_NAME, "Ljava/util/HashMap;")
         }
 
         fun loadId() = iv.load(1, Type.INT_TYPE)
@@ -222,11 +222,11 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         iv.ifnonnull(lCacheNonNull)
 
         // Init cache if null
-        iv.load(0, classType)
+        iv.load(0, containerType)
         iv.anew(Type.getType("Ljava/util/HashMap;"))
         iv.dup()
         iv.invokespecial("java/util/HashMap", "<init>", "()V", false)
-        iv.putfield(className, PROPERTY_NAME, "Ljava/util/HashMap;")
+        iv.putfield(containerClassName, PROPERTY_NAME, "Ljava/util/HashMap;")
 
         // Get View from cache
         iv.visitLabel(lCacheNonNull)
@@ -242,14 +242,16 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         iv.ifnonnull(lViewNonNull)
 
         // Resolve View via findViewById if not in cache
-        iv.load(0, classType)
-        when (entityOptions.classType) {
-            AndroidClassType.ACTIVITY, AndroidClassType.SUPPORT_FRAGMENT_ACTIVITY, AndroidClassType.VIEW, AndroidClassType.DIALOG -> {
+        iv.load(0, containerType)
+
+        val entityType = entityOptions.entityType
+        when (entityType) {
+            AndroidEntityType.ACTIVITY, AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY, AndroidEntityType.VIEW, AndroidEntityType.DIALOG -> {
                 loadId()
-                iv.invokevirtual(entityOptions.classType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
+                iv.invokevirtual(entityType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
             }
-            AndroidClassType.FRAGMENT, AndroidClassType.SUPPORT_FRAGMENT -> {
-                iv.invokevirtual(entityOptions.classType.internalClassName, "getView", "()Landroid/view/View;", false)
+            AndroidEntityType.FRAGMENT, AndroidEntityType.SUPPORT_FRAGMENT -> {
+                iv.invokevirtual(entityType.internalClassName, "getView", "()Landroid/view/View;", false)
                 iv.dup()
                 val lgetViewNotNull = Label()
                 iv.ifnonnull(lgetViewNotNull)
@@ -264,7 +266,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
                 loadId()
                 iv.invokevirtual("android/view/View", "findViewById", "(I)Landroid/view/View;", false)
             }
-            else -> throw IllegalStateException("Can't generate code for ${entityOptions.classType}")
+            else -> throw IllegalStateException("Can't generate code for $entityType")
         }
         iv.store(2, viewType)
 

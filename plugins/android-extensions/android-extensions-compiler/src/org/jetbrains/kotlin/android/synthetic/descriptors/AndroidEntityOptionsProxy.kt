@@ -20,14 +20,14 @@ import org.jetbrains.kotlin.resolve.constants.ConstantValue
 import kotlinx.android.extensions.AndroidEntityOptions
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.CacheImplementation.*
-import org.jetbrains.kotlin.android.synthetic.codegen.AndroidClassType
+import org.jetbrains.kotlin.android.synthetic.codegen.AndroidEntityType
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.constants.EnumValue
 import org.jetbrains.kotlin.resolve.source.KotlinSourceElement
 
-class AndroidEntityOptionsProxy(val classType: AndroidClassType, val cache: CacheImplementation) {
+class AndroidEntityOptionsProxy(val entityType: AndroidEntityType, val cache: CacheImplementation) {
     companion object {
         private val ANDROID_ENTITY_OPTIONS_FQNAME = FqName(AndroidEntityOptions::class.java.canonicalName)
         private val CACHE_NAME = AndroidEntityOptions::cache.name
@@ -35,7 +35,7 @@ class AndroidEntityOptionsProxy(val classType: AndroidClassType, val cache: Cach
         private val DEFAULT_CACHE_IMPL = HASH_MAP
 
         fun get(container: ClassDescriptor): AndroidEntityOptionsProxy {
-            val classType = AndroidClassType.get(container)
+            val classType = AndroidEntityType.get(container)
 
             val anno = container.annotations.findAnnotation(ANDROID_ENTITY_OPTIONS_FQNAME)
 

@@ -115,7 +115,7 @@ class AndroidOnDestroyClassBuilderInterceptorExtension : ClassBuilderInterceptor
 
                     val container = bindingContext.get(BindingContext.CLASS, currentClass) ?: return
                     val entityOptions = AndroidEntityOptionsProxy.get(container)
-                    if (!entityOptions.classType.isFragment || entityOptions.cache == NO_CACHE) return
+                    if (!entityOptions.entityType.isFragment || entityOptions.cache == NO_CACHE) return
 
                     val iv = InstructionAdapter(this)
                     iv.load(0, classType)
