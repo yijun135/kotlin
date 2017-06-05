@@ -22,6 +22,7 @@ import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.CacheImplementation.*
 import org.jetbrains.kotlin.android.synthetic.codegen.AndroidEntityType
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.constants.EnumValue
@@ -35,6 +36,10 @@ class AndroidEntityOptionsProxy(val entityType: AndroidEntityType, val cache: Ca
         private val DEFAULT_CACHE_IMPL = HASH_MAP
 
         fun get(container: ClassDescriptor): AndroidEntityOptionsProxy {
+            if (container.kind != ClassKind.CLASS) {
+                return AndroidEntityOptionsProxy(AndroidEntityType.UNKNOWN, NO_CACHE)
+            }
+
             val classType = AndroidEntityType.get(container)
 
             val anno = container.annotations.findAnnotation(ANDROID_ENTITY_OPTIONS_FQNAME)
@@ -42,7 +47,9 @@ class AndroidEntityOptionsProxy(val entityType: AndroidEntityType, val cache: Ca
             if (anno == null) {
                 // Java classes (and Kotlin classes from other modules) does not support cache by default
                 val supportsCache = container.source is KotlinSourceElement && classType.doesSupportCache
-                return AndroidEntityOptionsProxy(classType, if (supportsCache) DEFAULT_CACHE_IMPL else NO_CACHE)
+                return AndroidEntityOptionsProxy(
+                        classType,
+                        if (supportsCache && classType.isCacheEnabledByDefault) DEFAULT_CACHE_IMPL else NO_CACHE)
             }
 
             val cache = anno.getEnumValue(CACHE_NAME, HASH_MAP) { valueOf(it) }

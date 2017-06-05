@@ -93,8 +93,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
             return StackValue.functionCall(Type.VOID_TYPE) {}
         }
 
-        val androidClassType = AndroidEntityType.get(container)
-        if (androidClassType == AndroidEntityType.UNKNOWN) return null
+        if (entityOptions.entityType == AndroidEntityType.UNKNOWN) return null
 
         return StackValue.functionCall(Type.VOID_TYPE) {
             val bytecodeClassName = c.typeMapper.mapType(container).internalName
@@ -250,8 +249,17 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
                 loadId()
                 iv.invokevirtual(entityType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
             }
-            AndroidEntityType.FRAGMENT, AndroidEntityType.SUPPORT_FRAGMENT -> {
-                iv.invokevirtual(entityType.internalClassName, "getView", "()Landroid/view/View;", false)
+            AndroidEntityType.FRAGMENT, AndroidEntityType.SUPPORT_FRAGMENT, AndroidEntityType.ENTITY -> {
+                val methodName: String
+                val targetClassName: String
+                if (entityType == AndroidEntityType.ENTITY) {
+                    methodName = "getEntityView"
+                    targetClassName = containerClassName
+                } else {
+                    methodName = "getView"
+                    targetClassName = entityType.internalClassName
+                }
+                iv.invokevirtual(targetClassName, methodName, "()Landroid/view/View;", false)
                 iv.dup()
                 val lgetViewNotNull = Label()
                 iv.ifnonnull(lgetViewNotNull)

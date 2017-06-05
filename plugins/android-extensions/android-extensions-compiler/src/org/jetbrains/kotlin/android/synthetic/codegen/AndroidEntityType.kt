@@ -16,24 +16,31 @@
 
 package org.jetbrains.kotlin.android.synthetic.codegen
 
+import kotlinx.android.extensions.AndroidEntity
 import org.jetbrains.kotlin.android.synthetic.AndroidConst
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
-import org.jetbrains.kotlin.load.java.lazy.descriptors.LazyJavaClassDescriptor
 import org.jetbrains.kotlin.resolve.DescriptorUtils
-import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
 
-enum class AndroidEntityType(className: String, val doesSupportCache: Boolean = false, val isFragment: Boolean = false) {
+enum class AndroidEntityType(
+        className: String,
+        val doesSupportCache: Boolean = false,
+        val isCacheEnabledByDefault: Boolean = true,
+        val isFragment: Boolean = false
+) {
     ACTIVITY(AndroidConst.ACTIVITY_FQNAME, doesSupportCache = true),
     FRAGMENT(AndroidConst.FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
     DIALOG(AndroidConst.DIALOG_FQNAME, doesSupportCache = false),
     SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, doesSupportCache = true),
     SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
-    VIEW(AndroidConst.VIEW_FQNAME, doesSupportCache = true),
+    VIEW(AndroidConst.VIEW_FQNAME, doesSupportCache = true, isCacheEnabledByDefault = false),
+    ENTITY(AndroidEntity::class.java.canonicalName, doesSupportCache = true),
     UNKNOWN("");
 
     val internalClassName: String = className.replace('.', '/')
 
     companion object {
+        private val ENTITY_FQNAME = AndroidEntity::class.java.canonicalName
+
         fun get(descriptor: ClassifierDescriptor): AndroidEntityType {
             fun getClassTypeInternal(name: String): AndroidEntityType? = when (name) {
                 AndroidConst.ACTIVITY_FQNAME -> AndroidEntityType.ACTIVITY
@@ -42,17 +49,11 @@ enum class AndroidEntityType(className: String, val doesSupportCache: Boolean = 
                 AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME -> AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY
                 AndroidConst.SUPPORT_FRAGMENT_FQNAME -> AndroidEntityType.SUPPORT_FRAGMENT
                 AndroidConst.VIEW_FQNAME -> AndroidEntityType.VIEW
+                ENTITY_FQNAME -> AndroidEntityType.ENTITY
                 else -> null
             }
 
-            if (descriptor is LazyJavaClassDescriptor) {
-                val androidClassType = getClassTypeInternal(DescriptorUtils.getFqName(descriptor).asString())
-                if (androidClassType != null) return androidClassType
-            }
-            else if (descriptor is LazyClassDescriptor) { // For tests (FakeActivity)
-                val androidClassType = getClassTypeInternal(DescriptorUtils.getFqName(descriptor).toString())
-                if (androidClassType != null) return androidClassType
-            }
+            getClassTypeInternal(DescriptorUtils.getFqName(descriptor).asString())?.let { return it }
 
             for (supertype in descriptor.typeConstructor.supertypes) {
                 val declarationDescriptor = supertype.constructor.declarationDescriptor
