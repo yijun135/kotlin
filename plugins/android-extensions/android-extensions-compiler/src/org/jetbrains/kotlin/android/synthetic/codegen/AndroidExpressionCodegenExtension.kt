@@ -246,10 +246,10 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         when (entityOptions.classType) {
             AndroidClassType.ACTIVITY, AndroidClassType.SUPPORT_FRAGMENT_ACTIVITY, AndroidClassType.VIEW, AndroidClassType.DIALOG -> {
                 loadId()
-                iv.invokevirtual(className, "findViewById", "(I)Landroid/view/View;", false)
+                iv.invokevirtual(entityOptions.classType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
             }
             AndroidClassType.FRAGMENT, AndroidClassType.SUPPORT_FRAGMENT -> {
-                iv.invokevirtual(className, "getView", "()Landroid/view/View;", false)
+                iv.invokevirtual(entityOptions.classType.internalClassName, "getView", "()Landroid/view/View;", false)
                 iv.dup()
                 val lgetViewNotNull = Label()
                 iv.ifnonnull(lgetViewNotNull)
