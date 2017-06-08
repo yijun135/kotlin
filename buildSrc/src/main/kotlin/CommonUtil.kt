@@ -166,8 +166,22 @@ fun Project.configureKotlinProjectTestsDefault(sourcesBaseDir: File? = null) = c
 fun Project.configureKotlinProjectTestResources(vararg srcs: String, sourcesBaseDir: File? = null) =
         configureKotlinProjectSourceSet(*srcs, sourceSetName = "test", getSources = { this.resources }, sourcesBaseDir = sourcesBaseDir)
 
-private fun File.matchMaybeVersionedArtifact(baseName: String) =
-        name == baseName ||
-        name.removeSuffix(".jar") == baseName ||
-        name.matches(Regex("${Regex.escape(baseName)}-\\d.*")) // TODO: consider more precise version part of the regex
+private fun File.matchMaybeVersionedArtifact(baseName: String) = name.matches(baseName.toMaybeVersionedJarRegex())
 
+private val wildcardsRe = """[^*?]+|(\*)|(\?)""".toRegex()
+
+private fun String.wildcardsToEscapedRegexString(): String = buildString {
+    wildcardsRe.findAll(this@wildcardsToEscapedRegexString).forEach {
+        when {
+            it.groups[1] != null -> append(".*")
+            it.groups[2] != null -> append(".")
+            else -> append("\\Q${it.groups[0]!!.value}\\E")
+        }
+    }
+}
+
+private fun String.toMaybeVersionedJarRegex(): Regex {
+    val hasJarExtension = endsWith(".jar")
+    val escaped = this.wildcardsToEscapedRegexString()
+    return Regex(if (hasJarExtension) escaped else "$escaped(-\\d.*)?\\.jar") // TODO: consider more precise version part of the regex
+}
