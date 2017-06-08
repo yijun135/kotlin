@@ -39,6 +39,29 @@ dependencies {
     compile(ideaSdkDeps("maven", "maven-server-api", subdir = "plugins/maven/lib"))
     compile(ideaSdkDeps("coverage", subdir = "plugins/coverage/lib"))
     compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
+    testCompile(project(":compiler:cli"))
+    testCompile(project(":compiler.tests-common"))
+    testCompile(project(":idea:idea-test-framework"))
+    testCompile(ideaSdkDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", subdir = "plugins/gradle/lib"))
+    testCompile(ideaSdkDeps("groovy-all"))
+    testRuntime(project(":prepare:compiler", configuration = "default"))
+    testRuntime(project(":plugins:android-extensions-compiler"))
+    testRuntime(project(":plugins:android-extensions-idea"))
+//    testRuntime(fileTree(File($rootDir, "ideaSDK/lib")))
+    testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-i18n/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/properties/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/gradle/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/junit/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/intelliLang/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/testng/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/copyright/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/properties/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-decompiler/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/Groovy/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/maven/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/coverage/lib"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/android/lib"))
     buildVersion()
 }
 
@@ -47,7 +70,14 @@ configureKotlinProjectSources("src",
                               "idea-completion/src",
                               "idea-live-templates/src",
                               "idea-repl/src")
-configureKotlinProjectNoTests()
+configureKotlinProjectTests("tests",
+                            "idea-completion/tests")
+
+tasks.withType<Test> {
+    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
+    workingDir = rootDir
+    systemProperty("idea.is.unit.test", "true")
+}
 
 fixKotlinTaskDependencies()
 
