@@ -1,3 +1,4 @@
+import org.gradle.jvm.tasks.Jar
 
 apply { plugin("kotlin") }
 
@@ -21,6 +22,12 @@ dependencies {
 
 configureKotlinProjectSources("idea-core/src", "idea-analysis/src", sourcesBaseDir = File(rootDir, "idea"))
 configureKotlinProjectNoTests()
+
+tasks.withType<Jar> {
+    from(File(rootDir, "idea/idea-analysis/src")) {
+        include("**/*.properties")
+    }
+}
 
 fixKotlinTaskDependencies()
 
