@@ -1,4 +1,7 @@
 
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 apply { plugin("kotlin") }
 
 dependencies {
@@ -41,12 +44,22 @@ dependencies {
     compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
     testCompile(project(":compiler:cli"))
     testCompile(project(":compiler.tests-common"))
-    testCompile(project(":idea:idea-test-framework"))
+    testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
     testCompile(ideaSdkDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", subdir = "plugins/gradle/lib"))
     testCompile(ideaSdkDeps("groovy-all"))
     testRuntime(project(":prepare:compiler", configuration = "default"))
     testRuntime(project(":plugins:android-extensions-compiler"))
     testRuntime(project(":plugins:android-extensions-idea"))
+    testRuntime(project(":plugins:android-extensions-idea"))
+    testRuntime(project(":plugins:allopen-ide")) { isTransitive = false }
+    testRuntime(project(":plugins:allopen-cli"))
+    testRuntime(project(":plugins:noarg-ide")) { isTransitive = false }
+    testRuntime(project(":plugins:noarg-cli"))
+    testRuntime(project(":plugins:annotation-based-compiler-plugins-ide-support")) { isTransitive = false }
+    testRuntime(project(":plugins:sam-with-receiver-ide")) { isTransitive = false }
+    testRuntime(project(":plugins:sam-with-receiver-cli"))
+    testRuntime(project(":idea:idea-android")) { isTransitive = false }
+    testRuntime(preloadedDeps("uast-common", "uast-java"))
 //    testRuntime(fileTree(File($rootDir, "ideaSDK/lib")))
     testRuntime(ideaSdkDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-i18n/lib"))
@@ -62,6 +75,7 @@ dependencies {
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/maven/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/coverage/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/android/lib"))
+
     buildVersion()
 }
 
@@ -70,6 +84,17 @@ configureKotlinProjectSources("src",
                               "idea-completion/src",
                               "idea-live-templates/src",
                               "idea-repl/src")
+configure<JavaPluginConvention> {
+    sourceSets["main"].apply {
+        resources {
+            srcDir(File(projectDir, "resources"))
+                    .include("**")
+            srcDir(File(projectDir, "src"))
+                    .include("META-INF/**",
+                             "**/*.properties")
+        }
+    }
+}
 configureKotlinProjectTests("tests",
                             "idea-completion/tests")
 
@@ -77,6 +102,13 @@ tasks.withType<Test> {
     jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
+//    testLogging {
+//        events = setOf(TestLogEvent.FAILED)
+//        showStackTraces = true
+//        showCauses = true
+//        exceptionFormat = TestExceptionFormat.FULL
+//        showStandardStreams = true
+//    }
 }
 
 fixKotlinTaskDependencies()
