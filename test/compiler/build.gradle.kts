@@ -24,6 +24,7 @@ test.apply {
     dependsOn(":prepare:compiler:prepare")
     workingDir = rootDir
     systemProperty("kotlin.test.script.classpath", the<JavaPluginConvention>().sourceSets.getByName("test").output.classesDirs.joinToString(File.pathSeparator))
+    ignoreFailures = true
 }
 
 fixKotlinTaskDependencies()
