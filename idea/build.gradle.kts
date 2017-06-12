@@ -59,6 +59,8 @@ dependencies {
     testRuntime(project(":plugins:sam-with-receiver-ide")) { isTransitive = false }
     testRuntime(project(":plugins:sam-with-receiver-cli"))
     testRuntime(project(":idea:idea-android")) { isTransitive = false }
+    testRuntime(project(":plugins:lint")) { isTransitive = false }
+    testRuntime(project(":plugins:uast-kotlin"))
     testRuntime(preloadedDeps("uast-common", "uast-java"))
 //    testRuntime(fileTree(File($rootDir, "ideaSDK/lib")))
     testRuntime(ideaSdkDeps("*.jar"))
@@ -99,16 +101,17 @@ configureKotlinProjectTests("tests",
                             "idea-completion/tests")
 
 tasks.withType<Test> {
-    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
+    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1500m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
-//    testLogging {
+    forkEvery = 100
+    testLogging {
 //        events = setOf(TestLogEvent.FAILED)
 //        showStackTraces = true
 //        showCauses = true
 //        exceptionFormat = TestExceptionFormat.FULL
-//        showStandardStreams = true
-//    }
+//        showStandardStreams = false
+    }
 }
 
 fixKotlinTaskDependencies()
