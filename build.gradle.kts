@@ -11,14 +11,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 buildscript {
-    extra["kotlin_version"] = project.properties["deployVersion"] ?: "1.1-SNAPSHOT"
+    extra["kotlin_version"] = project.properties["deployVersion"] ?: "1.1.3-eap-68"
     extra["kotlinVersion"] = extra["kotlin_version"]
     extra["kotlin_language_version"] = "1.1"
-    extra["kotlin_gradle_plugin_version"] = "1.1-SNAPSHOT"
+    extra["kotlin_gradle_plugin_version"] = "1.1.3-eap-68"
     extra["repo"] = "https://repo.gradle.org/gradle/repo"
 
     repositories {
-        mavenLocal()
         maven { setUrl(rootProject.extra["repo"]) }
     }
 
@@ -38,6 +37,10 @@ extra["kotlin_root"] = rootDir
 val bootstrapCfg = configurations.create("bootstrap")
 val scriptCompileCfg = configurations.create("scriptCompile")
 val scriptRuntimeCfg = configurations.create("scriptRuntime").extendsFrom(scriptCompileCfg)
+
+repositories {
+    maven { setUrl(rootProject.extra["repo"]) }
+}
 
 dependencies {
     bootstrapCfg(kotlinDep("compiler-embeddable"))
@@ -115,7 +118,6 @@ allprojects {
     setBuildDir("$rootDir/build/${project.name}")
 
     repositories {
-        mavenLocal()
         maven { setUrl(rootProject.extra["repo"]) }
         mavenCentral()
     }
@@ -136,33 +138,6 @@ allprojects {
         classifier = "javadoc"
     }
 }
-
-//task("preparePublication") {
-//    val repositoryProviders = mapOf("sonatype-nexus-staging" to "sonatype", "sonatype-nexus-snapshots" to "sonatype")
-//
-//    val isRelease = !project.version.toString().contains("-SNAPSHOT")
-//    project.extra["isRelease"] = isRelease
-//
-//    val repo = properties["deploy-repo"] as? String
-//    val repoProvider = repo?.let { repositoryProviders.getOrDefault(it, it) }
-//    project.extra["isSonatypePublish"] = repoProvider == "sonatype"
-//    val isSonatypePublish = repoProvider == "sonatype"
-//    project.extra["isSonatypePublish"] = isSonatypePublish
-//    project.extra["isSonatypeRelease"] = isSonatypePublish && isRelease
-//
-//    project.extra["signing.keyId"] = properties["kotlin.key.name"]
-//    project.extra["signing.password"] = properties["kotlin.key.passphrase"]
-//
-//    val sonatypeSnapshotsUrl = if (isSonatypePublish && !isRelease) "https://oss.sonatype.org/content/repositories/snapshots/" else null
-//
-//    extra["repoUrl"] = properties["deployRepoUrl"] ?: sonatypeSnapshotsUrl ?: properties["deploy-url"] ?: "file://${rootProject.buildDir}/repo"
-//    extra["username"] = properties["deployRepoUsername"] ?: properties["kotlin.${repoProvider}.user"]
-//    extra["password"] = properties["deployRepoPassword"] ?: properties["kotlin.${repoProvider}.password"]
-//
-//    doLast {
-//        println("Deployment respository url: ${extra["repoUrl"]}")
-//    }
-//}
 
 task<Copy>("dist") {
     into(distDir)
