@@ -102,7 +102,7 @@ fun Project.preloadedDeps(vararg artifactBaseNames: String, baseDir: File = File
 }
 
 fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"): ConfigurableFileCollection =
-        preloadedDeps(*artifactBaseNames, baseDir = File(rootDir, "ideaSdk"), subdir = subdir)
+        preloadedDeps(*artifactBaseNames, baseDir = File(rootDir, "ideaSDK"), subdir = subdir)
 
 fun Project.ideaSdkCoreDeps(vararg artifactBaseNames: String): ConfigurableFileCollection = ideaSdkDeps(*artifactBaseNames, subdir = "core")
 
