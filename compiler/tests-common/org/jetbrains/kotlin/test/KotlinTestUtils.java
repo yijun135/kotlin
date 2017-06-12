@@ -344,9 +344,9 @@ public class KotlinTestUtils {
 
     @NotNull
     public static String getHomeDirectory() {
-        return ".";
-        //File resourceRoot = PathUtil.getResourcePathForClass(KotlinTestUtils.class);
-        //return FileUtil.toSystemIndependentName(resourceRoot.getParentFile().getParentFile().getParent());
+        File resourceRoot = PathUtil.getResourcePathForClass(KotlinTestUtils.class);
+        // TODO: very fragile logic, consider more robust home dir detection
+        return FileUtil.toSystemIndependentName(resourceRoot.getParentFile().getParentFile().getParentFile().getParent());
     }
 
     public static File findMockJdkRtJar() {
