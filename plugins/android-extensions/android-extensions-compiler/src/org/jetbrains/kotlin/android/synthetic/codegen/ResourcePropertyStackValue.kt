@@ -36,10 +36,10 @@ class ResourcePropertyStackValue(
         val entityOptions: AndroidEntityOptionsProxy,
         val androidPackage: String
 ) : StackValue(typeMapper.mapType(resource.returnType!!)) {
-    private val entityType get() = entityOptions.entityType
+    private val entityType get() = entityOptions.containerType
 
     init {
-        assert(entityOptions.entityType != AndroidEntityType.UNKNOWN)
+        assert(entityOptions.containerType != AndroidContainerType.UNKNOWN)
     }
 
     override fun putSelector(type: Type, v: InstructionAdapter) {
@@ -62,18 +62,18 @@ class ResourcePropertyStackValue(
         }
         else {
             when (entityType) {
-                AndroidEntityType.ACTIVITY, AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY, AndroidEntityType.VIEW, AndroidEntityType.DIALOG -> {
+                AndroidContainerType.ACTIVITY, AndroidContainerType.SUPPORT_FRAGMENT_ACTIVITY, AndroidContainerType.VIEW, AndroidContainerType.DIALOG -> {
                     receiver.put(Type.getType("L${entityType.internalClassName};"), v)
                     getResourceId(v)
                     v.invokevirtual(entityType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
                 }
-                AndroidEntityType.FRAGMENT, AndroidEntityType.SUPPORT_FRAGMENT -> {
+                AndroidContainerType.FRAGMENT, AndroidContainerType.SUPPORT_FRAGMENT -> {
                     receiver.put(Type.getType("L${entityType.internalClassName};"), v)
                     v.invokevirtual(entityType.internalClassName, "getView", "()Landroid/view/View;", false)
                     getResourceId(v)
                     v.invokevirtual("android/view/View", "findViewById", "(I)Landroid/view/View;", false)
                 }
-                AndroidEntityType.ENTITY -> {
+                AndroidContainerType.USER_CONTAINER -> {
                     receiver.put(Type.getType("L${entityType.internalClassName};"), v)
                     v.invokevirtual(entityType.internalClassName, "getEntityView", "()Landroid/view/View;", false)
                     getResourceId(v)
@@ -90,17 +90,17 @@ class ResourcePropertyStackValue(
         receiver.put(Type.getType("L${entityType.internalClassName};"), v)
 
         when (entityType) {
-            AndroidEntityType.ACTIVITY, AndroidEntityType.FRAGMENT -> {
+            AndroidContainerType.ACTIVITY, AndroidContainerType.FRAGMENT -> {
                 v.invokevirtual(entityType.internalClassName, "getFragmentManager", "()Landroid/app/FragmentManager;", false)
                 getResourceId(v)
                 v.invokevirtual("android/app/FragmentManager", "findFragmentById", "(I)Landroid/app/Fragment;", false)
             }
-            AndroidEntityType.SUPPORT_FRAGMENT -> {
+            AndroidContainerType.SUPPORT_FRAGMENT -> {
                 v.invokevirtual(entityType.internalClassName, "getFragmentManager", "()Landroid/support/v4/app/FragmentManager;", false)
                 getResourceId(v)
                 v.invokevirtual("android/support/v4/app/FragmentManager", "findFragmentById", "(I)Landroid/support/v4/app/Fragment;", false)
             }
-            AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY -> {
+            AndroidContainerType.SUPPORT_FRAGMENT_ACTIVITY -> {
                 v.invokevirtual(entityType.internalClassName, "getSupportFragmentManager", "()Landroid/support/v4/app/FragmentManager;", false)
                 getResourceId(v)
                 v.invokevirtual("android/support/v4/app/FragmentManager", "findFragmentById", "(I)Landroid/support/v4/app/Fragment;", false)

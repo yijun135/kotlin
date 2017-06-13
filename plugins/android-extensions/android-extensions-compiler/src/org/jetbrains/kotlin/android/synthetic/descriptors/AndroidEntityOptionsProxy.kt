@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.resolve.constants.ConstantValue
 import kotlinx.android.extensions.AndroidEntityOptions
 import kotlinx.android.extensions.CacheImplementation
 import kotlinx.android.extensions.CacheImplementation.*
-import org.jetbrains.kotlin.android.synthetic.codegen.AndroidEntityType
+import org.jetbrains.kotlin.android.synthetic.codegen.AndroidContainerType
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
@@ -28,25 +28,25 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.resolve.constants.EnumValue
 import org.jetbrains.kotlin.resolve.source.KotlinSourceElement
 
-class AndroidEntityOptionsProxy(val entityType: AndroidEntityType, val cache: CacheImplementation) {
+class AndroidEntityOptionsProxy(val containerType: AndroidContainerType, val cache: CacheImplementation) {
     companion object {
         private val ANDROID_ENTITY_OPTIONS_FQNAME = FqName(AndroidEntityOptions::class.java.canonicalName)
         private val CACHE_NAME = AndroidEntityOptions::cache.name
 
         private val DEFAULT_CACHE_IMPL = SPARSE_ARRAY
 
-        fun get(container: ClassDescriptor): AndroidEntityOptionsProxy {
+        fun create(container: ClassDescriptor): AndroidEntityOptionsProxy {
             if (container.kind != ClassKind.CLASS) {
-                return AndroidEntityOptionsProxy(AndroidEntityType.UNKNOWN, NO_CACHE)
+                return AndroidEntityOptionsProxy(AndroidContainerType.UNKNOWN, NO_CACHE)
             }
 
-            val classType = AndroidEntityType.get(container)
+            val classType = AndroidContainerType.get(container)
 
             val anno = container.annotations.findAnnotation(ANDROID_ENTITY_OPTIONS_FQNAME)
 
             if (anno == null) {
                 // Java classes (and Kotlin classes from other modules) does not support cache by default
-                val supportsCache = container.source is KotlinSourceElement && classType.doesSupportCache
+                val supportsCache = container.source is KotlinSourceElement && classType.supportsCache
                 return AndroidEntityOptionsProxy(
                         classType,
                         if (supportsCache && classType.isCacheEnabledByDefault) DEFAULT_CACHE_IMPL else NO_CACHE)
@@ -68,7 +68,8 @@ private fun <E: Enum<E>> AnnotationDescriptor.getEnumValue(name: String, default
 
     return try {
         factory(valueName)
-    } catch (e: Exception) {
+    } catch (e: IllegalArgumentException) {
+        // Enum.valueOf() may throw this
         defaultValue
     }
 }

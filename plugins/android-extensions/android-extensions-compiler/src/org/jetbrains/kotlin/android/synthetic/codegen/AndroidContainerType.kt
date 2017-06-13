@@ -21,19 +21,19 @@ import org.jetbrains.kotlin.android.synthetic.AndroidConst
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 
-enum class AndroidEntityType(
+enum class AndroidContainerType(
         className: String,
-        val doesSupportCache: Boolean = false,
+        val supportsCache: Boolean = false,
         val isCacheEnabledByDefault: Boolean = true,
         val isFragment: Boolean = false
 ) {
-    ACTIVITY(AndroidConst.ACTIVITY_FQNAME, doesSupportCache = true),
-    FRAGMENT(AndroidConst.FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
-    DIALOG(AndroidConst.DIALOG_FQNAME, doesSupportCache = false),
-    SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, doesSupportCache = true),
-    SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, doesSupportCache = true, isFragment = true),
-    VIEW(AndroidConst.VIEW_FQNAME, doesSupportCache = true, isCacheEnabledByDefault = false),
-    ENTITY(AndroidEntity::class.java.canonicalName, doesSupportCache = true),
+    ACTIVITY(AndroidConst.ACTIVITY_FQNAME, supportsCache = true),
+    FRAGMENT(AndroidConst.FRAGMENT_FQNAME, supportsCache = true, isFragment = true),
+    DIALOG(AndroidConst.DIALOG_FQNAME, supportsCache = false),
+    SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, supportsCache = true),
+    SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, supportsCache = true, isFragment = true),
+    VIEW(AndroidConst.VIEW_FQNAME, supportsCache = true, isCacheEnabledByDefault = false),
+    USER_CONTAINER(AndroidEntity::class.java.canonicalName, supportsCache = true), // is enabled by default?
     UNKNOWN("");
 
     val internalClassName: String = className.replace('.', '/')
@@ -41,15 +41,15 @@ enum class AndroidEntityType(
     companion object {
         private val ENTITY_FQNAME = AndroidEntity::class.java.canonicalName
 
-        fun get(descriptor: ClassifierDescriptor): AndroidEntityType {
-            fun getClassTypeInternal(name: String): AndroidEntityType? = when (name) {
-                AndroidConst.ACTIVITY_FQNAME -> AndroidEntityType.ACTIVITY
-                AndroidConst.FRAGMENT_FQNAME -> AndroidEntityType.FRAGMENT
-                AndroidConst.DIALOG_FQNAME -> AndroidEntityType.DIALOG
-                AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME -> AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY
-                AndroidConst.SUPPORT_FRAGMENT_FQNAME -> AndroidEntityType.SUPPORT_FRAGMENT
-                AndroidConst.VIEW_FQNAME -> AndroidEntityType.VIEW
-                ENTITY_FQNAME -> AndroidEntityType.ENTITY
+        fun get(descriptor: ClassifierDescriptor): AndroidContainerType {
+            fun getClassTypeInternal(name: String): AndroidContainerType? = when (name) {
+                AndroidConst.ACTIVITY_FQNAME -> AndroidContainerType.ACTIVITY
+                AndroidConst.FRAGMENT_FQNAME -> AndroidContainerType.FRAGMENT
+                AndroidConst.DIALOG_FQNAME -> AndroidContainerType.DIALOG
+                AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME -> AndroidContainerType.SUPPORT_FRAGMENT_ACTIVITY
+                AndroidConst.SUPPORT_FRAGMENT_FQNAME -> AndroidContainerType.SUPPORT_FRAGMENT
+                AndroidConst.VIEW_FQNAME -> AndroidContainerType.VIEW
+                ENTITY_FQNAME -> AndroidContainerType.USER_CONTAINER
                 else -> null
             }
 
@@ -59,11 +59,11 @@ enum class AndroidEntityType(
                 val declarationDescriptor = supertype.constructor.declarationDescriptor
                 if (declarationDescriptor != null) {
                     val androidClassType = get(declarationDescriptor)
-                    if (androidClassType != AndroidEntityType.UNKNOWN) return androidClassType
+                    if (androidClassType != AndroidContainerType.UNKNOWN) return androidClassType
                 }
             }
 
-            return AndroidEntityType.UNKNOWN
+            return AndroidContainerType.UNKNOWN
         }
     }
 }

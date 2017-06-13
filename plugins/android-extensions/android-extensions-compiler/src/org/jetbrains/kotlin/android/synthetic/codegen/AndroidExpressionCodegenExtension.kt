@@ -50,7 +50,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val ON_DESTROY_METHOD_NAME = "onDestroyView"
 
         fun shouldCacheResource(resource: PropertyDescriptor): Boolean {
-            return (resource as? AndroidSyntheticProperty)?.shouldBeCached ?: false
+            return (resource as? AndroidSyntheticProperty)?.shouldBeCached == true
         }
     }
 
@@ -87,13 +87,13 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
             container: ClassDescriptor,
             c: ExpressionCodegenExtension.Context
     ): StackValue? {
-        val entityOptions = AndroidEntityOptionsProxy.get(container)
+        val entityOptions = AndroidEntityOptionsProxy.create(container)
 
         if (!entityOptions.cache.hasCache) {
             return StackValue.functionCall(Type.VOID_TYPE) {}
         }
 
-        if (entityOptions.entityType == AndroidEntityType.UNKNOWN) return null
+        if (entityOptions.containerType == AndroidContainerType.UNKNOWN) return null
 
         return StackValue.functionCall(Type.VOID_TYPE) {
             val bytecodeClassName = c.typeMapper.mapType(container).internalName
@@ -114,7 +114,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val androidPackage = packageFragment.packageData.moduleData.module.applicationPackage
         val container = resolvedCall.getReceiverDeclarationDescriptor() as? ClassDescriptor ?: return null
 
-        val entityOptions = AndroidEntityOptionsProxy.get(container)
+        val entityOptions = AndroidEntityOptionsProxy.create(container)
         return ResourcePropertyStackValue(receiver, c.typeMapper, resource, container, entityOptions, androidPackage)
     }
 
@@ -129,7 +129,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val container = codegen.descriptor
         if (container.kind != ClassKind.CLASS || container.isInner || DescriptorUtils.isLocal(container)) return
 
-        val entityOptions = AndroidEntityOptionsProxy.get(container)
+        val entityOptions = AndroidEntityOptionsProxy.create(container)
         if (entityOptions.cache == NO_CACHE) return
 
         val context = SyntheticPartsGenerateContext(classBuilder, codegen.state, container, targetClass, entityOptions)
@@ -137,7 +137,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         context.generateClearCacheFunction()
         context.generateCacheField()
 
-        if (entityOptions.entityType.isFragment) {
+        if (entityOptions.containerType.isFragment) {
             val classMembers = container.unsubstitutedMemberScope.getContributedDescriptors()
             val onDestroy = classMembers.firstOrNull { it is FunctionDescriptor && it.isOnDestroyFunction() }
             if (onDestroy == null) {
@@ -233,22 +233,18 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         // Resolve View via findViewById if not in cache
         iv.load(0, containerType)
 
-        val entityType = entityOptions.entityType
+        val entityType = entityOptions.containerType
         when (entityType) {
-            AndroidEntityType.ACTIVITY, AndroidEntityType.SUPPORT_FRAGMENT_ACTIVITY, AndroidEntityType.VIEW, AndroidEntityType.DIALOG -> {
+            AndroidContainerType.ACTIVITY, AndroidContainerType.SUPPORT_FRAGMENT_ACTIVITY, AndroidContainerType.VIEW, AndroidContainerType.DIALOG -> {
                 loadId()
                 iv.invokevirtual(entityType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
             }
-            AndroidEntityType.FRAGMENT, AndroidEntityType.SUPPORT_FRAGMENT, AndroidEntityType.ENTITY -> {
-                val methodName: String
-                val targetClassName: String
-                if (entityType == AndroidEntityType.ENTITY) {
-                    methodName = "getEntityView"
-                    targetClassName = containerType.internalName
-                } else {
-                    methodName = "getView"
-                    targetClassName = entityType.internalClassName
+            AndroidContainerType.FRAGMENT, AndroidContainerType.SUPPORT_FRAGMENT, AndroidContainerType.USER_CONTAINER -> {
+                val (methodName, targetClassName) = when (entityType) {
+                    AndroidContainerType.USER_CONTAINER -> Pair("getEntityView", containerType.internalName)
+                    else -> Pair("getView", entityType.internalClassName)
                 }
+
                 iv.invokevirtual(targetClassName, methodName, "()Landroid/view/View;", false)
                 iv.dup()
                 val lgetViewNotNull = Label()
