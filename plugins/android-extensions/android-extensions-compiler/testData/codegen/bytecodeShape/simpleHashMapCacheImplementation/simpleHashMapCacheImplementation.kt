@@ -6,7 +6,7 @@ import java.io.File
 import kotlinx.android.synthetic.main.layout.*
 import kotlinx.android.extensions.*
 
-@AndroidEntityOptions(cache = CacheImplementation.HASH_MAP)
+@ContainerOptions(cache = CacheImplementation.HASH_MAP)
 public class MyActivity : Activity() {
     init {login}
 }

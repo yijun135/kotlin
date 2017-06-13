@@ -18,6 +18,6 @@ package kotlinx.android.extensions
 
 import android.view.View
 
-public interface AndroidEntity {
-    public val entityView: View?
+public interface LayoutContainer {
+    public val containerView: View?
 }

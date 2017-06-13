@@ -17,7 +17,7 @@
 package org.jetbrains.kotlin.android.synthetic.codegen
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.android.synthetic.descriptors.AndroidEntityOptionsProxy
+import org.jetbrains.kotlin.android.synthetic.descriptors.ContainerOptionsProxy
 import org.jetbrains.kotlin.codegen.ClassBuilder
 import org.jetbrains.kotlin.codegen.ClassBuilderFactory
 import org.jetbrains.kotlin.codegen.DelegatingClassBuilder
@@ -113,8 +113,8 @@ class AndroidOnDestroyClassBuilderInterceptorExtension : ClassBuilderInterceptor
                     val classType = currentClassName?.let { Type.getObjectType(it) } ?: return
 
                     val container = bindingContext.get(BindingContext.CLASS, currentClass) ?: return
-                    val entityOptions = AndroidEntityOptionsProxy.create(container)
-                    if (!entityOptions.containerType.isFragment || !entityOptions.cache.hasCache) return
+                    val containerOptions = ContainerOptionsProxy.create(container)
+                    if (!containerOptions.containerType.isFragment || !containerOptions.cache.hasCache) return
 
                     val iv = InstructionAdapter(this)
                     iv.load(0, classType)

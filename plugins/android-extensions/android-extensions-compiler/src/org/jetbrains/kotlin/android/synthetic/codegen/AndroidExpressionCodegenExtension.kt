@@ -18,7 +18,7 @@ package org.jetbrains.kotlin.android.synthetic.codegen
 
 import kotlinx.android.extensions.CacheImplementation.NO_CACHE
 import org.jetbrains.kotlin.android.synthetic.AndroidConst
-import org.jetbrains.kotlin.android.synthetic.descriptors.AndroidEntityOptionsProxy
+import org.jetbrains.kotlin.android.synthetic.descriptors.ContainerOptionsProxy
 import org.jetbrains.kotlin.android.synthetic.descriptors.AndroidSyntheticPackageFragmentDescriptor
 import org.jetbrains.kotlin.android.synthetic.res.AndroidSyntheticFunction
 import org.jetbrains.kotlin.android.synthetic.res.AndroidSyntheticProperty
@@ -59,7 +59,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
             val state: GenerationState,
             val container: ClassDescriptor,
             val classOrObject: KtClassOrObject,
-            val entityOptions: AndroidEntityOptionsProxy)
+            val containerOptions: ContainerOptionsProxy)
 
     override fun applyProperty(receiver: StackValue, resolvedCall: ResolvedCall<*>, c: ExpressionCodegenExtension.Context): StackValue? {
         val resultingDescriptor = resolvedCall.resultingDescriptor
@@ -87,13 +87,13 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
             container: ClassDescriptor,
             c: ExpressionCodegenExtension.Context
     ): StackValue? {
-        val entityOptions = AndroidEntityOptionsProxy.create(container)
+        val containerOptions = ContainerOptionsProxy.create(container)
 
-        if (!entityOptions.cache.hasCache) {
+        if (!containerOptions.cache.hasCache) {
             return StackValue.functionCall(Type.VOID_TYPE) {}
         }
 
-        if (entityOptions.containerType == AndroidContainerType.UNKNOWN) return null
+        if (containerOptions.containerType == AndroidContainerType.UNKNOWN) return null
 
         return StackValue.functionCall(Type.VOID_TYPE) {
             val bytecodeClassName = c.typeMapper.mapType(container).internalName
@@ -114,8 +114,8 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val androidPackage = packageFragment.packageData.moduleData.module.applicationPackage
         val container = resolvedCall.getReceiverDeclarationDescriptor() as? ClassDescriptor ?: return null
 
-        val entityOptions = AndroidEntityOptionsProxy.create(container)
-        return ResourcePropertyStackValue(receiver, c.typeMapper, resource, container, entityOptions, androidPackage)
+        val containerOptions = ContainerOptionsProxy.create(container)
+        return ResourcePropertyStackValue(receiver, c.typeMapper, resource, container, containerOptions, androidPackage)
     }
 
     private fun ResolvedCall<*>.getReceiverDeclarationDescriptor(): ClassifierDescriptor? {
@@ -129,15 +129,15 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val container = codegen.descriptor
         if (container.kind != ClassKind.CLASS || container.isInner || DescriptorUtils.isLocal(container)) return
 
-        val entityOptions = AndroidEntityOptionsProxy.create(container)
-        if (entityOptions.cache == NO_CACHE) return
+        val containerOptions = ContainerOptionsProxy.create(container)
+        if (containerOptions.cache == NO_CACHE) return
 
-        val context = SyntheticPartsGenerateContext(classBuilder, codegen.state, container, targetClass, entityOptions)
+        val context = SyntheticPartsGenerateContext(classBuilder, codegen.state, container, targetClass, containerOptions)
         context.generateCachedFindViewByIdFunction()
         context.generateClearCacheFunction()
         context.generateCacheField()
 
-        if (entityOptions.containerType.isFragment) {
+        if (containerOptions.containerType.isFragment) {
             val classMembers = container.unsubstitutedMemberScope.getContributedDescriptors()
             val onDestroy = classMembers.firstOrNull { it is FunctionDescriptor && it.isOnDestroyFunction() }
             if (onDestroy == null) {
@@ -176,7 +176,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         val iv = InstructionAdapter(methodVisitor)
 
         val containerType = state.typeMapper.mapClass(container)
-        val cacheImpl = CacheMechanism.get(entityOptions, iv, containerType)
+        val cacheImpl = CacheMechanism.get(containerOptions, iv, containerType)
 
         cacheImpl.loadCache()
         val lCacheIsNull = Label()
@@ -191,7 +191,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
     }
 
     private fun SyntheticPartsGenerateContext.generateCacheField() {
-        val cacheImpl = CacheMechanism.getType(entityOptions)
+        val cacheImpl = CacheMechanism.getType(containerOptions)
         classBuilder.newField(JvmDeclarationOrigin.NO_ORIGIN, ACC_PRIVATE, PROPERTY_NAME, cacheImpl.descriptor, null, null)
     }
 
@@ -205,7 +205,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         methodVisitor.visitCode()
         val iv = InstructionAdapter(methodVisitor)
 
-        val cacheImpl = CacheMechanism.get(entityOptions, iv, containerType)
+        val cacheImpl = CacheMechanism.get(containerOptions, iv, containerType)
 
         fun loadId() = iv.load(1, Type.INT_TYPE)
 
@@ -233,16 +233,16 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
         // Resolve View via findViewById if not in cache
         iv.load(0, containerType)
 
-        val entityType = entityOptions.containerType
-        when (entityType) {
+        val baseContainerType = containerOptions.containerType
+        when (baseContainerType) {
             AndroidContainerType.ACTIVITY, AndroidContainerType.SUPPORT_FRAGMENT_ACTIVITY, AndroidContainerType.VIEW, AndroidContainerType.DIALOG -> {
                 loadId()
-                iv.invokevirtual(entityType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
+                iv.invokevirtual(baseContainerType.internalClassName, "findViewById", "(I)Landroid/view/View;", false)
             }
             AndroidContainerType.FRAGMENT, AndroidContainerType.SUPPORT_FRAGMENT, AndroidContainerType.USER_CONTAINER -> {
-                val (methodName, targetClassName) = when (entityType) {
-                    AndroidContainerType.USER_CONTAINER -> Pair("getEntityView", containerType.internalName)
-                    else -> Pair("getView", entityType.internalClassName)
+                val (methodName, targetClassName) = when (baseContainerType) {
+                    AndroidContainerType.USER_CONTAINER -> Pair("getContainerView", containerType.internalName)
+                    else -> Pair("getView", baseContainerType.internalClassName)
                 }
 
                 iv.invokevirtual(targetClassName, methodName, "()Landroid/view/View;", false)
@@ -260,7 +260,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
                 loadId()
                 iv.invokevirtual("android/view/View", "findViewById", "(I)Landroid/view/View;", false)
             }
-            else -> throw IllegalStateException("Can't generate code for $entityType")
+            else -> throw IllegalStateException("Can't generate code for $baseContainerType")
         }
         iv.store(2, viewType)
 

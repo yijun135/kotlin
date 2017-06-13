@@ -6,7 +6,7 @@ import android.content.Context
 import kotlinx.android.synthetic.main.layout.view.*
 import kotlinx.android.extensions.*
 
-@AndroidEntityOptions(cache = CacheImplementation.NO_CACHE)
+@ContainerOptions(cache = CacheImplementation.NO_CACHE)
 class MyView(context: Context) : View(context)
 
 class MyActivity : Activity() {

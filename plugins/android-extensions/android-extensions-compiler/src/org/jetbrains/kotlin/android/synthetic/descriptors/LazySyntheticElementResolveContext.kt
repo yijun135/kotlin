@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.android.synthetic.descriptors
 
-import kotlinx.android.extensions.AndroidEntity
+import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.kotlin.android.synthetic.AndroidConst
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.descriptors.findClassAcrossModuleDependencies
@@ -44,7 +44,7 @@ class LazySyntheticElementResolveContext(private val module: ModuleDescriptor, s
         val dialogDescriptor = find(AndroidConst.DIALOG_FQNAME) ?: return SyntheticElementResolveContext.ERROR_CONTEXT
         val supportActivityDescriptor = find(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME)
         val supportFragmentDescriptor = find(AndroidConst.SUPPORT_FRAGMENT_FQNAME)
-        val androidEntityDescriptor = find(AndroidEntity::class.java.canonicalName)
+        val layoutContainerDescriptor = find(LayoutContainer::class.java.canonicalName)
 
         return SyntheticElementResolveContext(
                 view = viewDescriptor.defaultType,
@@ -53,7 +53,7 @@ class LazySyntheticElementResolveContext(private val module: ModuleDescriptor, s
                 dialog = dialogDescriptor.defaultType,
                 supportActivity = supportActivityDescriptor?.defaultType,
                 supportFragment = supportFragmentDescriptor?.defaultType,
-                androidEntity = androidEntityDescriptor?.defaultType)
+                layoutContainer = layoutContainerDescriptor?.defaultType)
     }
 }
 
@@ -64,7 +64,7 @@ internal class SyntheticElementResolveContext(
         val dialog: SimpleType,
         val supportActivity: SimpleType?,
         val supportFragment: SimpleType?,
-        val androidEntity: SimpleType?
+        val layoutContainer: SimpleType?
 ) {
     companion object {
         private fun errorType() = ErrorUtils.createErrorType("")
@@ -77,7 +77,7 @@ internal class SyntheticElementResolveContext(
         receivers += WidgetReceiver(dialog, mayHaveCache = false)
         fragment?.let { receivers += WidgetReceiver(it, mayHaveCache = true) }
         supportFragment?.let { receivers += WidgetReceiver(it, mayHaveCache = true) }
-        androidEntity?.let { receivers += WidgetReceiver(it, mayHaveCache = true) }
+        layoutContainer?.let { receivers += WidgetReceiver(it, mayHaveCache = true) }
         receivers
     }
 

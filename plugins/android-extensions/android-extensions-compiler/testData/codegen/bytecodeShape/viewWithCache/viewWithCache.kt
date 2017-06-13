@@ -6,10 +6,10 @@ import android.content.Context
 import kotlinx.android.synthetic.main.layout.view.*
 import kotlinx.android.extensions.*
 
-@AndroidEntityOptions(cache = CacheImplementation.HASH_MAP)
+@ContainerOptions(cache = CacheImplementation.HASH_MAP)
 class MyView(context: Context) : View(context)
 
-@AndroidEntityOptions(cache = CacheImplementation.NO_CACHE)
+@ContainerOptions(cache = CacheImplementation.NO_CACHE)
 class MyActivity : Activity() {
     init { MyView(this).login }
 }

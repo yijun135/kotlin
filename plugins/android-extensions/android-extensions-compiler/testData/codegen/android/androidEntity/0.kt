@@ -14,7 +14,7 @@ class R {
     }
 }
 
-class MyEntity(override val entityView: View) : AndroidEntity
+class MyEntity(override val containerView: View) : LayoutContainer
 
 class MyActivity(): Activity() {
     val loginItem = Button(this)

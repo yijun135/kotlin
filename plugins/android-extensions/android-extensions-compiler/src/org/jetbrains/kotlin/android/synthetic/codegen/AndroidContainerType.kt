@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.android.synthetic.codegen
 
-import kotlinx.android.extensions.AndroidEntity
+import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.kotlin.android.synthetic.AndroidConst
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.resolve.DescriptorUtils
@@ -33,13 +33,13 @@ enum class AndroidContainerType(
     SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, supportsCache = true),
     SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, supportsCache = true, isFragment = true),
     VIEW(AndroidConst.VIEW_FQNAME, supportsCache = true, isCacheEnabledByDefault = false),
-    USER_CONTAINER(AndroidEntity::class.java.canonicalName, supportsCache = true), // is enabled by default?
+    USER_CONTAINER(LayoutContainer::class.java.canonicalName, supportsCache = true), // is enabled by default?
     UNKNOWN("");
 
     val internalClassName: String = className.replace('.', '/')
 
     companion object {
-        private val ENTITY_FQNAME = AndroidEntity::class.java.canonicalName
+        private val LAYOUT_CONTAINER_FQNAME = LayoutContainer::class.java.canonicalName
 
         fun get(descriptor: ClassifierDescriptor): AndroidContainerType {
             fun getClassTypeInternal(name: String): AndroidContainerType? = when (name) {
@@ -49,7 +49,7 @@ enum class AndroidContainerType(
                 AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME -> AndroidContainerType.SUPPORT_FRAGMENT_ACTIVITY
                 AndroidConst.SUPPORT_FRAGMENT_FQNAME -> AndroidContainerType.SUPPORT_FRAGMENT
                 AndroidConst.VIEW_FQNAME -> AndroidContainerType.VIEW
-                ENTITY_FQNAME -> AndroidContainerType.USER_CONTAINER
+                LAYOUT_CONTAINER_FQNAME -> AndroidContainerType.USER_CONTAINER
                 else -> null
             }
 
