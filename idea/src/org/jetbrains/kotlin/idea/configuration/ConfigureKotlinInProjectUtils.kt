@@ -107,14 +107,7 @@ fun getModulesWithKotlinFiles(project: Project): Collection<Module> {
         return emptyList()
     }
 
-    if (!FileTypeIndex.containsFileOfType(KotlinFileType.INSTANCE, GlobalSearchScope.projectScope(project))) {
-        return emptyList()
-    }
-
-    return project.allModules()
-            .filter { module ->
-                FileTypeIndex.containsFileOfType(KotlinFileType.INSTANCE, module.getModuleScope(true))
-            }
+    return emptyList()
 }
 
 fun getConfigurableModulesWithKotlinFiles(project: Project): Collection<Module> {
