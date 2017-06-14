@@ -5,18 +5,18 @@ apply {
 
 //val shadowContentsCfg = configurations.create("shadowContents")
 
-val projectsToShadow = listOf(
-        //android-extensions-jps
-           ":build-common",
-           ":compiler:cli-common",
-           ":compiler:compiler-runner",
-           ":compiler:daemon-client",
-           ":compiler:daemon-common",
-           ":core",
-           ":idea:idea-jps-common",
-           ":compiler:preloader",
-           ":compiler:util",
-           ":core:util.runtime")
+//val projectsToShadow = listOf(
+//        //android-extensions-jps
+//           ":build-common",
+//           ":compiler:cli-common",
+//           ":compiler:compiler-runner",
+//           ":compiler:daemon-client",
+//           ":compiler:daemon-common",
+//           ":core",
+//           ":idea:idea-jps-common",
+//           ":compiler:preloader",
+//           ":compiler:util",
+//           ":core:util.runtime")
 
 dependencies {
     compile(project(":build-common"))
@@ -33,15 +33,29 @@ dependencies {
 //    projectsToShadow.forEach {
 //        shadowContentsCfg(projectDepIntransitive(it))
 //    }
-//    testCompile(project(":compiler.tests-common"))
-//    testCompile(ideaSdkDeps("idea"))
-//    testCompile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
-//    testCompile(commonDep("junit:junit"))
+    testCompile(project(":compiler"))
+    testCompile(project(":compiler.tests-common"))
+    testCompile(ideaSdkDeps("idea"))
+    testCompile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
+    testCompile(commonDep("junit:junit"))
+    testCompile(project(":build-common", configuration = "tests-jar"))
+    testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(project(":compiler:util"))
 }
 
 configureKotlinProjectSourcesDefault()
-configureKotlinProjectNoTests()
-//configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
-//configureKotlinProjectTestResources("testData")
+configureKotlinProjectResourcesDefault()
+configureKotlinProjectResources("resources", sourcesBaseDir = rootDir)
+//configureKotlinProjectNoTests()
+configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
+configureKotlinProjectTestResources("testData")
 
 fixKotlinTaskDependencies()
+
+tasks.withType<Test> {
+    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
+    workingDir = rootDir
+    systemProperty("idea.is.unit.test", "true")
+    forkEvery = 100
+    ignoreFailures = true
+}

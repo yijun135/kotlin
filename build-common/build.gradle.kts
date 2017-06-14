@@ -10,14 +10,30 @@ dependencies {
     compile(project(":compiler:frontend.java"))
     compile(ideaSdkDeps("util"))
     buildVersion()
+    testCompile(commonDep("junit:junit"))
+    testCompile(project(":compiler.tests-common"))
+    testCompile(protobufFull())
 }
+
+val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
 
 configureKotlinProjectSourcesDefault()
-configureKotlinProjectNoTests()
+configureKotlinProjectTestsDefault()
 
-tasks.withType<Jar> {
+val jar: Jar by tasks
+jar.apply {
     setupRuntimeJar("Kotlin Build Common")
-    archiveName = "kotlin-build-common.jar"
+    baseName = "kotlin-build-common"
 }
+
+val testsJar by task<Jar> {
+    dependsOn("testClasses")
+    pluginManager.withPlugin("java") {
+        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
+    }
+    classifier = "tests"
+}
+
+artifacts.add(testsJarCfg.name, testsJar)
 
 fixKotlinTaskDependencies()
