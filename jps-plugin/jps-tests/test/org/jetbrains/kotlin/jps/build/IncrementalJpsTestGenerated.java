@@ -1603,6 +1603,5 @@ public class IncrementalJpsTestGenerated extends AbstractIncrementalJpsTest {
             String fileName = KotlinTestUtils.navigationMetadata("jps-plugin/testData/incremental/classHierarchyAffected/varianceChanged/");
             doTest(fileName);
         }
-
     }
 }
