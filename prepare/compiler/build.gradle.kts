@@ -29,12 +29,12 @@ val proguardLibraryJarsCfg = configurations.create("library-jars")
 val mainCfg = configurations.create("default")
 val packedCfg = configurations.create("packed")
 val embeddableCfg = configurations.create("embeddable")
-val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
+//val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
 
 val outputBeforeSrinkJar = "$buildDir/libs/kotlin-compiler-before-shrink.jar"
 val outputJar = rootProject.extra["compilerJar"].toString()
 val outputEmbeddableJar = rootProject.extra["embeddableCompilerJar"].toString()
-val outputJarWithBootstrapRuntime = rootProject.extra["compilerJarWithBootstrapRuntime"].toString()
+//val outputJarWithBootstrapRuntime = rootProject.extra["compilerJarWithBootstrapRuntime"].toString()
 
 val kotlinEmbeddableRootPackage = "org.jetbrains.kotlin"
 
@@ -70,9 +70,9 @@ dependencies {
     embeddableCfg(projectDepIntransitive(":build-common"))
 //    embeddableCfg(projectDepIntransitive(":kotlin-test:kotlin-test-jvm"))
 //    embeddableCfg(projectDepIntransitive(":kotlin-stdlib"))
-    withBootstrapRuntimeCfg(kotlinDep("stdlib"))
-    withBootstrapRuntimeCfg(kotlinDep("script-runtime"))
-    withBootstrapRuntimeCfg(kotlinDep("reflect"))
+//    withBootstrapRuntimeCfg(kotlinDep("stdlib"))
+//    withBootstrapRuntimeCfg(kotlinDep("script-runtime"))
+//    withBootstrapRuntimeCfg(kotlinDep("reflect"))
 }
 
 val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
@@ -172,16 +172,7 @@ val embeddableTask = task<ShadowJar>("prepare-embeddable-compiler") {
     relocate("javax.inject", "$kotlinEmbeddableRootPackage.javax.inject")
 }
 
-val compilerWithBootstrapRuntimeTask = task<ShadowJar>("prepare-compiler-with-bootstrap-runtime") {
-    archiveName = outputJarWithBootstrapRuntime
-    configurations = listOf(withBootstrapRuntimeCfg)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn(embeddableTask)
-    from(files(outputEmbeddableJar))
-    from(withBootstrapRuntimeCfg.files)
-}
-
-defaultTasks(mainTask.name, embeddableTask.name, compilerWithBootstrapRuntimeTask.name)
+defaultTasks(mainTask.name, embeddableTask.name)
 
 artifacts.add(mainCfg.name, File(outputJar))
 artifacts.add(packedCfg.name, File(if (shrink) outputJar else outputBeforeSrinkJar))

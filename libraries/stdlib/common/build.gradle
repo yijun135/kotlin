@@ -19,8 +19,8 @@ createPreprocessorTask(project, "Main", "${projectDir}/../src/kotlin", commonSrc
 
 compileKotlinCommon {
     dependsOn preprocessSourcesMain
-    dependsOn ":prepare:compiler:prepare-compiler-with-bootstrap-runtime"
-    compilerJarFile = compilerJarWithBootstrapRuntime
+//    dependsOn ":prepare:compiler:prepare-compiler-with-bootstrap-runtime"
+//    compilerJarFile = compilerJarWithBootstrapRuntime
 }
 
 /*

@@ -34,8 +34,8 @@ extra["build.number"] = "1.1-SNAPSHOT"
 
 extra["kotlin_root"] = rootDir
 
-val bootstrapCfg = configurations.create("bootstrap")
-val scriptCompileCfg = configurations.create("scriptCompile")
+val bootstrapCompileCfg = configurations.create("bootstrapCompile")
+val scriptCompileCfg = configurations.create("scriptCompile").extendsFrom(bootstrapCompileCfg)
 val scriptRuntimeCfg = configurations.create("scriptRuntime").extendsFrom(scriptCompileCfg)
 
 repositories {
@@ -43,8 +43,7 @@ repositories {
 }
 
 dependencies {
-    bootstrapCfg(kotlinDep("compiler-embeddable"))
-    scriptCompileCfg(kotlinDep("compiler-embeddable"))
+    bootstrapCompileCfg(kotlinDep("compiler-embeddable"))
 }
 
 val distDir = "$rootDir/dist"
@@ -71,8 +70,8 @@ extra["JDK_18"] = jdkPath("1.8")
 
 extra["compilerJar"] = project.file("$distLibDir/kotlin-compiler.jar")
 extra["embeddableCompilerJar"] = project.file("$distLibDir/kotlin-compiler-embeddable.jar")
-extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
-extra["bootstrapCompilerFile"] = bootstrapCfg.files.first().canonicalPath
+//extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
+//extra["bootstrapCompilerFile"] = bootstrapCfg.files.first().canonicalPath
 
 extra["versions.protobuf-java"] = "2.6.1"
 extra["versions.javax.inject"] = "1"
@@ -104,9 +103,9 @@ tasks.matching { task ->
 //    dependsOn(tasks.getByName(importedAntTasksPrefix + "update"))
 //}
 
-val prepareBootstrapTask = task("prepareBootstrap") {
-    dependsOn(bootstrapCfg, scriptCompileCfg, scriptRuntimeCfg)
-}
+//val prepareBootstrapTask = task("prepareBootstrap") {
+//    dependsOn(bootstrapCfg, scriptCompileCfg, scriptRuntimeCfg)
+//}
 
 fun Project.allprojectsRecursive(body: Project.() -> Unit) {
     this.body()
@@ -123,14 +122,14 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        dependsOn(prepareBootstrapTask)
-        compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
+//        dependsOn(prepareBootstrapTask)
+//        compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
         kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", project.name)
     }
 
     tasks.withType<Kotlin2JsCompile> {
-        dependsOn(prepareBootstrapTask)
-        compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
+//        dependsOn(prepareBootstrapTask)
+//        compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
         kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", project.name)
     }
 
