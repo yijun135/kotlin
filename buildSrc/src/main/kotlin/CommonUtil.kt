@@ -213,3 +213,6 @@ private fun String.toMaybeVersionedJarRegex(): Regex {
     val escaped = this.wildcardsToEscapedRegexString()
     return Regex(if (hasJarExtension) escaped else "$escaped(-\\d.*)?\\.jar") // TODO: consider more precise version part of the regex
 }
+
+fun File(root: File, vararg children: String): File = children.fold(root, { f, c -> File(f, c) })
+fun File(root: String, vararg children: String): File = children.fold(File(root), { f, c -> File(f, c) })

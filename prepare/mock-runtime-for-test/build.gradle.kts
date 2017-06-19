@@ -21,10 +21,10 @@ jar.apply {
 configure<JavaPluginConvention> {
    sourceSets["main"].apply {
        (this as HasConvention).convention.getPlugin<KotlinSourceSet>().kotlin.apply {
-           srcDir(File(rootDir, "core/runtime.jvm/src"))
+           srcDir(File(rootDir, "core", "runtime.jvm", "src"))
                    .include("kotlin/TypeAliases.kt",
                             "kotlin/text/TypeAliases.kt")
-           srcDir(File(rootDir, "libraries/stdlib/src"))
+           srcDir(File(rootDir, "libraries", "stdlib", "src"))
                    .include("kotlin/collections/TypeAliases.kt",
                             "kotlin/jvm/JvmVersion.kt",
                             "kotlin/util/Standard.kt",

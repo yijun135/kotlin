@@ -6,8 +6,8 @@ import java.io.File
 
 apply { plugin("kotlin") }
 
-val builtinsSrc = File(rootDir, "core/builtins/src")
-val builtinsNative = File(rootDir, "core/builtins/native")
+val builtinsSrc = File(rootDir, "core", "builtins", "src")
+val builtinsNative = File(rootDir, "core", "builtins", "native")
 val builtinsSerialized = File(rootProject.extra["distDir"].toString(), "builtins")
 val builtinsJar = File(buildDir, "builtins.jar")
 

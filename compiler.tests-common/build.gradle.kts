@@ -30,7 +30,7 @@ dependencies {
 
 configure<JavaPluginConvention> {
     sourceSets.getByName("main").java.apply {
-        setSrcDirs(listOf(File(rootDir, "compiler/tests-common")))
+        setSrcDirs(listOf(File(rootDir, "compiler", "tests-common")))
         exclude("build.gradle.kts")
     }
 }
