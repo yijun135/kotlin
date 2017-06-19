@@ -48,7 +48,7 @@ dependencies {
 
 val distDir = "$rootDir/dist"
 val distLibDir = "$distDir/kotlinc/lib"
-val ideaPluginDir = "$distDir/idea-plugin"
+val ideaPluginDir = "$distDir/artifacts/idea-plugin"
 
 extra["distDir"] = distDir
 extra["distLibDir"] = project.file(distLibDir)
