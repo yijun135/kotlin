@@ -87,6 +87,7 @@ include "prepare:mock-runtime-for-test"
 include "kotlin-reflect"
 include "ant"
 include "test:compiler"
+include "test:js-backend"
 //include "test:idea-plugin"
 
 rootProject.name = "kotlin"
