@@ -11,6 +11,7 @@ dependencies {
     testRuntime(project(":ant"))
     testRuntime(project(":kotlin-stdlib"))
     testRuntime(project(":kotlin-script-runtime"))
+    testRuntime(project(":kotlin-runtime"))
     testRuntime(project(":kotlin-reflect"))
 }
 

@@ -55,8 +55,6 @@ extra["distLibDir"] = project.file(distLibDir)
 extra["libsDir"] = project.file(distLibDir)
 extra["ideaPluginDir"] = project.file(ideaPluginDir)
 
-extra["abcabc"] = project.file(ideaPluginDir)
-
 Properties().apply {
     load(File(rootDir, "resources", "kotlinManifest.properties").reader())
     forEach {

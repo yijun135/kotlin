@@ -106,6 +106,7 @@ tasks.withType<Test> {
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
     forkEvery = 100
+    maxHeapSize = "1250m"
     testLogging {
 //        events = setOf(TestLogEvent.FAILED)
 //        showStackTraces = true
