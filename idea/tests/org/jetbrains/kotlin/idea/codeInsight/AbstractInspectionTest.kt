@@ -22,6 +22,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.IdeaTestUtil
 import com.intellij.testFramework.LightProjectDescriptor
+import com.intellij.testFramework.TestLoggerFactory
 import org.jetbrains.kotlin.idea.inspections.runInspection
 import org.jetbrains.kotlin.idea.test.*
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
@@ -36,8 +37,14 @@ abstract class AbstractInspectionTest : KotlinLightCodeInsightFixtureTestCase() 
     }
 
     override fun setUp() {
-        super.setUp()
-        EntryPointsManagerBase.getInstance(project).ADDITIONAL_ANNOTATIONS.add(ENTRY_POINT_ANNOTATION)
+        try {
+            super.setUp()
+            EntryPointsManagerBase.getInstance(project).ADDITIONAL_ANNOTATIONS.add(ENTRY_POINT_ANNOTATION)
+        }
+        catch (e: Throwable) {
+            TestLoggerFactory.onTestFinished(false)
+            throw e
+        }
     }
 
     override fun tearDown() {
