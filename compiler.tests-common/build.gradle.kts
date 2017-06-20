@@ -1,5 +1,5 @@
-import org.gradle.api.internal.HasConvention
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+
+// Have to stay in the separate dir: attempt to move it to the source root dir lead to invalid import into IDEA
 
 apply { plugin("kotlin") }
 
@@ -28,15 +28,7 @@ dependencies {
     compile(preloadedDeps("dx", subdir = "android-5.0/lib"))
 }
 
-configure<JavaPluginConvention> {
-    sourceSets.getByName("main").apply {
-        java.srcDirs(listOf(projectDir))
-        (this as HasConvention).convention.getPlugin<KotlinSourceSet>().kotlin.apply {
-            srcDirs(listOf(projectDir))
-                    .exclude("build.gradle.kts")
-        }
-    }
-}
+configureKotlinProjectSources("tests-common", sourcesBaseDir = File(rootDir, "compiler"))
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()

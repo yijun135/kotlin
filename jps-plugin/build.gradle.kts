@@ -37,7 +37,7 @@ dependencies {
 //    projectsToShadow.forEach {
 //        shadowContentsCfg(projectDepIntransitive(it))
 //    }
-    testCompile(project(":compiler:tests-common"))
+    testCompile(project(":compiler.tests-common"))
     testCompile(project(":compiler:incremental-compilation-impl"))
 //    testCompileOnly(ideaSdkDeps("idea"))
     testCompileOnly(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
