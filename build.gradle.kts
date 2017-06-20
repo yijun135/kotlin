@@ -11,10 +11,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 buildscript {
-    extra["kotlin_version"] = project.properties["deployVersion"] ?: "1.1.3-eap-68"
+    extra["kotlin_version"] = file("kotlin-bootstrap-version.txt").readText().trim()
     extra["kotlinVersion"] = extra["kotlin_version"]
     extra["kotlin_language_version"] = "1.1"
-    extra["kotlin_gradle_plugin_version"] = "1.1.3-eap-68"
+    extra["kotlin_gradle_plugin_version"] = extra["kotlin_version"]
     extra["repo"] = "https://repo.gradle.org/gradle/repo"
 
     repositories {
