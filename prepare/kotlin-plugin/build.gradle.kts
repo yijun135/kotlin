@@ -11,8 +11,6 @@ buildscript {
     }
 }
 
-//apply { plugin("java") }
-
 val projectsToShadow = listOf(
         ":core:builtins",
         ":plugins:annotation-based-compiler-plugins-ide-support",
@@ -50,21 +48,23 @@ val projectsToShadow = listOf(
         ":compiler:util",
         ":core:util.runtime")
 
-val packedJars = configurations.create("packedJars")
-val sideJars = configurations.create("sideJars")
+val packedJars by configurations.creating
+val sideJars by configurations.creating
 
 dependencies {
     packedJars(commonDep("com.github.spullara.cli-parser", "cli-parser"))
     packedJars(preloadedDeps("protobuf-${rootProject.extra["versions.protobuf-java"]}"))
     sideJars(project(":kotlin-script-runtime"))
-    sideJars(commonDep("io.javaslang","javaslang"))
+    sideJars(commonDep("io.javaslang", "javaslang"))
     sideJars(commonDep("javax.inject"))
     sideJars(preloadedDeps("markdown", "kotlinx-coroutines-core", "uast-java"))
 }
 
+val targetJar = File(buildDir, "libs", "kotlin-plugin.jar")
+
 val shadowTask = task<ShadowJar>("shadowJar") {
     setupRuntimeJar("Kotlin IDEA plugin")
-    archiveName = "kotlin-plugin.jar"
+    archiveName = targetJar.canonicalPath
     projectsToShadow.forEach {
         dependsOn("$it:classes")
         project(it).let { p ->
@@ -79,10 +79,8 @@ val shadowTask = task<ShadowJar>("shadowJar") {
 
 ideaPlugin {
     dependsOn(shadowTask)
-    from(shadowTask)
+    from(targetJar)
     dependsOn(":kotlin-script-runtime:jar")
-    from(sideJars.files)
+    from(sideJars)
 }
 
-//configureKotlinProjectSources() // no sources
-//configureKotlinProjectNoTests()
