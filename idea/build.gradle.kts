@@ -43,7 +43,7 @@ dependencies {
     compile(ideaSdkDeps("coverage", subdir = "plugins/coverage/lib"))
     compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
     testCompile(project(":compiler:cli"))
-    testCompile(project(":compiler.tests-common"))
+    testCompile(project(":compiler:tests-common"))
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
     testCompile(ideaSdkDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", subdir = "plugins/gradle/lib"))
     testCompile(ideaSdkDeps("groovy-all"))

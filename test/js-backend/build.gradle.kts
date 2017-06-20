@@ -2,7 +2,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
-    testCompile(project(":compiler.tests-common"))
+    testCompile(project(":compiler:tests-common"))
     testCompile(project(":compiler:frontend"))
     testCompile(project(":compiler:cli"))
     testCompileOnly(project(":compiler:util"))

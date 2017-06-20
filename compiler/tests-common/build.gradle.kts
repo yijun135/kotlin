@@ -1,5 +1,5 @@
-
-import java.io.File
+import org.gradle.api.internal.HasConvention
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 apply { plugin("kotlin") }
 
@@ -29,9 +29,12 @@ dependencies {
 }
 
 configure<JavaPluginConvention> {
-    sourceSets.getByName("main").java.apply {
-        setSrcDirs(listOf(File(rootDir, "compiler", "tests-common")))
-        exclude("build.gradle.kts")
+    sourceSets.getByName("main").apply {
+        java.srcDirs(listOf(projectDir))
+        (this as HasConvention).convention.getPlugin<KotlinSourceSet>().kotlin.apply {
+            srcDirs(listOf(projectDir))
+                    .exclude("build.gradle.kts")
+        }
     }
 }
 configureKotlinProjectNoTests()

@@ -19,6 +19,10 @@ apply {
 //           ":core:util.runtime")
 
 dependencies {
+    testRuntime(ideaSdkCoreDeps("*.jar"))
+    testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "jps/test"))
+    testRuntime(ideaSdkDeps("*.jar", subdir = "jps"))
     compile(project(":build-common"))
     compile(project(":core"))
     compile(project(":compiler:compiler-runner"))
@@ -33,14 +37,15 @@ dependencies {
 //    projectsToShadow.forEach {
 //        shadowContentsCfg(projectDepIntransitive(it))
 //    }
-    testCompile(project(":compiler"))
-    testCompile(project(":compiler.tests-common"))
-    testCompile(ideaSdkDeps("idea"))
-    testCompile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
+    testCompile(project(":compiler:tests-common"))
+    testCompile(project(":compiler:incremental-compilation-impl"))
+//    testCompileOnly(ideaSdkDeps("idea"))
+    testCompileOnly(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(commonDep("junit:junit"))
     testCompile(project(":build-common", configuration = "tests-jar"))
-    testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(project(":compiler"))
     testRuntime(project(":compiler:util"))
+//    testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSourcesDefault()

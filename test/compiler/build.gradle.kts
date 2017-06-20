@@ -2,11 +2,13 @@
 apply { plugin("kotlin") }
 
 dependencies {
-    testCompile(project(":compiler.tests-common"))
-    testCompile(project(":compiler:ir.ir2cfg"))
-    testCompile(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward
-    testCompile(project(":prepare:compiler", configuration = "default"))
+    testRuntime(ideaSdkCoreDeps("*.jar"))
+    testRuntime(ideaSdkDeps("*.jar"))
+    testCompile(project(":compiler:tests-common"))
+    testCompileOnly(project(":compiler:ir.ir2cfg"))
+    testCompileOnly(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward
     testCompile(ideaSdkDeps("openapi", "idea", "util", "asm-all", "commons-httpclient-3.1-patched"))
+    testRuntime(project(":prepare:compiler", configuration = "default"))
     testRuntime(project(":plugins:android-extensions-compiler"))
     testRuntime(project(":ant"))
     testRuntime(project(":kotlin-stdlib"))

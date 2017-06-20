@@ -11,7 +11,7 @@ dependencies {
     compile(ideaSdkDeps("util"))
     buildVersion()
     testCompile(commonDep("junit:junit"))
-    testCompile(project(":compiler.tests-common"))
+    testCompile(project(":compiler:tests-common"))
     testCompile(protobufFull())
 }
 
