@@ -86,18 +86,18 @@ configureKotlinProjectSources("src",
                               "idea-completion/src",
                               "idea-live-templates/src",
                               "idea-repl/src")
-configureKotlinProjectResourcesDefault()
-//configure<JavaPluginConvention> {
-//    sourceSets["main"].apply {
-//        resources {
-//            srcDir(File(projectDir, "resources"))
-//                    .include("**")
-//            srcDir(File(projectDir, "src"))
-//                    .include("META-INF/**",
-//                             "**/*.properties")
-//        }
-//    }
-//}
+//configureKotlinProjectResourcesDefault()
+configure<JavaPluginConvention> {
+    sourceSets["main"].apply {
+        resources {
+            srcDir(File(projectDir, "resources"))
+                    .include("**")
+            srcDir(File(projectDir, "src"))
+                    .include("META-INF/**",
+                             "**/*.properties")
+        }
+    }
+}
 configureKotlinProjectTests("tests",
                             "idea-completion/tests")
 
