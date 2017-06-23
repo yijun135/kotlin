@@ -162,7 +162,7 @@ class KotlinToResolvedCallTransformer(
     private fun runLambdaArgumentsChecks(
             context: BasicCallResolutionContext,
             trace: BindingTrace,
-            lambdaArguments: List<ResolvedLambdaArgument>
+            lambdaArguments: List<PostponedLambdaArgument>
     ) {
         for (lambdaArgument in lambdaArguments) {
             val returnType = lambdaArgument.finalReturnType
@@ -182,7 +182,7 @@ class KotlinToResolvedCallTransformer(
         }
     }
 
-    private fun updateTraceForLambdaReturnType(lambdaArgument: ResolvedLambdaArgument, trace: BindingTrace, returnType: UnwrappedType) {
+    private fun updateTraceForLambdaReturnType(lambdaArgument: PostponedLambdaArgument, trace: BindingTrace, returnType: UnwrappedType) {
         val psiCallArgument = lambdaArgument.argument.psiCallArgument
 
         val ktArgumentExpression: KtExpression
