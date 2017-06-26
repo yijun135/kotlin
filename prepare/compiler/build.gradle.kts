@@ -55,12 +55,14 @@ dependencies {
     otherDepsCfg(commonDep("com.github.spullara.cli-parser", "cli-parser"))
     otherDepsCfg(commonDep("com.google.code.findbugs", "jsr305"))
     otherDepsCfg(commonDep("io.javaslang","javaslang"))
+    otherDepsCfg(preloadedDeps("json-org"))
     buildVersion()
     proguardLibraryJarsCfg(files("$javaHome/lib/rt.jar".takeIf { File(it).exists() } ?: "$javaHome/../Classes/classes.jar",
                                  "$javaHome/lib/jsse.jar".takeIf { File(it).exists() } ?: "$javaHome/../Classes/jsse.jar"))
     proguardLibraryJarsCfg(kotlinDep("stdlib"))
     proguardLibraryJarsCfg(kotlinDep("script-runtime"))
     proguardLibraryJarsCfg(kotlinDep("reflect"))
+    proguardLibraryJarsCfg(files("${System.getProperty("java.home")}/../lib/tools.jar"))
 //    proguardLibraryJarsCfg(project(":prepare:runtime", configuration = "default").apply { isTransitive = false })
 //    proguardLibraryJarsCfg(project(":prepare:reflect", configuration = "default").apply { isTransitive = false })
 //    proguardLibraryJarsCfg(project(":core:script.runtime").apply { isTransitive = false })
@@ -103,6 +105,7 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
            ":js:js.parser",
            ":js:js.frontend",
            ":js:js.translator",
+           ":js:js.dce",
            compilerProject.path,
            ":build-common",
            ":core:util.runtime",
