@@ -2,7 +2,7 @@
 
 import org.gradle.api.*
 import org.gradle.api.tasks.*
-import org.gradle.script.lang.kotlin.*
+import org.gradle.kotlin.dsl.*
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ProjectDependency

@@ -2,7 +2,7 @@ import java.util.*
 import java.io.File
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.script.lang.kotlin.java
+import org.gradle.kotlin.dsl.java
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.internal.HasConvention
 import org.gradle.api.tasks.testing.Test
@@ -30,7 +30,8 @@ plugins {
     java // so we can benefit from the `java()` accessor below
 }
 
-extra["build.number"] = "1.1-SNAPSHOT"
+val buildNumber = "1.1-SNAPSHOT"
+extra["build.number"] = buildNumber
 
 extra["kotlin_root"] = rootDir
 
@@ -85,6 +86,11 @@ extra["versions.ant"] = "1.8.2"
 
 extra["ideaCoreSdkJars"] = arrayOf("annotations", "asm-all", "guava", "intellij-core", "jdom", "jna", "log4j", "picocontainer",
                                    "snappy-in-java", "trove4j", "xpp3-1.1.4-min", "xstream")
+
+allprojects {
+    group = "org.jetbrains.kotlin"
+    version = buildNumber
+}
 
 applyFrom("libraries/commonConfiguration.gradle")
 
