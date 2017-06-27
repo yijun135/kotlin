@@ -35,7 +35,6 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassOrAny
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassDescriptor
-import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.source.KotlinSourceElement
 import org.jetbrains.kotlin.types.lowerIfFlexible
 import org.jetbrains.org.objectweb.asm.Label
@@ -245,7 +244,7 @@ class AndroidExpressionCodegenExtension : ExpressionCodegenExtension {
     }
 
     private fun ResolvedCall<*>.getReceiverDeclarationDescriptor(): ClassifierDescriptor? {
-        return (extensionReceiver as ReceiverValue).type.constructor.declarationDescriptor
+        return resultingDescriptor.extensionReceiverParameter?.type?.constructor?.declarationDescriptor
     }
 
     override fun generateClassSyntheticParts(codegen: ImplementationBodyCodegen) {
