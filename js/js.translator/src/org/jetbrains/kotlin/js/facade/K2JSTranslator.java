@@ -132,7 +132,7 @@ public final class K2JSTranslator {
         List<JsProgramFragment> allFragments = new ArrayList<>(translationResult.getFragments());
 
         JsInliner.process(reporter, config, analysisResult.getBindingTrace(), translationResult.getInnerModuleName(),
-                          allFragments, newFragments);
+                          allFragments, newFragments, translationResult.getImportStatements());
 
         LabeledBlockToDoWhileTransformation.INSTANCE.apply(newFragments);
 

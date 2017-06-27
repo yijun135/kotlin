@@ -341,7 +341,7 @@ public final class Translation {
                                                      config.getModuleKind()));
 
         return new AstGenerationResult(program, internalModuleName, fragments, fragmentMap, newFragments,
-                                       fileMemberScopes, importedModuleList);
+                                       merger.getImportBlock().getStatements(), fileMemberScopes, importedModuleList);
     }
 
     private static boolean isBuiltinModule(@NotNull List<JsProgramFragment> fragments) {
