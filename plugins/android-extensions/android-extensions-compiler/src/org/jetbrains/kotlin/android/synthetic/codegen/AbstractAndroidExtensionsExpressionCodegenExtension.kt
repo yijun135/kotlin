@@ -37,8 +37,10 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.getSuperClassOrAny
+import org.jetbrains.kotlin.resolve.descriptorUtil.isAncestorOf
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.JvmDeclarationOrigin
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
+import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 import org.jetbrains.org.objectweb.asm.Label
 import org.jetbrains.org.objectweb.asm.Opcodes.ACC_PRIVATE
 import org.jetbrains.org.objectweb.asm.Opcodes.ACC_PUBLIC
@@ -128,7 +130,23 @@ abstract class AbstractAndroidExtensionsExpressionCodegenExtension : ExpressionC
     }
 
     private fun ResolvedCall<*>.getReceiverDeclarationDescriptor(): ClassifierDescriptor? {
-        return (extensionReceiver as ReceiverValue).type.constructor.declarationDescriptor
+        val fromDeclarationSite = resultingDescriptor.extensionReceiverParameter?.type?.constructor?.declarationDescriptor
+        val fromCallSite = (extensionReceiver as ReceiverValue).type.constructor.declarationDescriptor
+
+        if (fromDeclarationSite == null && fromCallSite == null)
+            return null
+        else if (fromDeclarationSite != null && fromCallSite == null)
+            return fromDeclarationSite
+        else if (fromDeclarationSite == null && fromCallSite != null)
+            return fromCallSite
+
+        fromDeclarationSite as ClassifierDescriptor
+        fromCallSite as ClassifierDescriptor
+
+        return if (fromCallSite.defaultType.isSubtypeOf(fromDeclarationSite.defaultType))
+            fromCallSite
+        else
+            fromDeclarationSite
     }
 
     override fun generateClassSyntheticParts(codegen: ImplementationBodyCodegen) {
