@@ -5,7 +5,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 apply { plugin("kotlin") }
 
 dependencies {
-    testRuntime(project(":prepare:compiler", configuration = "default"))
     testRuntime(ideaSdkDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-i18n/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/properties/lib"))
@@ -34,6 +33,10 @@ dependencies {
     testRuntime(project(":idea:idea-android")) { isTransitive = false }
     testRuntime(project(":plugins:lint")) { isTransitive = false }
     testRuntime(project(":plugins:uast-kotlin"))
+    (rootProject.extra["compilerModules"] as Array<String>).forEach {
+        testRuntime(project(it))
+    }
+    testRuntime(project(":prepare:compiler", configuration = "default"))
     compile(project(":kotlin-stdlib"))
     compile(project(":core"))
     compile(project(":compiler:backend"))
