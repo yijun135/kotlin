@@ -30,6 +30,7 @@ tasks.withType<Test> {
     dependsOn(":prepare:compiler:prepare")
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
+    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
     systemProperty("kotlin.test.script.classpath", the<JavaPluginConvention>().sourceSets.getByName("test").output.classesDirs.joinToString(File.pathSeparator))
     jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
     maxHeapSize = "1250m"

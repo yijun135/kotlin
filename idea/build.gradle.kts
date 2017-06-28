@@ -108,6 +108,7 @@ tasks.withType<Test> {
     jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
+    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
 //    forkEvery = 100
     maxHeapSize = "1250m"
     testLogging {

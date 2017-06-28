@@ -25,7 +25,8 @@ test.apply {
     dependsOn(":prepare:mock-runtime-for-test:dist")
     dependsOn(":prepare:compiler:prepare")
     workingDir = rootDir
-    systemProperty("kotlin.test.script.classpath", the<JavaPluginConvention>().sourceSets.getByName("test").output.classesDirs.joinToString(File.pathSeparator))
+    systemProperty("idea.is.unit.test", "true")
+    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
     ignoreFailures = true
 }
 
