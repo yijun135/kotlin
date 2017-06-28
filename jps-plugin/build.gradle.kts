@@ -43,14 +43,15 @@ dependencies {
     testCompileOnly(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(commonDep("junit:junit"))
     testCompile(project(":build-common", configuration = "tests-jar"))
-    testRuntime(project(":compiler"))
-    testRuntime(project(":compiler:util"))
-//    testRuntime(project(":prepare:compiler", configuration = "default"))
+    (rootProject.extra["compilerModules"] as Array<String>).forEach {
+        testRuntime(project(it))
+    }
+    testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectResourcesDefault()
-configureKotlinProjectResources("resources", sourcesBaseDir = rootDir)
+//configureKotlinProjectResources("resources", sourcesBaseDir = rootDir)
 //configureKotlinProjectNoTests()
 configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
 configureKotlinProjectTestResources("testData")
