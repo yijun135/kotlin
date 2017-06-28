@@ -15,6 +15,11 @@ configureKotlinProjectSources(
         "compiler/daemon/src",
         "compiler/conditional-preprocessor/src",
         sourcesBaseDir = rootDir)
+configureKotlinProjectResources("idea/src", sourcesBaseDir = rootDir) {
+    include("META-INF/extensions/common.xml",
+            "META-INF/extensions/kotlin2jvm.xml",
+            "META-INF/extensions/kotlin2js.xml")
+}
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()

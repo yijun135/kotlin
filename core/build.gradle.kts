@@ -16,6 +16,8 @@ configureKotlinProjectSources(
         "descriptors/src",
         "descriptors.runtime/src",
         "deserialization/src")
+configureKotlinProjectResources(
+        "descriptor.loader.java/src", "deserialization/src") { include("META-INF/**") }
 configureKotlinProjectNoTests()
 
 tasks.withType<JavaCompile> {

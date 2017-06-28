@@ -8,6 +8,7 @@ dependencies {
 }
 
 configureKotlinProjectSourcesDefault()
+configureKotlinProjectResourcesDefault()
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()

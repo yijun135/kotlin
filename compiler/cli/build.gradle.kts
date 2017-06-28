@@ -26,6 +26,7 @@ configureKotlinProjectSources("compiler/cli/src",
                               "compiler/builtins-serializer/src",
                               "compiler/javac-wrapper/src",
                               sourcesBaseDir = rootDir)
+configureKotlinProjectResourcesDefault()
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()

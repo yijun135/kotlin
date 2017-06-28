@@ -12,6 +12,7 @@ dependencies {
 }
 
 configureKotlinProjectSources("backend/src", "ir/backend.jvm/src", sourcesBaseDir = File(rootDir, "compiler"))
+configureKotlinProjectResourcesDefault()
 configureKotlinProjectNoTests()
 
 fixKotlinTaskDependencies()
