@@ -31,6 +31,7 @@ fun Project.dist(body: Copy.() -> Unit) {
     task<Copy>("dist") {
         dependsOn("assemble")
         body()
+        rename("-${java.util.regex.Pattern.quote(rootProject.extra["build.number"].toString())}", "")
         into(rootProject.extra["distLibDir"].toString())
     }
 }

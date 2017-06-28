@@ -83,49 +83,13 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
     archiveName = if (shrink) outputBeforeSrinkJar else outputJar
     dependsOn(protobufFullTask)
     setupRuntimeJar("Kotlin Compiler")
-    listOf(":compiler:util",
-           ":compiler:container",
-           ":compiler:resolution",
-           ":compiler:serialization",
-           ":compiler:frontend",
-           ":compiler:frontend.java",
-           ":compiler:frontend.script",
-           ":compiler:cli-common",
-           ":compiler:daemon-common",
-           ":compiler:ir.tree",
-           ":compiler:ir.psi2ir",
-           ":compiler:backend-common",
-           ":compiler:backend",
-           ":compiler:plugin-api",
-           ":compiler:light-classes",
-           ":compiler:cli",
-           ":compiler:incremental-compilation-impl",
-           ":js:js.ast",
-           ":js:js.serializer",
-           ":js:js.parser",
-           ":js:js.frontend",
-           ":js:js.translator",
-           ":js:js.dce",
-           compilerProject.path,
-           ":build-common",
-           ":core:util.runtime",
-           ":core").forEach {
+    (rootProject.extra["compilerModules"] as Array<String>).forEach {
         dependsOn("$it:classes")
         from(project(it).getCompiledClasses())
     }
     from(ideaSdkCoreCfg.files)
     from(otherDepsCfg.files)
     from(project(":core:builtins").getResourceFiles()) { include("kotlin/**") }
-    from(fileTree("${project(":core").projectDir}/descriptor.loader.java/src")) { include("META-INF/services/**") }
-    from(fileTree("${compilerProject.projectDir}/frontend.java/src")) { include("META-INF/services/**") }
-    from(fileTree("${compilerProject.projectDir}/backend/src")) { include("META-INF/services/**") }
-    from(fileTree("${compilerProject.projectDir}/cli/src")) { include("META-INF/services/**") }
-    from(fileTree("$rootDir/idea/src")) {
-        include("META-INF/extensions/common.xml",
-                "META-INF/extensions/kotlin2jvm.xml",
-                "META-INF/extensions/kotlin2js.xml")
-    }
-    from(fileTree("$rootDir/resources")) { include("kotlinManifest.properties") }
 
     manifest.attributes.put("Class-Path", compilerManifestClassPath)
     manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")

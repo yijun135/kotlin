@@ -87,6 +87,34 @@ extra["versions.ant"] = "1.8.2"
 extra["ideaCoreSdkJars"] = arrayOf("annotations", "asm-all", "guava", "intellij-core", "jdom", "jna", "log4j", "picocontainer",
                                    "snappy-in-java", "trove4j", "xpp3-1.1.4-min", "xstream")
 
+extra["compilerModules"] = arrayOf(":compiler:util",
+                                   ":compiler:container",
+                                   ":compiler:resolution",
+                                   ":compiler:serialization",
+                                   ":compiler:frontend",
+                                   ":compiler:frontend.java",
+                                   ":compiler:frontend.script",
+                                   ":compiler:cli-common",
+                                   ":compiler:daemon-common",
+                                   ":compiler:ir.tree",
+                                   ":compiler:ir.psi2ir",
+                                   ":compiler:backend-common",
+                                   ":compiler:backend",
+                                   ":compiler:plugin-api",
+                                   ":compiler:light-classes",
+                                   ":compiler:cli",
+                                   ":compiler:incremental-compilation-impl",
+                                   ":js:js.ast",
+                                   ":js:js.serializer",
+                                   ":js:js.parser",
+                                   ":js:js.frontend",
+                                   ":js:js.translator",
+                                   ":js:js.dce",
+                                   ":compiler",
+                                   ":build-common",
+                                   ":core:util.runtime",
+                                   ":core")
+
 allprojects {
     group = "org.jetbrains.kotlin"
     version = buildNumber

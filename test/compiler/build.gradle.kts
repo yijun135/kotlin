@@ -2,7 +2,6 @@
 apply { plugin("kotlin") }
 
 dependencies {
-    testRuntime(project(":prepare:compiler", configuration = "default").apply { isTransitive = false })
     testRuntime(project(":kotlin-stdlib"))
     testRuntime(project(":kotlin-script-runtime"))
     testRuntime(project(":kotlin-runtime"))
@@ -14,8 +13,12 @@ dependencies {
     testCompile(ideaSdkDeps("openapi", "idea", "util", "asm-all", "commons-httpclient-3.1-patched"))
     testRuntime(project(":plugins:android-extensions-compiler"))
     testRuntime(project(":ant"))
+    (rootProject.extra["compilerModules"] as Array<String>).forEach {
+        testRuntime(project(it))
+    }
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSources()
