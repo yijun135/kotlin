@@ -88,8 +88,10 @@ public class PathUtil {
 
     @NotNull
     public static KotlinPaths getKotlinPathsForCompiler() {
-        if (!getPathUtilJar().isFile()) {
-            // Not running from a jar, i.e. it is it must be a unit test
+        File pathUtilJar = getPathUtilJar();
+        // TODO: find a better way to detect the unit test mode
+        if (!pathUtilJar.isFile() || pathUtilJar.getName().contains("util")) {
+            // Not running from a compiler jar, i.e. it is it must be a unit test
             return getKotlinPathsForDistDirectory();
         }
         return new KotlinPathsFromHomeDir(getCompilerPathForCompilerJar());
