@@ -59,7 +59,8 @@ configureKotlinProjectTestResources("testData")
 fixKotlinTaskDependencies()
 
 tasks.withType<Test> {
-    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1250m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
+    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1200m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
+    maxHeapSize = "1200m"
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
     systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
