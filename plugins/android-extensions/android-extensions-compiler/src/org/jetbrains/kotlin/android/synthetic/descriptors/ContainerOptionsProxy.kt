@@ -49,7 +49,7 @@ class ContainerOptionsProxy(val containerType: AndroidContainerType, val cache: 
                 val supportsCache = container.source is KotlinSourceElement && classType.supportsCache
                 return ContainerOptionsProxy(
                         classType,
-                        if (supportsCache && classType.isCacheEnabledByDefault) DEFAULT_CACHE_IMPL else NO_CACHE)
+                        if (supportsCache) DEFAULT_CACHE_IMPL else NO_CACHE)
             }
 
             val cache = anno.getEnumValue(CACHE_NAME, DEFAULT_CACHE_IMPL) { valueOf(it) }

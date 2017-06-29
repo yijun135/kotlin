@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.resolve.DescriptorUtils
 enum class AndroidContainerType(
         className: String,
         val supportsCache: Boolean = false,
-        val isCacheEnabledByDefault: Boolean = true,
         val isFragment: Boolean = false
 ) {
     ACTIVITY(AndroidConst.ACTIVITY_FQNAME, supportsCache = true),
@@ -32,7 +31,7 @@ enum class AndroidContainerType(
     DIALOG(AndroidConst.DIALOG_FQNAME, supportsCache = false),
     SUPPORT_FRAGMENT_ACTIVITY(AndroidConst.SUPPORT_FRAGMENT_ACTIVITY_FQNAME, supportsCache = true),
     SUPPORT_FRAGMENT(AndroidConst.SUPPORT_FRAGMENT_FQNAME, supportsCache = true, isFragment = true),
-    VIEW(AndroidConst.VIEW_FQNAME, supportsCache = true, isCacheEnabledByDefault = false),
+    VIEW(AndroidConst.VIEW_FQNAME, supportsCache = true),
     USER_CONTAINER(LayoutContainer::class.java.canonicalName, supportsCache = true), // is enabled by default?
     UNKNOWN("");
 

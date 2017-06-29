@@ -11,9 +11,9 @@ class MyActivity : Activity() {
     init { MyView(this).login }
 }
 
-// 1 public _\$_findCachedViewById
+// 2 public _\$_findCachedViewById
 // 1 INVOKEVIRTUAL android/app/Activity\.findViewById
-// 1 public _\$_clearFindViewByIdCache
+// 2 public _\$_clearFindViewByIdCache
 // 1 GETSTATIC test/R\$id\.login
 // 1 INVOKEVIRTUAL android/view/View\.findViewById
 // 0 INVOKEVIRTUAL test/MyActivity\._\$_findCachedViewById
