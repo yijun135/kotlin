@@ -56,6 +56,7 @@ task originalStdlibJar(type: Jar) {
 
 jar {
     manifestAttributes(manifest, project, 'Main')
+    dependsOn ":core:builtins:serialize"
     from("${rootDir}/dist/builtins")
     from sourceSets.builtins.output
 }

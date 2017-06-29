@@ -20,7 +20,7 @@ configureKotlinProjectSources("core/builtins/src", "core/runtime.jvm/src", sourc
 configureKotlinProjectResources(listOf(builtinsSerialized))
 configureKotlinProjectNoTests()
 
-val serialize = task("internal.serialize") {
+val serialize = task("serialize") {
     val outDir = builtinsSerialized
     val inDirs = arrayOf(builtinsSrc, builtinsNative)
     outputs.file(outDir)
@@ -31,25 +31,6 @@ val serialize = task("internal.serialize") {
                 .serialize(outDir, inDirs.asList(), listOf()) { totalSize, totalFiles ->
                     println("Total bytes written: $totalSize to $totalFiles files")
                 }
-    }
-}
-
-
-//configure<JavaPluginConvention> {
-//    sourceSets.getByName("main").apply {
-//        resources.setSrcDirs(listOf(builtinsSerialized))
-//    }
-//}
-
-task("sourcesets") {
-    doLast {
-        the<JavaPluginConvention>().sourceSets.forEach { ss ->
-            println("--> ${ss.name}.java: ${ss.java.srcDirs.joinToString()}")
-            ss.resources.srcDirs.let {
-                if (it.isNotEmpty())
-                    println("--> ${ss.name}.resources: ${it.joinToString()}")
-            }
-        }
     }
 }
 
