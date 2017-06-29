@@ -89,7 +89,7 @@ val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
     }
     from(ideaSdkCoreCfg.files)
     from(otherDepsCfg.files)
-//    from(project(":core:builtins").getResourceFiles()) { include("kotlin/**") }
+    from(project(":core:builtins").getResourceFiles()) { include("kotlin/**") }
 
     manifest.attributes.put("Class-Path", compilerManifestClassPath)
     manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")

@@ -2,23 +2,24 @@
 apply { plugin("kotlin") }
 
 dependencies {
-    testRuntime(project(":kotlin-stdlib"))
-    testRuntime(project(":kotlin-script-runtime"))
-    testRuntime(project(":kotlin-runtime"))
-    testRuntime(project(":kotlin-reflect"))
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testCompile(project(":compiler.tests-common"))
     testCompileOnly(project(":compiler:ir.ir2cfg"))
     testCompileOnly(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward
     testCompile(ideaSdkDeps("openapi", "idea", "util", "asm-all", "commons-httpclient-3.1-patched"))
-    testRuntime(project(":plugins:android-extensions-compiler"))
-    testRuntime(project(":ant"))
+    // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
+    testCompile(project(":kotlin-stdlib"))
+    testCompile(project(":kotlin-script-runtime"))
+    testCompile(project(":kotlin-runtime"))
+    testCompile(project(":kotlin-reflect"))
+    testCompile(project(":plugins:android-extensions-compiler"))
+    testCompile(project(":ant"))
     (rootProject.extra["compilerModules"] as Array<String>).forEach {
-        testRuntime(project(it))
+        testCompile(project(it))
     }
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))
-    testRuntime(project(":prepare:compiler", configuration = "default"))
+    testCompile(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSources()

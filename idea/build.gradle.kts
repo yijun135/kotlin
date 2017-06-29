@@ -20,23 +20,24 @@ dependencies {
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/coverage/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/android/lib"))
     testRuntime(preloadedDeps("uast-common", "uast-java"))
-    testRuntime(project(":plugins:android-extensions-compiler"))
-    testRuntime(project(":plugins:android-extensions-idea"))
-    testRuntime(project(":plugins:android-extensions-idea"))
-    testRuntime(project(":plugins:allopen-ide")) { isTransitive = false }
-    testRuntime(project(":plugins:allopen-cli"))
-    testRuntime(project(":plugins:noarg-ide")) { isTransitive = false }
-    testRuntime(project(":plugins:noarg-cli"))
-    testRuntime(project(":plugins:annotation-based-compiler-plugins-ide-support")) { isTransitive = false }
-    testRuntime(project(":plugins:sam-with-receiver-ide")) { isTransitive = false }
-    testRuntime(project(":plugins:sam-with-receiver-cli"))
-    testRuntime(project(":idea:idea-android")) { isTransitive = false }
-    testRuntime(project(":plugins:lint")) { isTransitive = false }
-    testRuntime(project(":plugins:uast-kotlin"))
+    // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
+    testCompile(project(":plugins:android-extensions-compiler"))
+    testCompile(project(":plugins:android-extensions-idea"))
+    testCompile(project(":plugins:android-extensions-idea"))
+    testCompile(project(":plugins:allopen-ide")) { isTransitive = false }
+    testCompile(project(":plugins:allopen-cli"))
+    testCompile(project(":plugins:noarg-ide")) { isTransitive = false }
+    testCompile(project(":plugins:noarg-cli"))
+    testCompile(project(":plugins:annotation-based-compiler-plugins-ide-support")) { isTransitive = false }
+    testCompile(project(":plugins:sam-with-receiver-ide")) { isTransitive = false }
+    testCompile(project(":plugins:sam-with-receiver-cli"))
+    testCompile(project(":idea:idea-android")) { isTransitive = false }
+    testCompile(project(":plugins:lint")) { isTransitive = false }
+    testCompile(project(":plugins:uast-kotlin"))
     (rootProject.extra["compilerModules"] as Array<String>).forEach {
-        testRuntime(project(it))
+        testCompile(project(it))
     }
-    testRuntime(project(":prepare:compiler", configuration = "default"))
+    testCompile(project(":prepare:compiler", configuration = "default"))
     compile(project(":kotlin-stdlib"))
     compile(project(":core"))
     compile(project(":compiler:backend"))
