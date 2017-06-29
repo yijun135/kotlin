@@ -35,11 +35,11 @@ val serialize = task("internal.serialize") {
 }
 
 
-configure<JavaPluginConvention> {
-    sourceSets.getByName("main").apply {
-        resources.setSrcDirs(listOf(builtinsSerialized))
-    }
-}
+//configure<JavaPluginConvention> {
+//    sourceSets.getByName("main").apply {
+//        resources.setSrcDirs(listOf(builtinsSerialized))
+//    }
+//}
 
 task("sourcesets") {
     doLast {
