@@ -33,10 +33,6 @@ dependencies {
     compile(project(":idea:idea-jps-common"))
     compile(ideaSdkDeps("jps-builders", "jps-builders-6", subdir = "jps"))
     buildVersion()
-//    shadowContentsCfg(files("$rootDir/dependencies/native-platform-uberjar.jar"))
-//    projectsToShadow.forEach {
-//        shadowContentsCfg(projectDepIntransitive(it))
-//    }
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":compiler:incremental-compilation-impl"))
 //    testCompileOnly(ideaSdkDeps("idea"))

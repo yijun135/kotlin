@@ -26,7 +26,7 @@ test.apply {
     dependsOn(":prepare:compiler:prepare")
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
-    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
+    environment("NO_FS_ROOTS_ACCESS_CHECK", "true")
     ignoreFailures = true
 }
 

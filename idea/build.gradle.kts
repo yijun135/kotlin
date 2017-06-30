@@ -1,7 +1,4 @@
 
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 apply { plugin("kotlin") }
 
 dependencies {
@@ -22,7 +19,6 @@ dependencies {
     testRuntime(preloadedDeps("uast-common", "uast-java"))
     // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
     testCompile(project(":plugins:android-extensions-compiler"))
-    testCompile(project(":plugins:android-extensions-idea"))
     testCompile(project(":plugins:android-extensions-idea"))
     testCompile(project(":plugins:allopen-ide")) { isTransitive = false }
     testCompile(project(":plugins:allopen-cli"))
@@ -101,8 +97,10 @@ configure<JavaPluginConvention> {
         }
     }
 }
-configureKotlinProjectTests("tests",
-                            "idea-completion/tests")
+configureKotlinProjectTests("idea/tests",
+                            "idea/idea-completion/tests",
+                            "j2k/tests",
+                            sourcesBaseDir = rootDir)
 
 tasks.withType<Test> {
     dependsOnTaskIfExistsRec("dist", project = rootProject)
@@ -110,7 +108,7 @@ tasks.withType<Test> {
     maxHeapSize = "1200m"
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
-    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
+    environment("NO_FS_ROOTS_ACCESS_CHECK", "true")
 //    forkEvery = 100
     testLogging {
 //        events = setOf(TestLogEvent.FAILED)
