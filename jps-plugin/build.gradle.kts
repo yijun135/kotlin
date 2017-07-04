@@ -1,22 +1,10 @@
+import org.gradle.jvm.tasks.Jar
 
 apply {
     plugin("kotlin")
 }
 
-//val shadowContentsCfg = configurations.create("shadowContents")
-
-//val projectsToShadow = listOf(
-//        //android-extensions-jps
-//           ":build-common",
-//           ":compiler:cli-common",
-//           ":compiler:compiler-runner",
-//           ":compiler:daemon-client",
-//           ":compiler:daemon-common",
-//           ":core",
-//           ":idea:idea-jps-common",
-//           ":compiler:preloader",
-//           ":compiler:util",
-//           ":core:util.runtime")
+val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
 
 dependencies {
     testRuntime(ideaSdkCoreDeps("*.jar"))
@@ -63,3 +51,14 @@ tasks.withType<Test> {
     forkEvery = 100
     ignoreFailures = true
 }
+
+val testsJar by task<Jar> {
+    dependsOn("testClasses")
+    pluginManager.withPlugin("java") {
+        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
+    }
+    classifier = "tests"
+}
+
+artifacts.add(testsJarCfg.name, testsJar)
+
