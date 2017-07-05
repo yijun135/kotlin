@@ -23,7 +23,6 @@ dependencies {
     buildVersion()
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":compiler:incremental-compilation-impl"))
-//    testCompileOnly(ideaSdkDeps("idea"))
     testCompileOnly(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(commonDep("junit:junit"))
     testCompile(project(":build-common", configuration = "tests-jar"))
@@ -35,8 +34,6 @@ dependencies {
 
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectResourcesDefault()
-//configureKotlinProjectResources("resources", sourcesBaseDir = rootDir)
-//configureKotlinProjectNoTests()
 configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
 configureKotlinProjectTestResources("testData")
 
@@ -47,7 +44,6 @@ tasks.withType<Test> {
     maxHeapSize = "1200m"
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
-    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
     forkEvery = 100
     ignoreFailures = true
 }
