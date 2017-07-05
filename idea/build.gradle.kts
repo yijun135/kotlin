@@ -103,6 +103,7 @@ configure<JavaPluginConvention> {
 configureKotlinProjectTests("idea/tests",
                             "idea/idea-completion/tests",
                             "j2k/tests",
+                            "eval4j/test",
                             sourcesBaseDir = rootDir)
 
 tasks.withType<Test> {

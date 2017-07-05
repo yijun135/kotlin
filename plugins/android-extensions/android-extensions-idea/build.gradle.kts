@@ -17,6 +17,7 @@ dependencies {
     testCompile(project(":idea", configuration = "tests-jar")) { isTransitive = false }
     testCompile(project(":idea:idea-android", configuration = "tests-jar")) { isTransitive = false }
 //    testRuntime(project(":idea")) { isTransitive = false }
+    testRuntime(project(":plugins:android-extensions-jps"))
     testRuntime(ideaSdkDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-i18n/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/properties/lib"))

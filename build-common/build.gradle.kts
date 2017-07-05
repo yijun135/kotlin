@@ -36,4 +36,11 @@ val testsJar by task<Jar> {
 
 artifacts.add(testsJarCfg.name, testsJar)
 
+tasks.withType<Test> {
+    workingDir = rootDir
+    systemProperty("idea.is.unit.test", "true")
+    systemProperty("NO_FS_ROOTS_ACCESS_CHECK", "true")
+    ignoreFailures = true
+}
+
 fixKotlinTaskDependencies()

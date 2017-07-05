@@ -2,6 +2,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    testCompile(commonDep("junit:junit"))
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testCompile(project(":compiler.tests-common"))
     testCompileOnly(project(":compiler:ir.ir2cfg"))
