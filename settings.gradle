@@ -93,6 +93,7 @@ include "kotlin-reflect"
 include "ant"
 include "test:compiler"
 include "test:js-backend"
+include "generators"
 //include "test:idea-plugin"
 
 rootProject.name = "kotlin"
