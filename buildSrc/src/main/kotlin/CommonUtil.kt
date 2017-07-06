@@ -29,7 +29,9 @@ fun AbstractTask.dependsOnTaskIfExistsRec(task: String, project: Project? = null
 
 fun Project.dist(body: Copy.() -> Unit) {
     task<Copy>("dist") {
-        dependsOn("assemble")
+        tasks.findByName("assemble")?.let {
+            dependsOn(it)
+        }
         body()
         rename("-${java.util.regex.Pattern.quote(rootProject.extra["build.number"].toString())}", "")
         into(rootProject.extra["distLibDir"].toString())
@@ -45,14 +47,14 @@ fun Project.ideaPlugin(subdir: String = "lib", body: Copy.() -> Unit) {
 }
 
 fun Project.fixKotlinTaskDependencies(): Unit {
-    the<JavaPluginConvention>().sourceSets.all { sourceset ->
-        val taskName = if (sourceset.name == "main") "classes" else (sourceset.name + "Classes")
-        tasks.withType<Task> {
-            if (name == taskName) {
-                dependsOn("copy${sourceset.name.capitalize()}KotlinClasses")
-            }
-        }
-    }
+//    the<JavaPluginConvention>().sourceSets.all { sourceset ->
+//        val taskName = if (sourceset.name == "main") "classes" else (sourceset.name + "Classes")
+//        tasks.withType<Task> {
+//            if (name == taskName) {
+//                dependsOn("copy${sourceset.name.capitalize()}KotlinClasses")
+//            }
+//        }
+//    }
 }
 
 fun Jar.setupRuntimeJar(implementationTitle: String): Unit {

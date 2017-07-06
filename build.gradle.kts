@@ -9,7 +9,7 @@ buildscript {
     extra["kotlinVersion"] = extra["kotlin_version"]
     extra["kotlin_language_version"] = "1.1"
     extra["kotlin_gradle_plugin_version"] = extra["kotlin_version"]
-    extra["repo"] = "https://repo.gradle.org/gradle/repo"
+    extra["repo"] = "https://dl.bintray.com/kotlin/kotlin-dev"
 
     repositories {
         maven { setUrl(rootProject.extra["repo"]) }
