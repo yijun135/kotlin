@@ -113,7 +113,7 @@ val proguardTask = task<ProGuardTask>("internal.proguard-compiler") {
     printconfiguration("$buildDir/compiler.pro.dump")
 }
 
-val mainTask = task("prepare") {
+val mainTask = task("dist") {
     dependsOn(if (shrink) proguardTask else packCompilerTask)
 }
 

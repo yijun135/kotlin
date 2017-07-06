@@ -18,7 +18,6 @@ fixKotlinTaskDependencies()
 tasks.withType<Test> {
     dependsOnTaskIfExistsRec("dist", project = rootProject)
     dependsOn(":prepare:mock-runtime-for-test:dist")
-    dependsOn(":prepare:compiler:prepare")
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")
     environment("NO_FS_ROOTS_ACCESS_CHECK", "true")
