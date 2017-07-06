@@ -15,7 +15,7 @@ dependencies {
     testCompile(protobufFull())
 }
 
-val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
+//val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
 
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectTestsDefault()
@@ -26,15 +26,17 @@ jar.apply {
     baseName = "kotlin-build-common"
 }
 
-val testsJar by task<Jar> {
-    dependsOn("testClasses")
-    pluginManager.withPlugin("java") {
-        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
-    }
-    classifier = "tests"
-}
+//val testsJar by task<Jar> {
+//    dependsOn("testClasses")
+//    pluginManager.withPlugin("java") {
+//        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
+//    }
+//    classifier = "tests"
+//}
+//
+//artifacts.add(testsJarCfg.name, testsJar)
 
-artifacts.add(testsJarCfg.name, testsJar)
+testsJar {}
 
 tasks.withType<Test> {
     workingDir = rootDir

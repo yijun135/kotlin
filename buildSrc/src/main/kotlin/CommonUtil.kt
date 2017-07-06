@@ -46,6 +46,23 @@ fun Project.ideaPlugin(subdir: String = "lib", body: Copy.() -> Unit) {
     }
 }
 
+fun Project.testsJar(body: Jar.() -> Unit): Jar {
+    val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
+
+    val testsJar by task<Jar> {
+        dependsOn("testClasses")
+        pluginManager.withPlugin("java") {
+            from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
+        }
+        classifier = "tests"
+        body()
+    }
+
+    artifacts.add(testsJarCfg.name, testsJar)
+
+    return testsJar
+}
+
 fun Project.fixKotlinTaskDependencies(): Unit {
 //    the<JavaPluginConvention>().sourceSets.all { sourceset ->
 //        val taskName = if (sourceset.name == "main") "classes" else (sourceset.name + "Classes")
