@@ -1,26 +1,15 @@
 
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.artifacts.Dependency
-import org.gradle.api.artifacts.ProjectDependency
-import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.jvm.tasks.Jar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.org.objectweb.asm.*
 import java.io.File
 
 buildscript {
     repositories {
         mavenLocal()
-        maven { setUrl(rootProject.extra["repo"]) }
         jcenter()
     }
 
     dependencies {
-        classpath(kotlinDep("gradle-plugin"))
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
         classpath(ideaSdkDeps("asm-all"))
     }

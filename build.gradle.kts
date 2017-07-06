@@ -9,10 +9,13 @@ buildscript {
     extra["kotlinVersion"] = extra["kotlin_version"]
     extra["kotlin_language_version"] = "1.1"
     extra["kotlin_gradle_plugin_version"] = extra["kotlin_version"]
-    extra["repo"] = "https://dl.bintray.com/kotlin/kotlin-dev"
+    extra["repos"] = listOf("https://dl.bintray.com/kotlin/kotlin-dev",
+                            "https://repo.gradle.org/gradle/repo")
 
     repositories {
-        maven { setUrl(rootProject.extra["repo"]) }
+        for (repo in (rootProject.extra["repos"] as List<String>)) {
+            maven { setUrl(repo) }
+        }
     }
 
     dependencies {
@@ -34,7 +37,9 @@ val scriptCompileCfg = configurations.create("scriptCompile").extendsFrom(bootst
 val scriptRuntimeCfg = configurations.create("scriptRuntime").extendsFrom(scriptCompileCfg)
 
 repositories {
-    maven { setUrl(rootProject.extra["repo"]) }
+    for (repo in (rootProject.extra["repos"] as List<String>)) {
+        maven { setUrl(repo) }
+    }
 }
 
 dependencies {
@@ -145,7 +150,9 @@ allprojects {
     setBuildDir("$rootDir/build/${project.name}")
 
     repositories {
-        maven { setUrl(rootProject.extra["repo"]) }
+        for (repo in (rootProject.extra["repos"] as List<String>)) {
+            maven { setUrl(repo) }
+        }
         mavenCentral()
     }
 
