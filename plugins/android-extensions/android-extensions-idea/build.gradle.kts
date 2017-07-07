@@ -32,6 +32,9 @@ dependencies {
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/maven/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/coverage/lib"))
     testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/android/lib"))
+    testRuntime(project(":plugins:sam-with-receiver-ide"))
+    testRuntime(project(":plugins:noarg-ide"))
+    testRuntime(project(":plugins:allopen-ide"))
 }
 
 configureKotlinProjectSourcesDefault()
