@@ -25,6 +25,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.compile.AbstractCompile
 import org.gradle.api.tasks.compile.JavaCompile
+import org.jetbrains.kotlin.com.intellij.openapi.util.io.FileUtil
 import org.jetbrains.kotlin.gradle.internal.Kapt3KotlinGradleSubplugin.Companion.KAPT_ARTIFACT_NAME
 import org.jetbrains.kotlin.gradle.internal.Kapt3KotlinGradleSubplugin.Companion.KAPT_GROUP_NAME
 import org.jetbrains.kotlin.gradle.plugin.*
@@ -310,7 +311,12 @@ class Kapt3KotlinGradleSubplugin : KotlinGradleSubplugin<KotlinCompile> {
 
         kaptTask.stubsDir = getKaptStubsDir()
         kaptTask.destinationDir = getKaptIncrementalDataDir()
-        kaptTask.mapClasspath { kotlinCompile.classpath }
+        kaptTask.mapClasspath {
+            kotlinCompile.classpath.filter {
+                !FileUtil.isAncestor(kotlinCompile.destinationDir, it, /* strict = */ false)
+                        && !FileUtil.isAncestor(sourcesOutputDir, it, /* strict = */ false)
+            }
+        }
         kaptTask.generatedSourcesDir = sourcesOutputDir
         mapKotlinTaskProperties(project, kaptTask)
 
