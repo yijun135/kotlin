@@ -21,13 +21,14 @@ dependencies {
     testCompile(project(":plugins:lint")) { isTransitive = false }
     testCompile(project(":plugins:uast-kotlin"))
     testCompile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
-    testCompile(ideaSdkDeps("*.jar", subdir = "plugins/android/lib/jps"))
+    testCompile(ideaPluginDeps("*.jar", plugin = "android", subdir = "lib/jps"))
     testCompile(project(":jps-plugin", configuration = "tests-jar"))
+    testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testRuntime(project(":jps-plugin"))
     testRuntime(ideaSdkDeps("*.jar"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/gradle/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/junit/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/android/lib"))
+    testRuntime(ideaPluginDeps("idea-junit", "resources_en", plugin = "junit"))
+    testRuntime(ideaPluginDeps("*.jar", plugin = "gradle"))
+    testRuntime(ideaPluginDeps("*.jar", plugin = "android"))
 }
 
 configureKotlinProjectSources()

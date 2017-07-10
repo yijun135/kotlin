@@ -14,8 +14,8 @@ dependencies {
     compile(project(":idea:idea-jps-common"))
     compile(project(":plugins:annotation-based-compiler-plugins-ide-support"))
     compile(ideaSdkDeps("openapi", "idea"))
-    compile(ideaSdkDeps("maven", subdir = "plugins/maven/lib"))
-    compile(ideaSdkDeps("gradle-tooling-api", "gradle", subdir = "plugins/gradle/lib"))
+    compile(ideaPluginDeps("maven", plugin = "maven"))
+    compile(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
 }
 
 

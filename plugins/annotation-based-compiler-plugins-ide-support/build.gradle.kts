@@ -7,8 +7,8 @@ dependencies {
     compile(project(":compiler:cli-common"))
     compile(project(":idea"))
     compile(project(":idea:idea-jps-common"))
-    compile(ideaSdkDeps("maven", subdir = "plugins/maven/lib"))
-    compile(ideaSdkDeps("gradle-tooling-api", "gradle", subdir = "plugins/gradle/lib"))
+    compile(ideaPluginDeps("maven", plugin = "maven"))
+    compile(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
     compile(ideaSdkDeps("openapi", "idea"))
 }
 

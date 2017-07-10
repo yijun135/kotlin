@@ -4,8 +4,8 @@ apply { plugin("kotlin") }
 dependencies {
     compile(project(":compiler:util"))
     compile(ideaSdkCoreDeps("intellij-core"))
-    compile(ideaSdkDeps("gradle-tooling-api", subdir = "plugins/gradle/lib"))
-    compile(ideaSdkDeps("android", "common", "sdk-common", subdir = "plugins/android/lib"))
+    compile(ideaPluginDeps("gradle-tooling-api", plugin = "gradle"))
+    compile(ideaPluginDeps("android", "common", "sdk-common", plugin = "android"))
 }
 
 configureKotlinProjectSourcesDefault()

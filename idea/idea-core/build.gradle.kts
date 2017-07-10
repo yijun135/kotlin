@@ -15,7 +15,7 @@ dependencies {
     compile(project(":idea:idea-jps-common"))
     compile(ideaSdkCoreDeps("intellij-core", "util"))
     compile(ideaSdkDeps("openapi", "idea"))
-    compile(ideaSdkDeps("gradle-tooling-api", "gradle", subdir = "plugins/gradle/lib"))
+    compile(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
     compile(preloadedDeps("uast-common", "kotlinx-coroutines-core"))
     buildVersion()
 }

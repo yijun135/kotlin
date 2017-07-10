@@ -21,7 +21,7 @@ dependencies {
     }
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))
-    testCompile(project(":prepare:compiler", configuration = "default"))
+    testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSources()
