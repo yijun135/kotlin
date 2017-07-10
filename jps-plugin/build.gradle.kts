@@ -1,10 +1,6 @@
-import org.gradle.jvm.tasks.Jar
-
 apply {
     plugin("kotlin")
 }
-
-//val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
 
 dependencies {
     testRuntime(ideaSdkCoreDeps("*.jar"))
@@ -47,15 +43,5 @@ tasks.withType<Test> {
     forkEvery = 100
     ignoreFailures = true
 }
-
-//val testsJar by task<Jar> {
-//    dependsOn("testClasses")
-//    pluginManager.withPlugin("java") {
-//        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
-//    }
-//    classifier = "tests"
-//}
-//
-//artifacts.add(testsJarCfg.name, testsJar)
 
 testsJar {}

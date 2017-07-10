@@ -1,8 +1,5 @@
-import org.gradle.jvm.tasks.Jar
 
 apply { plugin("kotlin") }
-
-//val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations.get["testCompile"])
 
 dependencies {
     compile(project(":kotlin-stdlib"))
@@ -88,7 +85,6 @@ configureKotlinProjectSources("src",
                               "idea-completion/src",
                               "idea-live-templates/src",
                               "idea-repl/src")
-//configureKotlinProjectResourcesDefault()
 configure<JavaPluginConvention> {
     sourceSets["main"].apply {
         resources {
@@ -102,6 +98,7 @@ configure<JavaPluginConvention> {
 }
 configureKotlinProjectTests("idea/tests",
                             "idea/idea-completion/tests",
+                            "idea-maven/test",
                             "j2k/tests",
                             "eval4j/test",
                             sourcesBaseDir = rootDir)
@@ -123,16 +120,6 @@ tasks.withType<Test> {
     }
     ignoreFailures = true
 }
-
-//val testsJar by task<Jar> {
-//    dependsOn("testClasses")
-//    pluginManager.withPlugin("java") {
-//        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
-//    }
-//    classifier = "tests"
-//}
-//
-//artifacts.add(testsJarCfg.name, testsJar)
 
 testsJar {}
 

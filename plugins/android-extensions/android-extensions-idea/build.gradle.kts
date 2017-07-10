@@ -40,6 +40,8 @@ dependencies {
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectTestsDefault()
 
+testsJar {}
+
 fixKotlinTaskDependencies()
 
 tasks.withType<Test> {

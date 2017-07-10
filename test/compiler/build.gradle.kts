@@ -27,6 +27,8 @@ dependencies {
 configureKotlinProjectSources()
 configureKotlinProjectTests("compiler/tests", sourcesBaseDir = rootDir)
 
+testsJar {}
+
 tasks.withType<Test> {
     dependsOnTaskIfExistsRec("dist", project = rootProject)
     dependsOn(":prepare:mock-runtime-for-test:dist")

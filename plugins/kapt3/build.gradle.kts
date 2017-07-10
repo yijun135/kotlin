@@ -15,6 +15,8 @@ dependencies {
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectTestsDefault()
 
+testsJar {}
+
 tasks.withType<Test> {
     workingDir = rootDir
     systemProperty("idea.is.unit.test", "true")

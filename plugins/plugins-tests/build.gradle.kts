@@ -33,6 +33,8 @@ dependencies {
 configureKotlinProjectSources()
 configureKotlinProjectTestsDefault()
 
+testsJar {}
+
 val test: Test by tasks
 test.apply {
     dependsOnTaskIfExistsRec("dist", project = rootProject)

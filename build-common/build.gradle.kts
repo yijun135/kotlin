@@ -15,8 +15,6 @@ dependencies {
     testCompile(protobufFull())
 }
 
-//val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
-
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectTestsDefault()
 
@@ -25,16 +23,6 @@ jar.apply {
     setupRuntimeJar("Kotlin Build Common")
     baseName = "kotlin-build-common"
 }
-
-//val testsJar by task<Jar> {
-//    dependsOn("testClasses")
-//    pluginManager.withPlugin("java") {
-//        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
-//    }
-//    classifier = "tests"
-//}
-//
-//artifacts.add(testsJarCfg.name, testsJar)
 
 testsJar {}
 

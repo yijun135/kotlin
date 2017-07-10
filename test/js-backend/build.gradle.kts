@@ -29,4 +29,6 @@ test.apply {
     ignoreFailures = true
 }
 
+testsJar {}
+
 fixKotlinTaskDependencies()

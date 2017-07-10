@@ -1,8 +1,4 @@
-import org.gradle.jvm.tasks.Jar
-
 apply { plugin("kotlin") }
-
-//val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations["testCompile"])
 
 dependencies {
     compile(kotlinDep("reflect"))
@@ -52,16 +48,6 @@ tasks.withType<Test> {
     environment("NO_FS_ROOTS_ACCESS_CHECK", "true")
     ignoreFailures = true
 }
-
-//val testsJar by task<Jar> {
-//    dependsOn("testClasses")
-//    pluginManager.withPlugin("java") {
-//        from(project.the<JavaPluginConvention>().sourceSets.getByName("test").output)
-//    }
-//    classifier = "tests"
-//}
-//
-//artifacts.add(testsJarCfg.name, testsJar)
 
 testsJar {}
 
