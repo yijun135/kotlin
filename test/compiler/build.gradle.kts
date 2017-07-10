@@ -4,6 +4,7 @@ apply { plugin("kotlin") }
 dependencies {
     testCompile(commonDep("junit:junit"))
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
+    testCompile(project(":kotlin-test:kotlin-test-junit"))
     testCompile(project(":compiler.tests-common"))
     testCompileOnly(project(":compiler:ir.ir2cfg"))
     testCompileOnly(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward

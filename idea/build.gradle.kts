@@ -5,38 +5,6 @@ apply { plugin("kotlin") }
 //val testsJarCfg = configurations.create("tests-jar").extendsFrom(configurations.get["testCompile"])
 
 dependencies {
-    testRuntime(ideaSdkDeps("*.jar"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-i18n/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/properties/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/gradle/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/junit/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/IntelliLang/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/testng/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/copyright/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/properties/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/java-decompiler/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/Groovy/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/maven/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/coverage/lib"))
-    testRuntime(ideaSdkDeps("*.jar", subdir = "plugins/android/lib"))
-    testRuntime(preloadedDeps("uast-common", "uast-java"))
-    // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
-    testCompile(project(":plugins:android-extensions-compiler"))
-    testCompile(project(":plugins:android-extensions-idea"))
-    testCompile(project(":plugins:allopen-ide")) { isTransitive = false }
-    testCompile(project(":plugins:allopen-cli"))
-    testCompile(project(":plugins:noarg-ide")) { isTransitive = false }
-    testCompile(project(":plugins:noarg-cli"))
-    testCompile(project(":plugins:annotation-based-compiler-plugins-ide-support")) { isTransitive = false }
-    testCompile(project(":plugins:sam-with-receiver-ide")) { isTransitive = false }
-    testCompile(project(":plugins:sam-with-receiver-cli"))
-    testCompile(project(":idea:idea-android")) { isTransitive = false }
-    testCompile(project(":plugins:lint")) { isTransitive = false }
-    testCompile(project(":plugins:uast-kotlin"))
-    (rootProject.extra["compilerModules"] as Array<String>).forEach {
-        testCompile(project(it))
-    }
-    testCompile(project(":prepare:compiler", configuration = "default"))
     compile(project(":kotlin-stdlib"))
     compile(project(":core"))
     compile(project(":compiler:backend"))
@@ -74,11 +42,43 @@ dependencies {
     compile(ideaSdkDeps("maven", "maven-server-api", subdir = "plugins/maven/lib"))
     compile(ideaSdkDeps("coverage", subdir = "plugins/coverage/lib"))
     compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
+    testCompile(project(":kotlin-test:kotlin-test-junit"))
     testCompile(project(":compiler:cli"))
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
     testCompile(ideaSdkDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", subdir = "plugins/gradle/lib"))
     testCompile(ideaSdkDeps("groovy-all"))
+    testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(ideaPluginDeps("idea-junit", "resources_en", plugin = "junit"))
+    testRuntime(ideaPluginDeps("IntelliLang", plugin = "IntelliLang"))
+    testRuntime(ideaPluginDeps("jcommander", "testng", "testng-plugin", "resources_en", plugin = "testng"))
+    testRuntime(ideaPluginDeps("copyright", plugin = "copyright"))
+    testRuntime(ideaPluginDeps("properties", "resources_en", plugin = "properties"))
+    testRuntime(ideaPluginDeps("java-i18n", plugin = "java-i18n"))
+    testRuntime(ideaPluginDeps("*.jar", plugin = "gradle"))
+    testRuntime(ideaPluginDeps("*.jar", plugin = "Groovy"))
+    testRuntime(ideaPluginDeps("coverage", "jacocoant", plugin = "coverage"))
+    testRuntime(ideaPluginDeps("java-decompiler", plugin = "java-decompiler"))
+    testRuntime(ideaPluginDeps("*.jar", plugin = "maven"))
+    testRuntime(ideaPluginDeps("*.jar", plugin = "android"))
+    testRuntime(preloadedDeps("uast-common", "uast-java"))
+    // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
+    testCompile(project(":plugins:android-extensions-compiler"))
+    testCompile(project(":plugins:android-extensions-idea"))
+    testCompile(project(":plugins:allopen-ide")) { isTransitive = false }
+    testCompile(project(":plugins:allopen-cli"))
+    testCompile(project(":plugins:noarg-ide")) { isTransitive = false }
+    testCompile(project(":plugins:noarg-cli"))
+    testCompile(project(":plugins:annotation-based-compiler-plugins-ide-support")) { isTransitive = false }
+    testCompile(project(":plugins:sam-with-receiver-ide")) { isTransitive = false }
+    testCompile(project(":plugins:sam-with-receiver-cli"))
+    testCompile(project(":idea:idea-android")) { isTransitive = false }
+    testCompile(project(":plugins:lint")) { isTransitive = false }
+    testCompile(project(":plugins:uast-kotlin"))
+    (rootProject.extra["compilerModules"] as Array<String>).forEach {
+        testCompile(project(it))
+    }
+    testCompile(project(":prepare:compiler", configuration = "default"))
 
     buildVersion()
 }

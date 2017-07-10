@@ -126,6 +126,9 @@ fun Project.ideaSdkDeps(vararg artifactBaseNames: String, subdir: String = "lib"
 
 fun Project.ideaSdkCoreDeps(vararg artifactBaseNames: String): ConfigurableFileCollection = ideaSdkDeps(*artifactBaseNames, subdir = "core")
 
+fun Project.ideaPluginDeps(vararg artifactBaseNames: String, plugin: String): ConfigurableFileCollection =
+        preloadedDeps(*artifactBaseNames, baseDir = File(rootDir, "ideaSDK"), subdir = "plugins/$plugin/lib")
+
 fun Project.kotlinDep(artifactBaseName: String): String = "org.jetbrains.kotlin:kotlin-$artifactBaseName:${rootProject.extra["kotlinVersion"]}"
 
 fun DependencyHandler.projectDep(name: String): Dependency = project(name, configuration = "default")
