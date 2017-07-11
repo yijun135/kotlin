@@ -277,7 +277,7 @@ abstract class BaseDiagnosticsTest : KotlinMultiFileTestWithJava<TestModule, Tes
             return jvmSignatureDiagnostics
         }
 
-        override fun toString(): String = ktFile!!.name
+        override fun toString(): String = ktFile?.name ?: "Java file"
     }
 
     companion object {
