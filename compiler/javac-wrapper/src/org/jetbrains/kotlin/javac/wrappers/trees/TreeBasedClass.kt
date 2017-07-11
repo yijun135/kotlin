@@ -69,14 +69,14 @@ class TreeBasedClass(
             TreeBasedTypeParameter(parameter, TreePath(treePath, parameter), javac)
         }
 
-    override val fqName: FqName =
-            treePath.reversed()
-                    .filterIsInstance<JCTree.JCClassDecl>()
-                    .joinToString(
-                            separator = ".",
-                            transform = JCTree.JCClassDecl::name
-                    )
-                    .let { treePath.compilationUnit.packageName?.let { packageName -> FqName("$packageName.$it") } ?: FqName.topLevel(Name.identifier(it))}
+    override val fqName: FqName
+        get() = treePath.reversed()
+                .filterIsInstance<JCTree.JCClassDecl>()
+                .joinToString(
+                        separator = ".",
+                        transform = JCTree.JCClassDecl::name
+                )
+                .let { treePath.compilationUnit.packageName?.let { packageName -> FqName("$packageName.$it") } ?: FqName.topLevel(Name.identifier(it))}
 
     override val supertypes: Collection<JavaClassifierType>
         get() = arrayListOf<JavaClassifierType>().apply {
@@ -92,8 +92,8 @@ class TreeBasedClass(
                 javac.JAVA_LANG_ANNOTATION_ANNOTATION?.let(this::add)
             }
 
-            tree.implementing?.mapNotNull { it.mapToJavaClassifierType() }?.let(this::addAll)
             tree.extending?.let { it.mapToJavaClassifierType()?.let(this::add) }
+            tree.implementing?.mapNotNull { it.mapToJavaClassifierType() }?.let(this::addAll)
 
             if (isEmpty()) {
                 javac.JAVA_LANG_OBJECT?.let(this::add)

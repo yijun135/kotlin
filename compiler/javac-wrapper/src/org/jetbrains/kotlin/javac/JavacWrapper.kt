@@ -115,16 +115,30 @@ class JavacWrapper(
     private val fileObjects = fileManager.getJavaFileObjectsFromFiles(javaFiles).toJavacList()
     private val compilationUnits: JavacList<JCTree.JCCompilationUnit> = fileObjects.map(javac::parse).toJavacList()
 
-    private val javaClasses = compilationUnits
-            .flatMap { unit ->
-                unit.typeDecls.map { classDeclaration ->
-                    TreeBasedClass(classDeclaration as JCTree.JCClassDecl,
-                                   trees.getPath(unit, classDeclaration),
-                                   this,
-                                   unit.sourceFile)
-                }
-            }
-            .associateBy(JavaClass::computeClassId)
+    private val treeBasedJavaClasses = hashMapOf<ClassId, TreeBasedClass>()
+
+    private val javaClassDeclarations = compilationUnits.flatMap { unit ->
+        unit.typeDecls.map { classDeclaration ->
+            val packageName = unit.packageName?.toString() ?: "<root>"
+            val className = (classDeclaration as JCTree.JCClassDecl).simpleName.toString()
+            val classId = classId(packageName, className)
+            classId to Pair(classDeclaration, unit)
+        }
+    }.toMap()
+
+    private fun getTreeBasedClass(classId: ClassId): TreeBasedClass? {
+        if (treeBasedJavaClasses.containsKey(classId)) {
+            return treeBasedJavaClasses[classId]
+        }
+
+        val (classDeclaration, unit) = javaClassDeclarations[classId] ?: return null
+        val treeBasedClass = TreeBasedClass(classDeclaration,
+                                            trees.getPath(unit, classDeclaration),
+                                            this,
+                                            unit.sourceFile)
+
+        return treeBasedClass.apply { treeBasedJavaClasses[classId] = this }
+    }
 
     private val javaPackages = compilationUnits
             .mapTo(hashSetOf<TreeBasedPackage>()) { unit ->
@@ -170,7 +184,7 @@ class JavacWrapper(
             return outerClass
         }
 
-        javaClasses[classId]?.let { javaClass ->
+        getTreeBasedClass(classId)?.let { javaClass ->
             javaClass.virtualFile?.let { if (it in scope) return javaClass }
         }
 
@@ -205,9 +219,9 @@ class JavacWrapper(
                     .map { it.value }
 
     fun findClassesFromPackage(fqName: FqName): List<JavaClass> =
-            javaClasses
-                    .filterKeys { it?.packageFqName == fqName }
-                    .values +
+            javaClassDeclarations
+                    .filterKeys { it.packageFqName == fqName }
+                    .map { getTreeBasedClass(it.key)!! } +
             elements.getPackageElement(fqName.asString())
                     ?.members()
                     ?.elements
@@ -216,8 +230,9 @@ class JavacWrapper(
                     .orEmpty()
 
     fun knownClassNamesInPackage(fqName: FqName): Set<String> =
-            javaClasses.filterKeys { it?.packageFqName == fqName }
-                    .mapTo(hashSetOf()) { it.value.name.asString() } +
+            javaClassDeclarations
+                    .filterKeys { it.packageFqName == fqName }
+                    .mapTo(hashSetOf()) { it.key.shortClassName.asString() } +
             elements.getPackageElement(fqName.asString())
                     ?.members_field
                     ?.elements
