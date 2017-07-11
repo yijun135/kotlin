@@ -80,6 +80,7 @@ class NoArgKotlinGradleSubplugin : KotlinGradleSubplugin<AbstractCompile> {
             kotlinCompile: AbstractCompile,
             javaCompile: AbstractCompile,
             variantData: Any?,
+            androidProjectHandler: Any?,
             javaSourceSet: SourceSet?
     ): List<SubpluginOption> {
         if (!NoArgGradleSubplugin.isEnabled(project)) return emptyList()

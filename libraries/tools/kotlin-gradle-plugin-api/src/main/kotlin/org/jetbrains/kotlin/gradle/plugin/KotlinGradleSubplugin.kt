@@ -22,7 +22,7 @@ import org.gradle.api.tasks.compile.AbstractCompile
 
 class SubpluginOption(val key: String, val value: String)
 
-interface KotlinGradleSubplugin<KotlinCompile : AbstractCompile> {
+interface KotlinGradleSubplugin<in KotlinCompile : AbstractCompile> {
     fun isApplicable(project: Project, task: KotlinCompile): Boolean
     
     fun apply(
@@ -30,8 +30,20 @@ interface KotlinGradleSubplugin<KotlinCompile : AbstractCompile> {
             kotlinCompile: KotlinCompile,
             javaCompile: AbstractCompile,
             variantData: Any?,
+            androidProjectHandler: Any?,
             javaSourceSet: SourceSet?
     ): List<SubpluginOption>
+
+    @Deprecated(
+            "Use apply() with androidProjectHandler parameter instead.",
+            ReplaceWith("apply(project, kotlinCompile, javaCompile, variantData, null, javaSourceSet)"))
+    fun apply(
+            project: Project,
+            kotlinCompile: KotlinCompile,
+            javaCompile: AbstractCompile,
+            variantData: Any?,
+            javaSourceSet: SourceSet?
+    ): List<SubpluginOption> = apply(project, kotlinCompile, javaCompile, variantData, null, javaSourceSet)
 
     fun getSubpluginKotlinTasks(
             project: Project,
