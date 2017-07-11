@@ -5,7 +5,7 @@ public class b {
     
     public void a_b() {}
 
-    public static class c {
+    public class c {
         public void a_bc() {}
     }    
 }

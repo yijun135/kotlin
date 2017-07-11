@@ -117,9 +117,9 @@ class JavacWrapper(
 
     private val javaClasses = compilationUnits
             .flatMap { unit ->
-                unit.typeDecls.map { classDecl ->
-                    TreeBasedClass(classDecl as JCTree.JCClassDecl,
-                                   trees.getPath(unit, classDecl),
+                unit.typeDecls.map { classDeclaration ->
+                    TreeBasedClass(classDeclaration as JCTree.JCClassDecl,
+                                   trees.getPath(unit, classDeclaration),
                                    this,
                                    unit.sourceFile)
                 }
@@ -134,7 +134,7 @@ class JavacWrapper(
             }
             .associateBy(TreeBasedPackage::fqName)
 
-    val treePathResolverCache = TreePathResolverCache(this)
+    val classifierResolver = ClassifierResolver(this)
     private val kotlinClassifiersCache = KotlinClassifiersCache(if (javaFiles.isNotEmpty()) kotlinFiles else emptyList(), this)
     private val symbolBasedClassesCache = hashMapOf<String, SymbolBasedClass?>()
     private val symbolBasedPackagesCache = hashMapOf<String, SymbolBasedPackage?>()
@@ -187,7 +187,7 @@ class JavacWrapper(
         return null
     }
 
-    fun findPackage(fqName: FqName, scope: GlobalSearchScope): JavaPackage? {
+    fun findPackage(fqName: FqName, scope: GlobalSearchScope = EverythingGlobalScope()): JavaPackage? {
         javaPackages[fqName]?.let { javaPackage ->
             javaPackage.virtualFile?.let { file ->
                 if (file in scope) return javaPackage
@@ -237,7 +237,7 @@ class JavacWrapper(
     fun isDeprecated(typeMirror: TypeMirror) = isDeprecated(types.asElement(typeMirror))
 
     fun resolve(treePath: TreePath): JavaClassifier? =
-            treePathResolverCache.resolve(treePath)
+            classifierResolver.resolve(treePath)
 
     fun toVirtualFile(javaFileObject: JavaFileObject): VirtualFile? =
             javaFileObject.toUri().let { uri ->
