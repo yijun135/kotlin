@@ -92,12 +92,6 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             doTestWithJavac(fileName);
         }
 
-        @TestMetadata("InaccessiblePrivateClass.kt")
-        public void testInaccessiblePrivateClass() throws Exception {
-            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/InaccessiblePrivateClass.kt");
-            doTestWithJavac(fileName);
-        }
-
         @TestMetadata("NestedClassClash.kt")
         public void testNestedClassClash() throws Exception {
             String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/NestedClassClash.kt");

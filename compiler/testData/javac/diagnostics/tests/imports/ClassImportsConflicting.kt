@@ -27,4 +27,4 @@ import a.a
 
 class A : a()
 
-fun test() = A().getO()
+fun test() = A().<!MISSING_DEPENDENCY_CLASS!>getO<!>()
