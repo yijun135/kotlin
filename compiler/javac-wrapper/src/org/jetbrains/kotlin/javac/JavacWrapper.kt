@@ -136,7 +136,6 @@ class JavacWrapper(
 
     val classifierResolver = ClassifierResolver(this)
     private val kotlinClassifiersCache = KotlinClassifiersCache(if (javaFiles.isNotEmpty()) kotlinFiles else emptyList(), this)
-    private val symbolBasedClassesCache = hashMapOf<String, SymbolBasedClass?>()
     private val symbolBasedPackagesCache = hashMapOf<String, SymbolBasedPackage?>()
 
     fun compile(outDir: File? = null): Boolean = with(javac) {
@@ -251,16 +250,10 @@ class JavacWrapper(
 
     private inline fun <reified T> Iterable<T>.toJavacList() = JavacList.from(this)
 
-    private fun findClassInSymbols(fqName: String): SymbolBasedClass? {
-        if (symbolBasedClassesCache.containsKey(fqName)) return symbolBasedClassesCache[fqName]
-
-        elements.getTypeElement(fqName)?.let { symbol ->
-            SymbolBasedClass(symbol, this, symbol.classfile)
-        }.let { symbolBasedClass ->
-            symbolBasedClassesCache[fqName] = symbolBasedClass
-            return symbolBasedClass
-        }
-    }
+    private fun findClassInSymbols(fqName: String): SymbolBasedClass? =
+            elements.getTypeElement(fqName)?.let { symbol ->
+                SymbolBasedClass(symbol, this, symbol.classfile)
+            }
 
     private fun findPackageInSymbols(fqName: String): SymbolBasedPackage? {
         if (symbolBasedPackagesCache.containsKey(fqName)) return symbolBasedPackagesCache[fqName]

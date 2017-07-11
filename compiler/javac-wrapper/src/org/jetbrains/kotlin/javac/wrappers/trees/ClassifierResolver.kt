@@ -69,16 +69,26 @@ class ClassifierResolver(private val javac: JavacWrapper) {
 
         val asteriskImports = {
             (compilationUnit as JCTree.JCCompilationUnit).imports
-                .filter { it.qualifiedIdentifier.toString().endsWith("*") }
-                .map { it.qualifiedIdentifier.toString().dropLast(1) }
+                    .mapNotNull {
+                        val fqName = it.qualifiedIdentifier.toString()
+                        if (fqName.endsWith("*")) {
+                            fqName.dropLast(1)
+                        }
+                        else null
+                    }
         }
         val packageName = {
             compilationUnit.packageName?.toString() ?: "<root>"
         }
         val imports = {
             (compilationUnit as JCTree.JCCompilationUnit).imports
-                    .filter { it.qualifiedIdentifier.toString().endsWith(".$firstSegment") }
-                    .map { it.qualifiedIdentifier.toString() }
+                    .mapNotNull {
+                        val fqName = it.qualifiedIdentifier.toString()
+                        if (fqName.endsWith(".$firstSegment")) {
+                            fqName
+                        }
+                        else null
+                    }
         }
 
         val javaClass = createResolutionScope(enclosingClasses, asteriskImports, packageName, imports).findClass(firstSegment, pathSegments)

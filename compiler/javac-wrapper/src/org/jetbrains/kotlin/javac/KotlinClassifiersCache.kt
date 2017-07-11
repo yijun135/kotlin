@@ -39,12 +39,16 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
             }.toMap()
 
     private val classifiers = hashMapOf<ClassId, JavaClass>()
+    private val supertypesCache = hashMapOf<KtClassOrObject, JavaClass?>()
 
     fun getKotlinClassifier(classId: ClassId) = classifiers[classId] ?: createClassifier(classId)
 
     fun resolveSupertype(name: String,
                          classOrObject: KtClassOrObject,
                          javac: JavacWrapper): JavaClass? {
+        if (supertypesCache.containsKey(classOrObject)) {
+            return supertypesCache[classOrObject]
+        }
         val pathSegments = name.split(".")
         val firstSegment = pathSegments.first()
 
@@ -52,20 +56,30 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
 
         val enclosingClasses = classOrObject.enclosingClasses
         val asteriskImports = {
-            ktFile.importDirectives.filter { it.text.endsWith("*") }
-                    .map { "${it.importedFqName!!.asString()}." }
+            ktFile.importDirectives
+                    .mapNotNull {
+                        if (it.text.endsWith("*")) {
+                            it.importedFqName!!.asString()
+                        }
+                        else null
+                    }
         }
         val packageName = {
             ktFile.packageFqName.asString()
         }
         val imports = {
-            ktFile.importDirectives.filter { it.text.endsWith(".$firstSegment") }
-                    .map { it.importedFqName!!.asString() }
+            ktFile.importDirectives
+                    .mapNotNull {
+                        if (it.text.endsWith(".$firstSegment")) {
+                            it.importedFqName!!.asString()
+                        }
+                        else null
+                    }
         }
 
         val resolutionScope = javac.classifierResolver.createResolutionScope(enclosingClasses, asteriskImports, packageName, imports)
 
-        return resolutionScope.findClass(firstSegment, pathSegments)
+        return resolutionScope.findClass(firstSegment, pathSegments).apply { supertypesCache[classOrObject] = this }
     }
 
     fun createMockKotlinClassifier(classifier: KtClassOrObject,
