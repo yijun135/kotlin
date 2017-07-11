@@ -72,7 +72,7 @@ class KotlinTestClassGradleConfigurationProducer : TestClassGradleConfigurationP
         if (methodLocation != null) return false
 
         val testClass = KotlinJUnitRunConfigurationProducer.getTestClass(leaf)
-        if (testClass == null || testClass.qualifiedName == null) return false
+        if (testClass?.qualifiedName == null) return false
 
 
         val projectPath = resolveProjectPath(context.module) ?: return false
