@@ -497,7 +497,7 @@ abstract class BasicBoxTest(
         val hasFilesToRecompile = module.hasFilesToRecompile
         configuration.put(JSConfigurationKeys.META_INFO, multiModule)
         configuration.put(JSConfigurationKeys.SERIALIZE_FRAGMENTS, hasFilesToRecompile)
-        configuration.put(JSConfigurationKeys.SOURCE_MAP, hasFilesToRecompile || generateSourceMap)
+        configuration.put(JSConfigurationKeys.SOURCE_MAP, true)
         configuration.put(JSConfigurationKeys.SOURCE_MAP_SOURCE_ROOTS, sourceDirs)
         configuration.put(JSConfigurationKeys.SOURCE_MAP_EMBED_SOURCES, module.sourceMapSourceEmbedding)
 
