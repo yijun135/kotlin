@@ -97,8 +97,8 @@ configure<JavaPluginConvention> {
     }
 }
 configureKotlinProjectTests("idea/tests",
+                            "idea/idea-maven/test",
                             "idea/idea-completion/tests",
-                            "idea-maven/test",
                             "j2k/tests",
                             "eval4j/test",
                             sourcesBaseDir = rootDir)
