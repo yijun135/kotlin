@@ -95,6 +95,9 @@ include "test:compiler"
 include "test:compiler-java8"
 include "test:js-backend"
 include "generators"
+include 'tools:binary-compatibility-validator'
+include 'tools:kotlin-stdlib-js-merger'
+include 'tools:kotlin-stdlib-gen'
 //include "test:idea-plugin"
 
 rootProject.name = "kotlin"
@@ -130,6 +133,9 @@ project(':plugins:noarg-ide').projectDir = "$rootDir/plugins/noarg/noarg-ide" as
 project(':plugins:sam-with-receiver-cli').projectDir = "$rootDir/plugins/sam-with-receiver/sam-with-receiver-cli" as File
 project(':plugins:sam-with-receiver-ide').projectDir = "$rootDir/plugins/sam-with-receiver/sam-with-receiver-ide" as File
 project(':plugins:source-sections-compiler').projectDir = "$rootDir/plugins/source-sections/source-sections-compiler" as File
+project(':tools:binary-compatibility-validator').projectDir = "$rootDir/libraries/tools/binary-compatibility-validator" as File
+project(':tools:kotlin-stdlib-js-merger').projectDir = "$rootDir/libraries/tools/kotlin-stdlib-js-merger" as File
+project(':tools:kotlin-stdlib-gen').projectDir = "$rootDir/libraries/tools/kotlin-stdlib-gen" as File
 
 def setBuildFile(ProjectDescriptor project) {
     if (project.projectDir.listFiles().any { file -> file.name == "build.gradle.kts"}) {
