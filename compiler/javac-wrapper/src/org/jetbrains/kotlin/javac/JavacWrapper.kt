@@ -84,7 +84,7 @@ class JavacWrapper(
     }
 
     val JAVA_LANG_ENUM by lazy {
-        createCommonClassifierType(CommonClassNames.JAVA_LANG_ENUM)
+        findClassInSymbols(CommonClassNames.JAVA_LANG_ENUM)
     }
 
     val JAVA_LANG_ANNOTATION_ANNOTATION by lazy {
@@ -263,6 +263,14 @@ class JavacWrapper(
                 }
             }
 
+    fun hasKotlinPackage(fqName: FqName) =
+            if (kotlinClassifiersCache.hasPackage(fqName)) {
+                fqName
+            }
+            else {
+                null
+            }
+
     private inline fun <reified T> Iterable<T>.toJavacList() = JavacList.from(this)
 
     private fun findClassInSymbols(fqName: String): SymbolBasedClass? =
@@ -314,7 +322,7 @@ class JavacWrapper(
 
     private fun Symbol.PackageSymbol.findClass(name: String): SymbolBasedClass? {
         val nameParts = name.replace("$", ".").split(".")
-        var symbol = members_field.getElementsByName(names.fromString(nameParts.first()))
+        var symbol = members_field?.getElementsByName(names.fromString(nameParts.first()))
                              ?.firstOrNull() as? Symbol.ClassSymbol ?: return null
         if (nameParts.size > 1) {
             symbol.complete()

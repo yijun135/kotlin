@@ -36,6 +36,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
         KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
     }
 
+    @TestMetadata("SameClassNames.kt")
+    public void testSameClassNames() throws Exception {
+        String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/SameClassNames.kt");
+        doTestWithJavac(fileName);
+    }
+
     @TestMetadata("compiler/testData/javac/diagnostics/tests/imports")
     @TestDataPath("$PROJECT_ROOT")
     @RunWith(JUnit3RunnerWithInners.class)

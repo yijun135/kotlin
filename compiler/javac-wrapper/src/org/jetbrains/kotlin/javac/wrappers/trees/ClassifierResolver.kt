@@ -140,25 +140,11 @@ private class GlobalScope(override val javac: JavacWrapper) : Scope {
         get() = null
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
-        findByFqName(pathSegments)?.let { return it }
+        findByFqName(pathSegments, javac)?.let { return it }
 
         return findJavaOrKotlinClass(classId("java.lang", name), javac)?.let { javaClass ->
             getJavaClassFromPathSegments(javaClass, pathSegments)
         }
-    }
-
-    private fun findByFqName(pathSegments: List<String>): JavaClass? {
-        pathSegments.forEachIndexed { index, _ ->
-            val packageFqName = pathSegments.dropLast(index).joinToString(separator = ".")
-            javac.findPackage(FqName(packageFqName))?.let { pack ->
-                val className = pathSegments.takeLast(index)
-                return findJavaOrKotlinClass(ClassId(pack.fqName, Name.identifier(className.first())), javac)?.let { javaClass ->
-                    getJavaClassFromPathSegments(javaClass, className)
-                }
-            }
-        }
-
-        return null
     }
 
 }
@@ -171,7 +157,8 @@ private class ImportOnDemandScope(override val javac: JavacWrapper,
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
         asteriskImports()
-                .mapNotNull { tryToResolveByFqName("$it$name".split("."), javac) }
+                .toSet()
+                .mapNotNull { findByFqName("$it$name".split("."), javac) }
                 .takeIf { it.isNotEmpty() }
                 ?.let {
                     return it.singleOrNull()?.let { javaClass ->
@@ -207,11 +194,11 @@ private class SingleTypeImportScope(override val javac: JavacWrapper,
     override val parent: Scope? get() = scope()
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
-        val imports = imports().takeIf { it.isNotEmpty() } ?: return parent?.findClass(name, pathSegments)
+        val imports = imports().toSet().takeIf { it.isNotEmpty() } ?: return parent?.findClass(name, pathSegments)
 
         imports.singleOrNull() ?: return null
 
-        return tryToResolveByFqName(imports.first().split("."), javac)
+        return findByFqName(imports.first().split("."), javac)
                 ?.let { javaClass -> getJavaClassFromPathSegments(javaClass, pathSegments) }
     }
 
@@ -244,31 +231,26 @@ private fun getJavaClassFromPathSegments(javaClass: JavaClass,
             javaClass.findInner(pathSegments.drop(1))
         }
 
-private fun tryToResolveByFqName(pathSegments: List<String>, javac: JavacWrapper): JavaClass? {
-    fun tryToResolveByFqName(packageSegments: List<String>, classSegments: List<String>): JavaClass? {
-        val javaClass = classId(packageSegments.joinToString(separator = "."), classSegments.first())
-                                .let { findJavaOrKotlinClass(it, javac) } ?: return null
-
-        return classSegments.drop(1).let {
-            if (it.isNotEmpty()) {
-                javaClass.findInner(it)
-            }
-            else {
-                javaClass
+private fun findByFqName(pathSegments: List<String>, javac: JavacWrapper): JavaClass? {
+    pathSegments.forEachIndexed { index, _ ->
+        if (index == pathSegments.lastIndex) return null
+        val packageFqName = pathSegments.dropLast(index + 1).joinToString(separator = ".")
+        findPackage(packageFqName, javac)?.let { pack ->
+            val className = pathSegments.takeLast(index + 1)
+            return findJavaOrKotlinClass(ClassId(pack, Name.identifier(className.first())), javac)?.let { javaClass ->
+                getJavaClassFromPathSegments(javaClass, className)
             }
         }
     }
 
-    val packageSegments = arrayListOf<String>()
-
-    pathSegments.forEachIndexed { i, _ ->
-        packageSegments.add(pathSegments[i])
-        if (i == pathSegments.lastIndex) return null
-
-        tryToResolveByFqName(packageSegments, pathSegments.drop(i + 1))?.let { return it }
-    }
-
     return null
+}
+
+private fun findPackage(packageName: String, javac: JavacWrapper): FqName? {
+    val fqName = FqName(packageName)
+    javac.hasKotlinPackage(fqName)?.let { return it }
+
+    return javac.findPackage(fqName)?.fqName
 }
 
 private fun findJavaOrKotlinClass(classId: ClassId, javac: JavacWrapper) = javac.findClass(classId) ?: javac.getKotlinClassifier(classId)

@@ -24,10 +24,7 @@ import org.jetbrains.kotlin.analyzer.common.DefaultAnalyzerFacade
 import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport
 import org.jetbrains.kotlin.cli.jvm.compiler.JvmPackagePartProvider
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
-import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.config.LanguageVersionSettings
-import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
-import org.jetbrains.kotlin.config.languageVersionSettings
+import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.container.StorageComponentContainer
 import org.jetbrains.kotlin.container.get
 import org.jetbrains.kotlin.container.useImpl
@@ -102,8 +99,10 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
         val modules = createModules(groupedByModule, context.storageManager)
         val moduleBindings = HashMap<TestModule?, BindingContext>()
 
+        val allKtFiles = groupedByModule.values.flatMap { getKtFiles(it, true) }
+
         if (useJavac) {
-            environment.registerJavac()
+            environment.registerJavac(kotlinFiles = allKtFiles)
         }
 
         for ((testModule, testFilesInModule) in groupedByModule) {
@@ -291,7 +290,12 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
                     moduleContext.project,
                     files,
                     moduleTrace,
-                    environment.configuration.copy().apply { this.languageVersionSettings = languageVersionSettings },
+                    environment.configuration.copy().apply {
+                        this.languageVersionSettings = languageVersionSettings
+                        if (useJavac) {
+                            put(JVMConfigurationKeys.USE_JAVAC, true)
+                        }
+                    },
                     { scope -> JvmPackagePartProvider(environment, scope) }
             )
         }

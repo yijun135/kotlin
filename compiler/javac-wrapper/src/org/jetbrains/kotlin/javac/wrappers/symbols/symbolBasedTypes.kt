@@ -91,8 +91,8 @@ class SymbolBasedClassifierType<out T : TypeMirror>(
             }
 
             var enclosingType = (typeMirror as DeclaredType).enclosingType
-            while (enclosingType.kind == TypeKind.DECLARED) {
-                args.addAll((enclosingType as DeclaredType).typeArguments.map { create(it, javac) })
+            while (enclosingType.kind == TypeKind.DECLARED && !(enclosingType as DeclaredType).asElement().isStatic) {
+                args.addAll(enclosingType.typeArguments.map { create(it, javac) })
                 enclosingType = enclosingType.enclosingType
             }
 

@@ -31,8 +31,10 @@ import org.jetbrains.kotlin.name.ClassId
 class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
                              private val javac: JavacWrapper) {
 
+    private val kotlinPackages = hashSetOf<FqName>()
     private val kotlinClasses: Map<ClassId?, KtClassOrObject?> =
             sourceFiles.flatMap { ktFile ->
+                kotlinPackages.add(ktFile.packageFqName)
                 ktFile.declarations
                         .filterIsInstance<KtClassOrObject>()
                         .map { it.computeClassId() to it }
@@ -89,6 +91,8 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
                                                                             this,
                                                                             javac)
             .apply { classifiers[classId] = this }
+
+    fun hasPackage(packageFqName: FqName) = kotlinPackages.contains(packageFqName)
 
     private fun createClassifier(classId: ClassId): JavaClass? {
         if (classId.isNestedClass) {

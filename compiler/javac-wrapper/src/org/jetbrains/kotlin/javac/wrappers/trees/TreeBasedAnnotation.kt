@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.load.java.structure.JavaAnnotationArgument
 import org.jetbrains.kotlin.load.java.structure.JavaClass
 import org.jetbrains.kotlin.load.java.structure.JavaElement
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
 class TreeBasedAnnotation(
@@ -36,7 +37,7 @@ class TreeBasedAnnotation(
         get() = annotation.arguments.map { TreeBasedAnnotationArgument(Name.identifier(it.toString())) }
 
     override val classId: ClassId?
-        get() = resolve()?.computeClassId()
+        get() = resolve()?.computeClassId() ?: ClassId.topLevel(FqName(annotation.annotationType.toString().substringAfter("@")))
 
     override fun resolve() =
             javac.resolve(TreePath.getPath(treePath.compilationUnit, annotation.annotationType)) as? JavaClass
