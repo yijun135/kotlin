@@ -1,0 +1,69 @@
+package
+
+public fun incorrect2(): kotlin.Unit
+
+public interface Base {
+    public abstract var x: kotlin.String
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+public open class Foo : Base {
+    public constructor Foo()
+    public final var nonLateInit: kotlin.Int
+    public open override /*1*/ lateinit var x: kotlin.String
+    private final lateinit var y: kotlin.String
+    public final fun correct1(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public final fun incorrect1(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+
+    public final inner class InnerSubclass : Foo {
+        public constructor InnerSubclass()
+        public final override /*1*/ /*fake_override*/ var nonLateInit: kotlin.Int
+        public open override /*1*/ lateinit /*fake_override*/ var x: kotlin.String
+        invisible_fake final override /*1*/ lateinit /*fake_override*/ var y: kotlin.String
+        public final override /*1*/ /*fake_override*/ fun correct1(): kotlin.Unit
+        public final fun correct2(): kotlin.Unit
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public final override /*1*/ /*fake_override*/ fun incorrect1(): kotlin.Unit
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+    }
+}
+
+public final class FooImpl : Foo {
+    public constructor FooImpl()
+    public final override /*1*/ /*fake_override*/ var nonLateInit: kotlin.Int
+    public open override /*1*/ lateinit /*fake_override*/ var x: kotlin.String
+    invisible_fake final override /*1*/ lateinit /*fake_override*/ var y: kotlin.String
+    public final override /*1*/ /*fake_override*/ fun correct1(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public final override /*1*/ /*fake_override*/ fun incorrect1(): kotlin.Unit
+    public final fun incorrect4(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+public final class OtherFooImpl : Foo {
+    public constructor OtherFooImpl()
+    public final override /*1*/ /*fake_override*/ var nonLateInit: kotlin.Int
+    public open override /*1*/ lateinit /*fake_override*/ var x: kotlin.String
+    invisible_fake final override /*1*/ lateinit /*fake_override*/ var y: kotlin.String
+    public final override /*1*/ /*fake_override*/ fun correct1(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public final override /*1*/ /*fake_override*/ fun incorrect1(): kotlin.Unit
+    public final fun incorrect5(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+public object Unrelated {
+    private constructor Unrelated()
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public final fun incorrect3(): kotlin.Unit
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}

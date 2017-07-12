@@ -13113,6 +13113,33 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/properties/lateinit/visibility.kt");
                 doTest(fileName);
             }
+
+            @TestMetadata("compiler/testData/codegen/box/properties/lateinit/isInitializedAndReset")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class IsInitializedAndReset extends AbstractIrBlackBoxCodegenTest {
+                public void testAllFilesPresentInIsInitializedAndReset() throws Exception {
+                    KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/codegen/box/properties/lateinit/isInitializedAndReset"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.JVM, true);
+                }
+
+                @TestMetadata("lexicallyDeep.kt")
+                public void testLexicallyDeep() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/properties/lateinit/isInitializedAndReset/lexicallyDeep.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("sideEffects.kt")
+                public void testSideEffects() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/properties/lateinit/isInitializedAndReset/sideEffects.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("simpleIsInitializedAndReset.kt")
+                public void testSimpleIsInitializedAndReset() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/properties/lateinit/isInitializedAndReset/simpleIsInitializedAndReset.kt");
+                    doTest(fileName);
+                }
+            }
         }
     }
 
