@@ -76,6 +76,7 @@ import org.junit.Assert
 import java.io.File
 import java.util.*
 import java.util.function.Predicate
+import java.util.regex.Pattern
 
 abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
     override fun analyzeAndCheck(testDataFile: File, files: List<TestFile>, useJavac: Boolean) {
@@ -431,11 +432,29 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
         KotlinTestUtils.assertEqualsToFile(expectedFile, rootPackageText.toString())
     }
 
+    private fun getJavaFilePackage(testFile: TestFile): Name {
+        val pattern = Pattern.compile("^\\s*package [.\\w\\d]*", Pattern.MULTILINE)
+        val matcher = pattern.matcher(testFile.expectedText)
+
+        if (matcher.find()) {
+            return testFile.expectedText
+                    .substring(matcher.start(), matcher.end())
+                    .split(" ")
+                    .last()
+                    .filter { !it.isWhitespace() }
+                    .let { Name.identifier(it.split(".").first()) }
+        }
+
+        return SpecialNames.ROOT_PACKAGE
+    }
+
     private fun createdAffectedPackagesConfiguration(
             testFiles: List<TestFile>,
             modules: Collection<ModuleDescriptor>
     ): RecursiveDescriptorComparator.Configuration {
-        val packagesNames = getTopLevelPackagesFromFileList(getKtFiles(testFiles, false))
+        val packagesNames = testFiles
+                .map { getJavaFilePackage(it) }
+                .toSet()
 
         val stepIntoFilter = Predicate<DeclarationDescriptor> { descriptor ->
             val module = DescriptorUtils.getContainingModuleOrNull(descriptor)
