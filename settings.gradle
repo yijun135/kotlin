@@ -94,11 +94,18 @@ include "ant"
 include "test:compiler"
 include "test:compiler-java8"
 include "test:js-backend"
+//include "test:idea-plugin"
 include "generators"
 include 'tools:binary-compatibility-validator'
 include 'tools:kotlin-stdlib-js-merger'
 include 'tools:kotlin-stdlib-gen'
-//include "test:idea-plugin"
+include ':kotlin-gradle-plugin-api',
+        ':kotlin-gradle-plugin',
+        ':kotlin-gradle-plugin-integration-tests',
+        ':kotlin-allopen',
+        ':kotlin-noarg',
+        ':kotlin-sam-with-receiver',
+        ':kotlin-gradle-subplugin-example'
 
 rootProject.name = "kotlin"
 
@@ -136,6 +143,13 @@ project(':plugins:source-sections-compiler').projectDir = "$rootDir/plugins/sour
 project(':tools:binary-compatibility-validator').projectDir = "$rootDir/libraries/tools/binary-compatibility-validator" as File
 project(':tools:kotlin-stdlib-js-merger').projectDir = "$rootDir/libraries/tools/kotlin-stdlib-js-merger" as File
 project(':tools:kotlin-stdlib-gen').projectDir = "$rootDir/libraries/tools/kotlin-stdlib-gen" as File
+project(':kotlin-gradle-plugin-api').projectDir = "$rootDir/libraries/tools/kotlin-gradle-plugin-api" as File
+project(':kotlin-gradle-plugin').projectDir = "$rootDir/libraries/tools/kotlin-gradle-plugin" as File
+project(':kotlin-gradle-plugin-integration-tests').projectDir = "$rootDir/libraries/tools/kotlin-gradle-plugin-integration-tests" as File
+project(':kotlin-allopen').projectDir = "$rootDir/libraries/tools/kotlin-allopen" as File
+project(':kotlin-noarg').projectDir = "$rootDir/libraries/tools/kotlin-noarg" as File
+project(':kotlin-sam-with-receiver').projectDir = "$rootDir/libraries/tools/kotlin-sam-with-receiver" as File
+project(':kotlin-gradle-subplugin-example').projectDir = "$rootDir/libraries/examples/kotlin-gradle-subplugin-example" as File
 
 def setBuildFile(ProjectDescriptor project) {
     if (project.projectDir.listFiles().any { file -> file.name == "build.gradle.kts"}) {

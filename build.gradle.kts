@@ -10,7 +10,8 @@ buildscript {
     extra["kotlin_language_version"] = "1.1"
     extra["kotlin_gradle_plugin_version"] = extra["kotlin_version"]
     extra["repos"] = listOf("https://dl.bintray.com/kotlin/kotlin-dev",
-                            "https://repo.gradle.org/gradle/repo")
+                            "https://repo.gradle.org/gradle/repo",
+                            "https://plugins.gradle.org/m2")
 
     repositories {
         for (repo in (rootProject.extra["repos"] as List<String>)) {
@@ -20,6 +21,7 @@ buildscript {
 
     dependencies {
         classpath(kotlinDep("gradle-plugin"))
+        classpath("com.gradle.publish:plugin-publish-plugin:0.9.7")
     }
 }
 
@@ -120,6 +122,7 @@ allprojects {
 }
 
 applyFrom("libraries/commonConfiguration.gradle")
+applyFrom("libraries/gradlePluginsConfiguration.gradle")
 
 val importedAntTasksPrefix = "imported-ant-update-"
 
@@ -157,14 +160,10 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile> {
-//        dependsOn(prepareBootstrapTask)
-//        compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
         kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", project.name)
     }
 
     tasks.withType<Kotlin2JsCompile> {
-//        dependsOn(prepareBootstrapTask)
-//        compilerJarFile = File(rootProject.extra["bootstrapCompilerFile"].toString())
         kotlinOptions.freeCompilerArgs = listOf("-Xallow-kotlin-package", "-module-name", project.name)
     }
 

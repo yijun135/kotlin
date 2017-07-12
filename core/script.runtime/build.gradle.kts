@@ -5,6 +5,7 @@ apply { plugin("kotlin") }
 
 dependencies {
     compile(project(":core:builtins"))
+    compile(kotlinDep("stdlib"))
     buildVersion()
 }
 

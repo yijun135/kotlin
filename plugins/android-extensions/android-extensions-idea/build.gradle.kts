@@ -7,6 +7,7 @@ dependencies {
     compile(project(":compiler:util"))
     compile(project(":compiler:light-classes"))
     compile(project(":idea:idea-core"))
+    compile(project(":idea"))
     compile(project(":plugins:android-extensions-compiler"))
     compile(ideaPluginDeps("android", "sdk-tools", plugin = "android"))
     compile(ideaPluginDeps("Groovy", plugin = "Groovy"))

@@ -3,8 +3,6 @@ import org.gradle.jvm.tasks.Jar
 import org.gradle.api.internal.HasConvention
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
-plugins { application }
-
 apply { plugin("kotlin") }
 
 dependencies {
