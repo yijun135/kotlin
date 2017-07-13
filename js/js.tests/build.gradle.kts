@@ -17,7 +17,7 @@ dependencies {
 }
 
 configureKotlinProjectSources()
-configureKotlinProjectTests("js/js.tests/test", sourcesBaseDir = rootDir)
+configureKotlinProjectTestsDefault()
 
 val test: Test by tasks
 test.apply {

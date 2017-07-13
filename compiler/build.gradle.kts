@@ -2,13 +2,34 @@
 apply { plugin("kotlin") }
 
 dependencies {
-    compile(project(":compiler:cli"))
-    compile(project(":compiler:daemon-common"))
-    compile(project(":compiler:incremental-compilation-impl"))
-    compile(project(":build-common"))
-    compile(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
-    compile(commonDep("org.fusesource.jansi", "jansi"))
-    compile(commonDep("jline"))
+    compileOnly(project(":compiler:cli"))
+    compileOnly(project(":compiler:daemon-common"))
+    compileOnly(project(":compiler:incremental-compilation-impl"))
+    compileOnly(project(":build-common"))
+    compileOnly(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
+    compileOnly(commonDep("org.fusesource.jansi", "jansi"))
+    compileOnly(commonDep("jline"))
+
+    testCompile(commonDep("junit:junit"))
+    testCompile(project(":kotlin-test:kotlin-test-jvm"))
+    testCompile(project(":kotlin-test:kotlin-test-junit"))
+    testCompile(project(":compiler.tests-common"))
+    testCompileOnly(project(":compiler:ir.ir2cfg"))
+    testCompileOnly(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward
+    testCompile(ideaSdkDeps("openapi", "idea", "util", "asm-all", "commons-httpclient-3.1-patched"))
+    // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
+    testCompile(project(":kotlin-stdlib"))
+    testCompile(project(":kotlin-script-runtime"))
+    testCompile(project(":kotlin-runtime"))
+    testCompile(project(":kotlin-reflect"))
+    testCompile(project(":plugins:android-extensions-compiler"))
+    testCompile(project(":ant"))
+    (rootProject.extra["compilerModules"] as Array<String>).forEach {
+        testCompile(project(it))
+    }
+    testRuntime(ideaSdkCoreDeps("*.jar"))
+    testRuntime(ideaSdkDeps("*.jar"))
+    testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSources(
@@ -20,6 +41,20 @@ configureKotlinProjectResources("idea/src", sourcesBaseDir = rootDir) {
             "META-INF/extensions/kotlin2jvm.xml",
             "META-INF/extensions/kotlin2js.xml")
 }
-configureKotlinProjectNoTests()
+configureKotlinProjectTests("tests")
+
+testsJar {}
+
+tasks.withType<Test> {
+    dependsOnTaskIfExistsRec("dist", project = rootProject)
+    dependsOn(":prepare:mock-runtime-for-test:dist")
+    workingDir = rootDir
+    systemProperty("idea.is.unit.test", "true")
+    environment("NO_FS_ROOTS_ACCESS_CHECK", "true")
+    systemProperty("kotlin.test.script.classpath", the<JavaPluginConvention>().sourceSets.getByName("test").output.classesDirs.joinToString(File.pathSeparator))
+    jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1200m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
+    maxHeapSize = "1200m"
+    ignoreFailures = true
+}
 
 fixKotlinTaskDependencies()

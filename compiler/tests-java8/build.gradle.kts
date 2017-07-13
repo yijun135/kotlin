@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 apply { plugin("kotlin") }
 
@@ -6,30 +7,38 @@ dependencies {
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testCompile(project(":kotlin-test:kotlin-test-junit"))
     testCompile(project(":compiler.tests-common"))
-    testCompileOnly(project(":compiler:ir.ir2cfg"))
-    testCompileOnly(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward
-    testCompile(ideaSdkDeps("openapi", "idea", "util", "asm-all", "commons-httpclient-3.1-patched"))
+    testCompile(project(":core"))
+    testCompile(project(":compiler:util"))
+    testCompile(project(":compiler:backend"))
+    testCompile(project(":compiler:frontend"))
+    testCompile(project(":compiler:frontend.java"))
+    testCompile(project(":compiler:cli"))
+    testCompile(project(":compiler:serialization"))
+    testCompile(ideaSdkDeps("openapi", "idea", "util", "asm-all"))
     // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
     testCompile(project(":kotlin-stdlib"))
     testCompile(project(":kotlin-script-runtime"))
     testCompile(project(":kotlin-runtime"))
     testCompile(project(":kotlin-reflect"))
-    testCompile(project(":plugins:android-extensions-compiler"))
-    testCompile(project(":ant"))
-    (rootProject.extra["compilerModules"] as Array<String>).forEach {
-        testCompile(project(it))
-    }
+    testCompile(project(":compiler", configuration = "tests-jar")) { isTransitive = false }
+    testRuntime(project(":compiler:preloader"))
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))
     testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSources()
-configureKotlinProjectTests("compiler/tests", sourcesBaseDir = rootDir)
+configureKotlinProjectTestsDefault()
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jdkHome = rootProject.extra["JDK_18"]!!.toString()
+    kotlinOptions.jvmTarget = "1.8"
+}
 
 testsJar {}
 
 tasks.withType<Test> {
+    executable = "${rootProject.extra["JDK_18"]!!}/bin/java"
     dependsOnTaskIfExistsRec("dist", project = rootProject)
     dependsOn(":prepare:mock-runtime-for-test:dist")
     workingDir = rootDir
