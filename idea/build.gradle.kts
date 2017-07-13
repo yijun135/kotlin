@@ -2,6 +2,8 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    testRuntime(ideaSdkDeps("*.jar"))
+
     compile(project(":kotlin-stdlib"))
     compile(project(":core"))
     compile(project(":compiler:backend"))
@@ -25,40 +27,47 @@ dependencies {
     compile(project(":idea:kotlin-gradle-tooling"))
     compile(project(":plugins:uast-kotlin"))
     compile(project(":plugins:uast-kotlin-idea"))
+
     compile(ideaSdkCoreDeps("intellij-core", "util"))
-    compile(ideaSdkDeps("openapi", "idea", "velocity", "boot", "gson", "swingx-core", "jsr305"))
-    compile(ideaSdkDeps("gradle-tooling-api", "gradle", subdir = "plugins/gradle/lib"))
-    compile(ideaSdkDeps("idea-junit", subdir = "plugins/junit/lib"))
-    compile(ideaSdkDeps("IntelliLang", subdir = "plugins/IntelliLang/lib"))
-    compile(ideaSdkDeps("testng", "testng-plugin", subdir = "plugins/testng/lib"))
-    compile(ideaSdkDeps("copyright", subdir = "plugins/copyright/lib"))
-    compile(ideaSdkDeps("properties", subdir = "plugins/properties/lib"))
-    compile(ideaSdkDeps("java-i18n", subdir = "plugins/java-i18n/lib"))
-    compile(ideaSdkDeps("java-decompiler", subdir = "plugins/java-decompiler/lib"))
-    compile(ideaSdkDeps("Groovy", subdir = "plugins/Groovy/lib"))
-    compile(ideaSdkDeps("maven", "maven-server-api", subdir = "plugins/maven/lib"))
-    compile(ideaSdkDeps("coverage", subdir = "plugins/coverage/lib"))
+
+    compileOnly(ideaSdkDeps("openapi", "idea", "velocity", "boot", "gson", "swingx-core", "jsr305"))
+
+    compile(ideaPluginDeps("idea-junit", plugin = "junit"))
+    compile(ideaPluginDeps("IntelliLang", plugin = "IntelliLang"))
+    compile(ideaPluginDeps("testng", "testng-plugin", plugin = "testng"))
+    compile(ideaPluginDeps("copyright", plugin = "copyright"))
+    compile(ideaPluginDeps("properties", plugin = "properties"))
+    compile(ideaPluginDeps("java-i18n", plugin = "java-i18n"))
+    compile(ideaPluginDeps("coverage", plugin = "coverage"))
+    compile(ideaPluginDeps("java-decompiler", plugin = "java-decompiler"))
+
+    compileOnly(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
+    compileOnly(ideaPluginDeps("Groovy", plugin = "Groovy"))
+    compileOnly(ideaPluginDeps("maven", "maven-server-api", plugin = "maven"))
+
     compile(preloadedDeps("markdown", "kotlinx-coroutines-core"))
+
     testCompile(project(":kotlin-test:kotlin-test-junit"))
     testCompile(project(":compiler:cli"))
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
-    testCompile(ideaSdkDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", subdir = "plugins/gradle/lib"))
-    testCompile(ideaSdkDeps("groovy-all"))
-    testRuntime(ideaSdkDeps("*.jar"))
-    testRuntime(ideaPluginDeps("idea-junit", "resources_en", plugin = "junit"))
-    testRuntime(ideaPluginDeps("IntelliLang", plugin = "IntelliLang"))
-    testRuntime(ideaPluginDeps("jcommander", "testng", "testng-plugin", "resources_en", plugin = "testng"))
-    testRuntime(ideaPluginDeps("copyright", plugin = "copyright"))
-    testRuntime(ideaPluginDeps("properties", "resources_en", plugin = "properties"))
-    testRuntime(ideaPluginDeps("java-i18n", plugin = "java-i18n"))
+
+    testCompileOnly(ideaPluginDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", plugin = "gradle"))
+    testCompileOnly(ideaPluginDeps("maven", "maven-server-api", plugin = "maven"))
+
+    testCompileOnly(ideaSdkDeps("groovy-all", "velocity", "gson", "jsr305"))
+
+    testRuntime(ideaPluginDeps("resources_en", plugin = "junit"))
+    testRuntime(ideaPluginDeps("jcommander", "resources_en", plugin = "testng"))
+    testRuntime(ideaPluginDeps("resources_en", plugin = "properties"))
     testRuntime(ideaPluginDeps("*.jar", plugin = "gradle"))
     testRuntime(ideaPluginDeps("*.jar", plugin = "Groovy"))
-    testRuntime(ideaPluginDeps("coverage", "jacocoant", plugin = "coverage"))
-    testRuntime(ideaPluginDeps("java-decompiler", plugin = "java-decompiler"))
+    testRuntime(ideaPluginDeps("jacocoant", plugin = "coverage"))
     testRuntime(ideaPluginDeps("*.jar", plugin = "maven"))
     testRuntime(ideaPluginDeps("*.jar", plugin = "android"))
+
     testRuntime(preloadedDeps("uast-common", "uast-java"))
+
     // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
     testCompile(project(":plugins:android-extensions-compiler"))
     testCompile(project(":plugins:android-extensions-idea"))
@@ -72,9 +81,11 @@ dependencies {
     testCompile(project(":idea:idea-android")) { isTransitive = false }
     testCompile(project(":plugins:lint")) { isTransitive = false }
     testCompile(project(":plugins:uast-kotlin"))
+
     (rootProject.extra["compilerModules"] as Array<String>).forEach {
         testCompile(project(it))
     }
+
     testCompile(project(":prepare:compiler", configuration = "default"))
 
     buildVersion()

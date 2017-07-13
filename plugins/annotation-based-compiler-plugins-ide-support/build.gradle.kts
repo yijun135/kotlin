@@ -7,9 +7,9 @@ dependencies {
     compile(project(":compiler:cli-common"))
     compile(project(":idea"))
     compile(project(":idea:idea-jps-common"))
-    compile(ideaPluginDeps("maven", plugin = "maven"))
-    compile(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
-    compile(ideaSdkDeps("openapi", "idea"))
+    compileOnly(ideaPluginDeps("maven", "maven-server-api", plugin = "maven"))
+    compileOnly(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
+    compileOnly(ideaSdkDeps("openapi", "idea"))
 }
 
 configureKotlinProjectSourcesDefault()
