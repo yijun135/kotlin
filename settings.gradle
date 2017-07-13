@@ -105,6 +105,8 @@ include ':kotlin-gradle-plugin-api',
         ':kotlin-sam-with-receiver',
         ':kotlin-gradle-subplugin-example'
 
+include ':examples:annotation-processor-example'
+
 rootProject.name = "kotlin"
 
 project(':kotlin-runtime').projectDir = "$rootDir/libraries/tools/runtime" as File
@@ -148,6 +150,7 @@ project(':kotlin-allopen').projectDir = "$rootDir/libraries/tools/kotlin-allopen
 project(':kotlin-noarg').projectDir = "$rootDir/libraries/tools/kotlin-noarg" as File
 project(':kotlin-sam-with-receiver').projectDir = "$rootDir/libraries/tools/kotlin-sam-with-receiver" as File
 project(':kotlin-gradle-subplugin-example').projectDir = "$rootDir/libraries/examples/kotlin-gradle-subplugin-example" as File
+project(':examples:annotation-processor-example').projectDir = "$rootDir/libraries/examples/annotation-processor-example" as File
 
 def setBuildFile(ProjectDescriptor project) {
     if (project.projectDir.listFiles().any { file -> file.name == "build.gradle.kts"}) {
