@@ -33,7 +33,6 @@ configure<JavaPluginConvention> {
 
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()
 
 task<Copy>("dist") {
     into(rootProject.extra["distDir"].toString())

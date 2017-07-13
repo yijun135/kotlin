@@ -11,4 +11,3 @@ configureKotlinProjectSourcesDefault()
 configureKotlinProjectResourcesDefault()
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

@@ -17,4 +17,3 @@ tasks.withType<Jar> {
     archiveName = "kotlin-script-runtime.jar"
 }
 
-fixKotlinTaskDependencies()

@@ -29,4 +29,3 @@ configureKotlinProjectSources("compiler/cli/src",
 configureKotlinProjectResourcesDefault()
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

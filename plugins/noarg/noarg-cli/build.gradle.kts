@@ -29,4 +29,3 @@ ideaPlugin {
     from(jar)
 }
 
-fixKotlinTaskDependencies()

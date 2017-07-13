@@ -29,5 +29,4 @@ tasks.withType<Jar> {
     }
 }
 
-fixKotlinTaskDependencies()
 

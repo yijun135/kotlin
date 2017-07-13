@@ -22,7 +22,6 @@ dependencies {
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()
 
 val jar: Jar by tasks
 

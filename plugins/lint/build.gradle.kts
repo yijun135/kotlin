@@ -22,4 +22,3 @@ configureKotlinProjectSources("android-annotations/src",
                               "lint-idea/src")
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

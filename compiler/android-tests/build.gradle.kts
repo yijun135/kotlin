@@ -23,7 +23,6 @@ dependencies {
 configureKotlinProjectSourcesDefault()
 configureKotlinProjectTestsDefault()
 
-fixKotlinTaskDependencies()
 
 tasks.withType<Test> {
     workingDir = rootDir

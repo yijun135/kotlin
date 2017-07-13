@@ -63,17 +63,6 @@ fun Project.testsJar(body: Jar.() -> Unit): Jar {
     return testsJar
 }
 
-fun Project.fixKotlinTaskDependencies(): Unit {
-//    the<JavaPluginConvention>().sourceSets.all { sourceset ->
-//        val taskName = if (sourceset.name == "main") "classes" else (sourceset.name + "Classes")
-//        tasks.withType<Task> {
-//            if (name == taskName) {
-//                dependsOn("copy${sourceset.name.capitalize()}KotlinClasses")
-//            }
-//        }
-//    }
-}
-
 fun Jar.setupRuntimeJar(implementationTitle: String): Unit {
     dependsOn(":prepare:build.version:prepare")
     manifest.attributes.apply {

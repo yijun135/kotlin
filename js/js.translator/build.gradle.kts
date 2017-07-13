@@ -15,4 +15,3 @@ dependencies {
 configureKotlinProjectSources("js.translator/src", "js.inliner/src", sourcesBaseDir = File(rootDir, "js"))
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

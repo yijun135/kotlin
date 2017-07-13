@@ -15,7 +15,6 @@ configureKotlinProjectTestsDefault()
 
 testsJar {}
 
-fixKotlinTaskDependencies()
 
 tasks.withType<Test> {
     dependsOnTaskIfExistsRec("dist", project = rootProject)

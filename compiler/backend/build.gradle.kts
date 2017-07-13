@@ -15,4 +15,3 @@ configureKotlinProjectSources("backend/src", "ir/backend.jvm/src", sourcesBaseDi
 configureKotlinProjectResourcesDefault()
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

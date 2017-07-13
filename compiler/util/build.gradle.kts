@@ -11,4 +11,3 @@ configureKotlinProjectSourcesDefault()
 configureKotlinProjectResources("resources", sourcesBaseDir = rootDir)
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

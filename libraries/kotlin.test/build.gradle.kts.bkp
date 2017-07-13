@@ -45,4 +45,3 @@ tasks.withType<Jar> {
     exclude("kotlin/internal/OnlyInputTypes*", "kotlin/internal/InlineOnly*", "kotlin/internal")
 }
 
-fixKotlinTaskDependencies()

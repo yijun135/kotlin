@@ -45,4 +45,3 @@ test.apply {
     ignoreFailures = true
 }
 
-fixKotlinTaskDependencies()

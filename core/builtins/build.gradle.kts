@@ -44,4 +44,3 @@ tasks.withType<KotlinCompile> {
     dependsOn(serialize)
 }
 
-fixKotlinTaskDependencies()

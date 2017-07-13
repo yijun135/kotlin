@@ -26,4 +26,3 @@ dist {
     from(jar)
 }
 
-fixKotlinTaskDependencies()

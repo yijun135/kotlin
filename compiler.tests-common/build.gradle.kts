@@ -32,4 +32,3 @@ dependencies {
 configureKotlinProjectSources("tests-common", sourcesBaseDir = File(rootDir, "compiler"))
 configureKotlinProjectNoTests()
 
-fixKotlinTaskDependencies()

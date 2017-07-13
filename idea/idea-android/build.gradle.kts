@@ -52,4 +52,3 @@ tasks.withType<Test> {
 
 testsJar {}
 
-fixKotlinTaskDependencies()

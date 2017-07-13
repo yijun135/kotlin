@@ -25,7 +25,6 @@ configureKotlinProjectTestsDefault()
 
 testsJar {}
 
-fixKotlinTaskDependencies()
 
 tasks.withType<Test> {
     workingDir = rootDir

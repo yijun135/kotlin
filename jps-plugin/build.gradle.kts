@@ -34,7 +34,6 @@ configureKotlinProjectResourcesDefault()
 configureKotlinProjectTests("test", sourcesBaseDir = File(projectDir, "jps-tests"))
 configureKotlinProjectTestResources("testData")
 
-fixKotlinTaskDependencies()
 
 tasks.withType<Test> {
     jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1200m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")

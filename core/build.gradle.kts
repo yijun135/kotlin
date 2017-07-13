@@ -28,5 +28,4 @@ tasks.withType<KotlinCompile> {
     dependsOn(protobufLiteTask)
 }
 
-fixKotlinTaskDependencies()
 

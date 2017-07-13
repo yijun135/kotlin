@@ -24,4 +24,3 @@ tasks.withType<Test> {
     ignoreFailures = true
 }
 
-fixKotlinTaskDependencies()

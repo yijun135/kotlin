@@ -31,4 +31,3 @@ test.apply {
 
 testsJar {}
 
-fixKotlinTaskDependencies()

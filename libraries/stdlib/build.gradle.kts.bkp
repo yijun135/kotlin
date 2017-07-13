@@ -46,4 +46,3 @@ tasks.withType<KotlinCompile> {
                     "-Xdump-declarations-to", File(buildDir, "declarations/stdlib-declarations.json").canonicalPath)
 }
 
-fixKotlinTaskDependencies()
