@@ -18,12 +18,14 @@ dependencies {
 }
 
 configureKotlinProjectSourcesDefault()
+configureKotlinProjectResources("src") {
+    include("META-INF/**")
+}
 configureKotlinProjectTestsDefault()
 
 val jar: Jar by tasks
 jar.apply {
     setupRuntimeJar("Kotlin SourceSections Compiler Plugin")
-    from(fileTree("$projectDir/src")) { include("META-INF/**") }
     archiveName = "kotlin-source-sections-compiler-plugin.jar"
 }
 
