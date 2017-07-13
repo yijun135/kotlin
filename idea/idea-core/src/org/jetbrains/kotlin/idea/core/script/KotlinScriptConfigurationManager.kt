@@ -235,13 +235,13 @@ class KotlinScriptConfigurationManager(
             scriptDefinition: KotlinScriptDefinition
     ): Boolean {
         val path = file.path
-        val requestInProgress = requests[path]
+        val current = requests[path]
 
-        if (!shouldSendNewRequest(file, requestInProgress)) {
+        if (!shouldSendNewRequest(file, current)) {
             return false
         }
 
-        requestInProgress?.requestInProgress?.future?.cancel(true)
+        current?.requestInProgress?.future?.cancel(true)
 
         val (currentTimeStamp, newFuture) = sendRequest(path, scriptDefinition, file)
 
