@@ -15,19 +15,19 @@ dependencies {
     compile(project(":js:js.ast"))
     compile(project(":js:js.frontend"))
     compile(project(":idea:idea-test-framework"))
-    compile(project(":build-common", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":compiler", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":compiler:tests-java8", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":compiler:container", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":idea", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":idea:idea-android", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":jps-plugin", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":plugins:plugins-tests", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":plugins:android-extensions-idea", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":plugins:kapt3", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":plugins:uast-kotlin", configuration = "tests-jar")) { isTransitive = false }
-    compile(project(":js:js.tests", configuration = "tests-jar")) { isTransitive = false }
     compile(project(":kotlin-test:kotlin-test-jvm"))
+    compile(projectTests(":build-common"))
+    compile(projectTests(":compiler"))
+    compile(projectTests(":compiler:tests-java8"))
+    compile(projectTests(":compiler:container"))
+    compile(projectTests(":idea"))
+    compile(projectTests(":idea:idea-android"))
+    compile(projectTests(":jps-plugin"))
+    compile(projectTests(":plugins:plugins-tests"))
+    compile(projectTests(":plugins:android-extensions-idea"))
+    compile(projectTests(":plugins:kapt3"))
+    compile(projectTests(":plugins:uast-kotlin"))
+    compile(projectTests(":js:js.tests"))
     compile(protobufFull())
     compileOnly(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(project(":compiler.tests-common"))

@@ -21,8 +21,8 @@ dependencies {
     testCompile(project(":compiler:incremental-compilation-impl"))
     testCompileOnly(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(commonDep("junit:junit"))
-    testCompile(project(":build-common", configuration = "tests-jar"))
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
+    testCompile(projectTests(":build-common"))
     (rootProject.extra["compilerModules"] as Array<String>).forEach {
         testRuntime(project(it))
     }

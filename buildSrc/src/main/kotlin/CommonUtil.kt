@@ -124,6 +124,8 @@ fun DependencyHandler.projectDep(name: String): Dependency = project(name, confi
 fun DependencyHandler.projectDepIntransitive(name: String): Dependency =
         project(name, configuration = "default").apply { isTransitive = false }
 
+fun DependencyHandler.projectTests(name: String): Dependency = project(name, configuration = "tests-jar").apply { isTransitive = false }
+
 val protobufLiteProject = ":custom-dependencies:protobuf-lite"
 fun DependencyHandler.protobufLite(): ProjectDependency =
         project(protobufLiteProject, configuration = "default").apply { isTransitive = false }

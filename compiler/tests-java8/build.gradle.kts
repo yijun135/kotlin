@@ -20,7 +20,7 @@ dependencies {
     testCompile(project(":kotlin-script-runtime"))
     testCompile(project(":kotlin-runtime"))
     testCompile(project(":kotlin-reflect"))
-    testCompile(project(":compiler", configuration = "tests-jar")) { isTransitive = false }
+    testCompile(projectTests(":compiler"))
     testRuntime(project(":compiler:preloader"))
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))

@@ -15,8 +15,8 @@ dependencies {
     testCompile(project(":compiler:cli"))
     testCompile(project(":compiler:frontend.java"))
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
-    testCompile(project(":idea", configuration = "tests-jar")) { isTransitive = false }
-    testCompile(project(":idea:idea-android", configuration = "tests-jar")) { isTransitive = false }
+    testCompile(projectTests(":idea"))
+    testCompile(projectTests(":idea:idea-android"))
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testRuntime(project(":plugins:android-extensions-jps"))
     testRuntime(project(":plugins:sam-with-receiver-ide"))

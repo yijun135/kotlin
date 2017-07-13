@@ -20,10 +20,10 @@ dependencies {
     testCompile(project(":idea:idea-android")) { isTransitive = false }
     testCompile(project(":plugins:lint")) { isTransitive = false }
     testCompile(project(":plugins:uast-kotlin"))
+    testCompile(project(":kotlin-test:kotlin-test-jvm"))
+    testCompile(projectTests(":jps-plugin"))
     testCompile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(ideaPluginDeps("*.jar", plugin = "android", subdir = "lib/jps"))
-    testCompile(project(":jps-plugin", configuration = "tests-jar"))
-    testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testRuntime(project(":jps-plugin"))
     testRuntime(ideaSdkDeps("*.jar"))
     testRuntime(ideaPluginDeps("idea-junit", "resources_en", plugin = "junit"))

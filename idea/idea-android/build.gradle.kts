@@ -13,13 +13,16 @@ dependencies {
     compile(ideaPluginDeps("gradle-tooling-api", plugin = "gradle"))
     compile(ideaPluginDeps("android", "common", "sdk-common", "layoutlib-api", plugin = "android"))
     compile(preloadedDeps("uast-common", "uast-java"))
+
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
-    testCompile(project(":idea", configuration = "tests-jar")) { isTransitive = false }
     testCompile(project(":plugins:lint")) { isTransitive = false }
+    testCompile(projectTests(":idea"))
     testCompile(ideaPluginDeps("android-common", "sdklib", plugin = "android"))
     testCompile(ideaPluginDeps("properties", plugin = "properties"))
+    testCompile(ideaSdkDeps("gson"))
+
     testRuntime(preloadedDeps("uast-common", "uast-java"))
     testRuntime(project(":plugins:android-extensions-idea"))
     testRuntime(project(":plugins:sam-with-receiver-ide"))

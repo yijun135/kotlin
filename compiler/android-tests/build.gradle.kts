@@ -12,7 +12,7 @@ dependencies {
     testCompile(project(":compiler:incremental-compilation-impl"))
     testCompile(project(":core"))
     testCompile(project(":compiler:frontend.java"))
-    testCompile(project(":jps-plugin", configuration = "tests-jar"))
+    testCompile(projectTests(":jps-plugin"))
     testCompile(commonDep("junit:junit"))
     testCompile(ideaSdkDeps("jps-model.jar", subdir = "jps"))
     testCompile(ideaSdkDeps("groovy-all"))
