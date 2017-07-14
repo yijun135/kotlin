@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.js.coroutine.CoroutineTransformer;
 import org.jetbrains.kotlin.js.facade.exceptions.TranslationException;
 import org.jetbrains.kotlin.js.inline.JsInliner;
 import org.jetbrains.kotlin.js.inline.clean.LabeledBlockToDoWhileTransformation;
+import org.jetbrains.kotlin.js.inline.clean.RemoveDuplicateImportsKt;
 import org.jetbrains.kotlin.js.inline.clean.RemoveUnusedImportsKt;
 import org.jetbrains.kotlin.js.inline.clean.ResolveTemporaryNamesKt;
 import org.jetbrains.kotlin.js.sourceMap.SourceFilePathResolver;
@@ -188,6 +189,7 @@ public final class K2JSTranslator {
             metadataHeader = KotlinJavascriptSerializationUtil.INSTANCE.serializeHeader(null).toByteArray();
         }
 
+        RemoveDuplicateImportsKt.removeDuplicateImports(translationResult.getProgram());
         ResolveTemporaryNamesKt.resolveTemporaryNames(translationResult.getProgram());
         ProgressIndicatorAndCompilationCanceledStatus.checkCanceled();
         if (hasError(diagnostics)) return new TranslationResult.Fail(diagnostics);
