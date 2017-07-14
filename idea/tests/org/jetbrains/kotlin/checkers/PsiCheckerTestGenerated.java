@@ -1015,5 +1015,11 @@ public class PsiCheckerTestGenerated extends AbstractPsiCheckerTest {
             String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/diagnosticsMessage/operatorCallDiagnosticsOnInOperator.kt");
             doTest(fileName);
         }
+
+        @TestMetadata("operatorGetValueMessage.kt")
+        public void testOperatorGetValueMessage() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("idea/testData/checker/diagnosticsMessage/operatorGetValueMessage.kt");
+            doTest(fileName);
+        }
     }
 }
