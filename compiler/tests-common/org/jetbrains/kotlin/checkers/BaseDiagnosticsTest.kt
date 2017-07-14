@@ -50,20 +50,6 @@ abstract class BaseDiagnosticsTest : KotlinMultiFileTestWithJava<TestModule, Tes
     override fun createTestFile(module: TestModule?, fileName: String, text: String, directives: Map<String, String>): TestFile =
             TestFile(module, fileName, text, directives)
 
-    override fun doMultiFileTestWithJavac(
-            file: File,
-            modules: @JvmSuppressWildcards Map<String, ModuleAndDependencies>,
-            testFiles: List<TestFile>
-    ) {
-        for (moduleAndDependencies in modules.values) {
-            moduleAndDependencies.module.getDependencies().addAll(moduleAndDependencies.dependencies.map { name ->
-                modules[name]?.module ?: error("Dependency not found: $name for module ${moduleAndDependencies.module.name}")
-            })
-        }
-
-        analyzeAndCheck(file, testFiles, useJavac = true)
-    }
-
     override fun doMultiFileTest(
             file: File,
             modules: @JvmSuppressWildcards Map<String, ModuleAndDependencies>,
@@ -78,7 +64,7 @@ abstract class BaseDiagnosticsTest : KotlinMultiFileTestWithJava<TestModule, Tes
         analyzeAndCheck(file, testFiles)
     }
 
-    protected abstract fun analyzeAndCheck(testDataFile: File, files: List<TestFile>, useJavac: Boolean = false)
+    protected abstract fun analyzeAndCheck(testDataFile: File, files: List<TestFile>)
 
     protected fun getKtFiles(testFiles: List<TestFile>, includeExtras: Boolean): List<KtFile> {
         var declareFlexibleType = false

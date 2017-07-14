@@ -103,15 +103,6 @@ public abstract class KotlinMultiFileTestWithJava<M, F> extends KotlinTestWithEn
         return false;
     }
 
-    protected void doTestWithJavac(String filePath) throws Exception {
-        File file = new File(filePath);
-        String expectedText = KotlinTestUtils.doLoadFile(file);
-        Map<String, ModuleAndDependencies> modules = new HashMap<>();
-        List<F> testFiles = createTestFiles(file, expectedText, modules);
-
-        doMultiFileTestWithJavac(file, modules, testFiles);
-    }
-
     protected void doTest(String filePath) throws Exception {
         File file = new File(filePath);
         String expectedText = KotlinTestUtils.doLoadFile(file);
@@ -127,9 +118,7 @@ public abstract class KotlinMultiFileTestWithJava<M, F> extends KotlinTestWithEn
 
     protected abstract void doMultiFileTest(File file, Map<String, ModuleAndDependencies> modules, List<F> files) throws Exception;
 
-    protected void doMultiFileTestWithJavac(File file, Map<String, ModuleAndDependencies> modules, List<F> files) {}
-
-    private List<F> createTestFiles(File file, String expectedText, Map<String, ModuleAndDependencies> modules) {
+    protected List<F> createTestFiles(File file, String expectedText, Map<String, ModuleAndDependencies> modules) {
         return KotlinTestUtils.createTestFiles(file.getName(), expectedText, new KotlinTestUtils.TestFileFactory<M, F>() {
             @Override
             public F createFile(

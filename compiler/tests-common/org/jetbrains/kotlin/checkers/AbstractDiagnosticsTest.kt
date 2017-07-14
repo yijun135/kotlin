@@ -25,9 +25,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport
 import org.jetbrains.kotlin.cli.jvm.compiler.JvmPackagePartProvider
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.config.*
-import org.jetbrains.kotlin.container.StorageComponentContainer
 import org.jetbrains.kotlin.container.get
-import org.jetbrains.kotlin.container.useImpl
 import org.jetbrains.kotlin.context.ModuleContext
 import org.jetbrains.kotlin.context.SimpleGlobalContext
 import org.jetbrains.kotlin.context.withModule
@@ -45,9 +43,6 @@ import org.jetbrains.kotlin.diagnostics.Errors.*
 import org.jetbrains.kotlin.frontend.java.di.createContainerForTopDownAnalyzerForJvm
 import org.jetbrains.kotlin.frontend.java.di.initJvmBuiltInsForTopDownAnalysis
 import org.jetbrains.kotlin.incremental.components.LookupTracker
-import org.jetbrains.kotlin.javac.components.JavacBasedClassFinder
-import org.jetbrains.kotlin.javac.components.JavacBasedSourceElementFactory
-import org.jetbrains.kotlin.javac.components.StubJavaResolverCache
 import org.jetbrains.kotlin.load.java.lazy.SingleModuleClassResolver
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -76,7 +71,7 @@ import java.util.function.Predicate
 import java.util.regex.Pattern
 
 abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
-    override fun analyzeAndCheck(testDataFile: File, files: List<TestFile>, useJavac: Boolean) {
+    override fun analyzeAndCheck(testDataFile: File, files: List<TestFile>) {
         val groupedByModule = files.groupBy(TestFile::module)
 
         var lazyOperationsLog: LazyOperationsLog? = null
@@ -99,12 +94,6 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
         val modules = createModules(groupedByModule, context.storageManager)
         val moduleBindings = HashMap<TestModule?, BindingContext>()
 
-        val allKtFiles = groupedByModule.values.flatMap { getKtFiles(it, true) }
-
-        if (useJavac) {
-            environment.registerJavac(kotlinFiles = allKtFiles)
-        }
-
         for ((testModule, testFilesInModule) in groupedByModule) {
             val ktFiles = getKtFiles(testFilesInModule, true)
 
@@ -116,7 +105,7 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
             val separateModules = groupedByModule.size == 1 && groupedByModule.keys.single() == null
             val result = analyzeModuleContents(
                     moduleContext, ktFiles, CliLightClassGenerationSupport.NoScopeRecordCliBindingTrace(),
-                    languageVersionSettings, separateModules, useJavac
+                    languageVersionSettings, separateModules
             )
             if (oldModule != result.moduleDescriptor) {
                 // For common modules, we use DefaultAnalyzerFacade who creates ModuleDescriptor instances by itself
@@ -267,13 +256,12 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
     private fun getLazyLogFile(testDataFile: File): File =
             File(FileUtil.getNameWithoutExtension(testDataFile.absolutePath) + ".lazy.log")
 
-    private fun analyzeModuleContents(
+    protected open fun analyzeModuleContents(
             moduleContext: ModuleContext,
             files: List<KtFile>,
             moduleTrace: BindingTrace,
             languageVersionSettings: LanguageVersionSettings,
-            separateModules: Boolean,
-            useJavac: Boolean
+            separateModules: Boolean
     ): AnalysisResult {
         @Suppress("NAME_SHADOWING")
         var files = files
@@ -292,9 +280,6 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
                     moduleTrace,
                     environment.configuration.copy().apply {
                         this.languageVersionSettings = languageVersionSettings
-                        if (useJavac) {
-                            put(JVMConfigurationKeys.USE_JAVAC, true)
-                        }
                     },
                     { scope -> JvmPackagePartProvider(environment, scope) }
             )
@@ -323,12 +308,6 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
         val moduleContentScope = GlobalSearchScope.allScope(moduleContext.project)
         val moduleClassResolver = SingleModuleClassResolver()
 
-        fun StorageComponentContainer.useJavac() {
-            useImpl<JavacBasedClassFinder>()
-            useImpl<StubJavaResolverCache>()
-            useImpl<JavacBasedSourceElementFactory>()
-        }
-
         val container = createContainerForTopDownAnalyzerForJvm(
                 moduleContext,
                 moduleTrace,
@@ -338,8 +317,7 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
                 JvmPackagePartProvider(environment, moduleContentScope),
                 moduleClassResolver,
                 JvmTarget.JVM_1_6,
-                languageVersionSettings,
-                configureJavaClassFinder =  if (useJavac) StorageComponentContainer::useJavac else null
+                languageVersionSettings
         )
 
         container.initJvmBuiltInsForTopDownAnalysis()
@@ -354,14 +332,6 @@ abstract class AbstractDiagnosticsTest : BaseDiagnosticsTest() {
 
         return AnalysisResult.success(moduleTrace.bindingContext, moduleDescriptor)
     }
-
-    protected open fun analyzeModuleContents(
-            moduleContext: ModuleContext,
-            files: List<KtFile>,
-            moduleTrace: BindingTrace,
-            languageVersionSettings: LanguageVersionSettings,
-            separateModules: Boolean
-    ): AnalysisResult = analyzeModuleContents(moduleContext, files, moduleTrace, languageVersionSettings, separateModules, false)
 
     private fun getCommonCodeFilesForPlatformSpecificModule(moduleDescriptor: ModuleDescriptorImpl): List<KtFile> {
         // We assume that a platform-specific module _implements_ all declarations from common modules which are immediate dependencies.
