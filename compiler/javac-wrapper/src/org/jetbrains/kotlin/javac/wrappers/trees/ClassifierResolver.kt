@@ -59,12 +59,47 @@ class ClassifierResolver(private val javac: JavacWrapper) {
             return classes
         }
 
-    private fun TreePath.tryToResolve(): JavaClassifier? {
-        val pathSegments = leaf.toString()
-                .substringBefore("<")
-                .substringAfter("@")
-                .split(".")
+    private fun pathSegments(path: String): List<String> {
+        fun findGenericParts(text: String): List<IntRange> {
+            val ranges = arrayListOf<IntRange>()
+            var numberOfBraces = 0
+            var index = 0
+            text.forEachIndexed { i, char ->
+                when (char) {
+                    '<' -> {
+                        if (numberOfBraces == 0) {
+                            index = i
+                        }
+                        numberOfBraces++
+                    }
+                    '>' -> {
+                        if (numberOfBraces == 1) {
+                            ranges.add(IntRange(index, i))
+                        }
+                        numberOfBraces--
+                    }
+                }
+            }
 
+            return ranges
+        }
+
+        val genericParts = findGenericParts(path).takeIf { it.isNotEmpty() } ?: return path.split(".")
+        var diff = 0
+        var newPath = path
+
+        genericParts.forEach {
+            val start = it.start - diff
+            val end = it.endInclusive + 1 - diff
+            newPath = newPath.removeRange(start, end)
+            diff += (end - start)
+        }
+
+        return newPath.split(".")
+    }
+
+    private fun TreePath.tryToResolve(): JavaClassifier? {
+        val pathSegments = leaf.toString().substringAfter("@").let { pathSegments(it) }
         val firstSegment = pathSegments.first()
 
         val asteriskImports = {
@@ -212,6 +247,7 @@ private class CurrentClassAndInnerScope(override val javac: JavacWrapper,
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
         enclosingClasses.forEach {
+            if (it.fqName?.shortName() == Name.identifier(name)) return getJavaClassFromPathSegments(it, pathSegments)
             it.findInner(Name.identifier(name))?.let { javaClass ->
                 return getJavaClassFromPathSegments(javaClass, pathSegments)
             }

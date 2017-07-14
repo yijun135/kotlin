@@ -111,7 +111,7 @@ sealed class TreeBasedClassifierType<out T : JCTree>(
         get() = javac.resolve(treePath)
 
     override val classifierQualifiedName: String
-        get() = (classifier as? JavaClass)?.fqName?.asString() ?: treePath.leaf.toString()
+        get() = (classifier as? JavaClass)?.fqName?.asString() ?: treePath.leaf.toString().substringBefore("<")
 
     override val presentableText: String
         get() = classifierQualifiedName

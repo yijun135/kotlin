@@ -19,14 +19,14 @@ package org.jetbrains.kotlin.javac
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.SearchScope
 import org.jetbrains.kotlin.descriptors.Visibility
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.load.java.structure.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.load.java.structure.impl.VirtualFileBoundJavaClass
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.psi.*
 
 class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
                              private val javac: JavacWrapper) {
@@ -117,7 +117,7 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
         get() {
             val classOrObjects = arrayListOf<KtClassOrObject>()
 
-            var outerClass: KtClassOrObject? = this.containingClassOrObject ?: return emptyList()
+            var outerClass: KtClassOrObject? = this.containingClassOrObject
 
             while (outerClass != null) {
                 classOrObjects.add(outerClass)
@@ -196,7 +196,13 @@ class MockKotlinClassifier(override val fqName: FqName,
         get() = throw UnsupportedOperationException("Should not be called")
 
     override val fields: Collection<JavaField>
-        get() = throw UnsupportedOperationException("Should not be called")
+        get() = classOrObject.declarations
+                .filterIsInstance<KtProperty>()
+                .map(::MockKotlinField) + classOrObject.companionObjects.flatMap {
+            it.declarations
+                    .filterIsInstance<KtProperty>()
+                    .map(::MockKotlinField)
+        }
 
     override val constructors: Collection<JavaConstructor>
         get() = throw UnsupportedOperationException("Should not be called")
@@ -246,6 +252,40 @@ class MockKotlinClassifierType(override val classifier: JavaClassifier) : JavaCl
     override val isDeprecatedInJavaDoc: Boolean
         get() = throw UnsupportedOperationException("Should not be called")
 
+}
+
+class MockKotlinField(private val property: KtProperty) : JavaField {
+    override val name: Name
+        get() = property.nameAsSafeName
+    override val annotations: Collection<JavaAnnotation>
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val isDeprecatedInJavaDoc: Boolean
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val isAbstract: Boolean
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val isStatic: Boolean
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val isFinal: Boolean
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val visibility: Visibility
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val containingClass: JavaClass
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val isEnumEntry: Boolean
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val type: JavaType
+        get() = throw UnsupportedOperationException("Should not be called")
+    override val initializerValue: Any?
+        get() {
+            if (!property.hasModifier(KtTokens.CONST_KEYWORD)) return null
+            val initializer = property.initializer ?: return null
+
+            return initializer.text.toIntOrNull() ?: initializer.text
+        }
+    override val hasConstantNotNullInitializer: Boolean
+        get() = throw UnsupportedOperationException("Should not be called")
+
+    override fun findAnnotation(fqName: FqName) = throw UnsupportedOperationException("Should not be called")
 }
 
 private fun KtClassOrObject.computeClassId(): ClassId? =
