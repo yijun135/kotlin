@@ -107,12 +107,18 @@ object Renderers {
         "$declarationKindWithSpace'${it.name.asString()}'"
     }
 
-    @JvmField val NAME_OF_PARENT_OR_FILE = Renderer<DeclarationDescriptor> {
+    @JvmField val NAME_OF_CONTAINING_DECLARATION_OR_FILE = Renderer<DeclarationDescriptor> {
         if (DescriptorUtils.isTopLevelDeclaration(it) && it is DeclarationDescriptorWithVisibility && it.visibility == Visibilities.PRIVATE) {
             "file"
         }
         else {
-            "'" + it.containingDeclaration!!.name + "'"
+            val containingDeclaration = it.containingDeclaration
+            if (containingDeclaration is PackageFragmentDescriptor) {
+                containingDeclaration.fqName.asString().wrapIntoQuotes()
+            }
+            else {
+                containingDeclaration!!.name.asString().wrapIntoQuotes()
+            }
         }
     }
 
@@ -495,6 +501,8 @@ object Renderers {
         }
         append("(").append(renderTypes(inferenceErrorData.valueArgumentsTypes, context)).append(")")
     }
+
+    private fun String.wrapIntoQuotes(): String = "'$this'"
 
     private val WHEN_MISSING_LIMIT = 7
 
