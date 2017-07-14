@@ -1,0 +1,3 @@
+package
+
+public fun foo(/*0*/ i: @setparam:kotlin.Suppress(names = {}) kotlin.Int): kotlin.Unit

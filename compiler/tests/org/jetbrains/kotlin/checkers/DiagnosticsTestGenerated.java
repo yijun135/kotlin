@@ -1617,6 +1617,12 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                     doTest(fileName);
                 }
 
+                @TestMetadata("setparamOnFunctionParameter.kt")
+                public void testSetparamOnFunctionParameter() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/annotations/withUseSiteTarget/setparamOnFunctionParameter.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("SetterAnnotations.kt")
                 public void testSetterAnnotations() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/annotations/withUseSiteTarget/SetterAnnotations.kt");
