@@ -58,14 +58,15 @@ public final class TranslationUtils {
     }
 
     @NotNull
-    public static JsPropertyInitializer translateFunctionAsEcma5PropertyDescriptor(@NotNull JsFunction function,
-            @NotNull FunctionDescriptor descriptor,
-            @NotNull TranslationContext context) {
+    public static JsPropertyInitializer translateFunctionAsEcma5PropertyDescriptor(
+            @NotNull JsFunction function, @NotNull FunctionDescriptor descriptor,
+            @NotNull TranslationContext context
+    ) {
         JsExpression functionExpression = function;
         if (InlineUtil.isInline(descriptor)) {
             InlineMetadata metadata = InlineMetadata.compose(function, descriptor, context);
             PsiElement sourceInfo = KotlinSourceElementKt.getPsi(descriptor.getSource());
-            functionExpression = metadata.functionWithMetadata(sourceInfo);
+            functionExpression = metadata.functionWithMetadata(context, sourceInfo);
         }
 
         if (DescriptorUtils.isExtension(descriptor) ||

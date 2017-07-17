@@ -98,11 +98,14 @@ fun TranslationContext.translateFunction(declaration: KtDeclarationWithBody, fun
     function.functionDescriptor = descriptor
 }
 
-fun TranslationContext.wrapWithInlineMetadata(function: JsFunction, descriptor: FunctionDescriptor): JsExpression {
+fun TranslationContext.wrapWithInlineMetadata(
+        outerContext: TranslationContext,
+        function: JsFunction, descriptor: FunctionDescriptor
+): JsExpression {
     val sourceInfo = descriptor.source.getPsi()
     return if (descriptor.isInline && descriptor.isEffectivelyPublicApi) {
         val metadata = InlineMetadata.compose(function, descriptor, this)
-        metadata.functionWithMetadata(sourceInfo)
+        metadata.functionWithMetadata(outerContext, sourceInfo)
     }
     else {
         val block = if (descriptor.isInline) {
@@ -114,6 +117,6 @@ fun TranslationContext.wrapWithInlineMetadata(function: JsFunction, descriptor: 
         else {
             null
         }
-        if (block != null) InlineMetadata.wrapFunction(FunctionWithWrapper(function, block), sourceInfo) else function
+        if (block != null) InlineMetadata.wrapFunction(outerContext, FunctionWithWrapper(function, block), sourceInfo) else function
     }
 }
