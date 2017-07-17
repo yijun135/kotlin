@@ -152,8 +152,8 @@ public class AsmUtil {
         return isIntPrimitive(type) || type == Type.LONG_TYPE || type == Type.BOOLEAN_TYPE;
     }
 
-    public static boolean isIntPrimitiveOrBoolean(Type type) {
-        return isIntPrimitive(type) || type == Type.BOOLEAN_TYPE;
+    public static boolean isIntOrLongPrimitive(Type type) {
+        return isIntPrimitive(type) || type == Type.LONG_TYPE;
     }
 
     public static boolean isNumberPrimitiveOrBoolean(Type type) {
