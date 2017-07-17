@@ -16,8 +16,11 @@
 
 package org.jetbrains.kotlin.checkers.javac
 
+import com.intellij.openapi.util.io.FileUtil
 import org.jetbrains.kotlin.checkers.AbstractDiagnosticsTest
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
 
 abstract class AbstractDiagnosticsUsingJavacTest : AbstractDiagnosticsTest() {
@@ -25,9 +28,25 @@ abstract class AbstractDiagnosticsUsingJavacTest : AbstractDiagnosticsTest() {
     override fun analyzeAndCheck(testDataFile: File, files: List<TestFile>) {
         val groupedByModule = files.groupBy(TestFile::module)
         val allKtFiles = groupedByModule.values.flatMap { getKtFiles(it, true) }
-        environment.registerJavac(kotlinFiles = allKtFiles)
+
+        val jdk6 = System.getenv("JDK_16")
+        val jdkClassesRootsFromJre = PathUtil.getJdkClassesRootsFromJre(getJreHome(jdk6))
+        val mockJdk = listOf(File(getHomeDirectory(), "compiler/testData/mockJDK/jre/lib/rt.jar"),
+                             jdkClassesRootsFromJre.find { it.name == "classes.jar" })
+                .filterNotNull()
+        environment.registerJavac(kotlinFiles = allKtFiles, bootClasspath = mockJdk)
         environment.configuration.put(JVMConfigurationKeys.USE_JAVAC, true)
         super.analyzeAndCheck(testDataFile, files)
+    }
+
+    private fun getJreHome(jdkHome: String): String {
+        val jre = File(jdkHome, "jre")
+        return if (jre.isDirectory) jre.path else jdkHome
+    }
+
+    private fun getHomeDirectory(): String {
+        val resourceRoot = PathUtil.getResourcePathForClass(KotlinTestUtils::class.java)
+        return FileUtil.toSystemIndependentName(resourceRoot.parentFile.parentFile.parent)
     }
 
 }
