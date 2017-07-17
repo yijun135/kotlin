@@ -50,7 +50,7 @@ class TreeBasedClass(
             annotations.find { it.classId?.asSingleFqName() == fqName }
 
     override val isDeprecatedInJavaDoc: Boolean
-        get() = false
+        get() = javac.isDeprecatedInJavaDoc(treePath)
 
     override val isAbstract: Boolean
         get() = tree.modifiers.isAbstract || ((isAnnotationType || isEnum) && methods.any { it.isAbstract })

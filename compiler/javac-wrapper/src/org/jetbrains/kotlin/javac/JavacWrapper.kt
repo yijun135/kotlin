@@ -35,6 +35,7 @@ import com.sun.tools.javac.jvm.ClassReader
 import com.sun.tools.javac.main.JavaCompiler
 import com.sun.tools.javac.model.JavacElements
 import com.sun.tools.javac.model.JavacTypes
+import com.sun.tools.javac.tree.DCTree
 import com.sun.tools.javac.tree.JCTree
 import com.sun.tools.javac.util.Context
 import com.sun.tools.javac.util.Log
@@ -103,6 +104,8 @@ class JavacWrapper(
     private val fileManager = context[JavaFileManager::class.java] as JavacFileManager
 
     init {
+        // keep javadoc comments
+        javac.keepComments = true
         // use rt.jar instead of lib/ct.sym
         fileManager.setSymbolFileEnabled(false)
         fileManager.setLocation(StandardLocation.CLASS_PATH, jvmClasspathRoots)
@@ -272,6 +275,9 @@ class JavacWrapper(
             else {
                 null
             }
+
+    fun isDeprecatedInJavaDoc(treePath: TreePath) =
+            (trees.getDocCommentTree(treePath) as? DCTree.DCDocComment)?.comment?.isDeprecated ?: false
 
     private inline fun <reified T> Iterable<T>.toJavacList() = JavacList.from(this)
 

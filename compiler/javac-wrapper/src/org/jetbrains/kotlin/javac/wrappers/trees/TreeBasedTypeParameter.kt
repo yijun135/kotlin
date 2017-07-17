@@ -42,7 +42,7 @@ class TreeBasedTypeParameter(
             annotations.firstOrNull { it.classId?.asSingleFqName() == fqName }
 
     override val isDeprecatedInJavaDoc: Boolean
-        get() = false
+        get() = javac.isDeprecatedInJavaDoc(treePath)
 
     override val upperBounds: Collection<JavaClassifierType>
         get() = tree.bounds.mapNotNull {
