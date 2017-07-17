@@ -63,6 +63,7 @@ class JavacWrapper(
         kotlinFiles: Collection<KtFile>,
         arguments: Array<String>?,
         jvmClasspathRoots: List<File>,
+        bootClasspath: List<File>?,
         private val compileJava: Boolean,
         private val outputDirectory: File?,
         private val context: Context
@@ -105,6 +106,7 @@ class JavacWrapper(
         // use rt.jar instead of lib/ct.sym
         fileManager.setSymbolFileEnabled(false)
         fileManager.setLocation(StandardLocation.CLASS_PATH, jvmClasspathRoots)
+        bootClasspath?.let { fileManager.setLocation(StandardLocation.PLATFORM_CLASS_PATH, it) }
     }
 
     private val names = Names.instance(context)
