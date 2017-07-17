@@ -354,12 +354,12 @@ public final class Namer {
     }
 
     @NotNull
-    public static JsNameRef createInlineFunction() {
+    private static JsNameRef createInlineFunction() {
         return pureFqn(DEFINE_INLINE_FUNCTION, kotlinObject());
     }
 
     @NotNull
-    public static JsNameRef wrapFunction() {
+    private static JsNameRef wrapFunction() {
         return pureFqn(WRAP_FUNCTION, kotlinObject());
     }
 
@@ -370,6 +370,10 @@ public final class Namer {
                 return createInlineFunction();
             case WRAP_FUNCTION:
                 return wrapFunction();
+            case TO_BOXED_CHAR:
+                return pureFqn("toBoxedChar", kotlinObject());
+            case UNBOX_CHAR:
+                return pureFqn("unboxChar", kotlinObject());
             default:
                 throw new IllegalArgumentException("Unknown function: " + specialFunction);
         }

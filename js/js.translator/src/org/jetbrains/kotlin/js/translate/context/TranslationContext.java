@@ -834,6 +834,7 @@ public class TranslationContext {
                 JsExpression imported = Namer.createSpecialFunction(function);
                 JsName result = JsScope.declareTemporaryName(function.getSuggestedName());
                 MetadataProperties.setImported(result, true);
+                MetadataProperties.setSpecialFunction(result, function);
                 inlineFunctionContext.getImportBlock().getStatements().add(JsAstUtils.newVar(result, imported));
                 return result;
             });
