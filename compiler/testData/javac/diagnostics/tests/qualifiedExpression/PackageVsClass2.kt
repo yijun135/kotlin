@@ -16,10 +16,17 @@ package test;
 
 public class a {}
 
+// FILE: test/d.java
+package test;
+
+public class d {
+    public a.b getB() { return null; }
+}
+
 // FILE: b.kt
 package test
 
-val x = a.<!UNRESOLVED_REFERENCE!>b<!>()
+val x = d().<!MISSING_DEPENDENCY_CLASS!>getB<!>()
 
 // FILE: test/c.java
 package test;

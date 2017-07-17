@@ -56,7 +56,7 @@ class ClassifierResolver(private val javac: JavacWrapper) {
                 classes.add(outermostClass)
             }
 
-            return classes
+            return classes.reversed()
         }
 
     private fun pathSegments(path: String): List<String> {
@@ -230,7 +230,6 @@ private class CurrentClassAndInnerScope(override val javac: JavacWrapper,
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
         enclosingClasses.forEach {
-            if (it.fqName?.shortName() == Name.identifier(name)) return getJavaClassFromPathSegments(it, pathSegments)
             it.findInner(Name.identifier(name))?.let { javaClass ->
                 return getJavaClassFromPathSegments(javaClass, pathSegments)
             }
@@ -285,6 +284,7 @@ fun JavaClass.findInner(pathSegments: List<String>): JavaClass? =
 
 fun JavaClass.findInner(name: Name): JavaClass? {
     findInnerClass(name)?.let { return it }
+    if (fqName?.shortName() == name) return this
 
     supertypes.mapNotNull { it.classifier as? JavaClass }
             .forEach { javaClass -> javaClass.findInner(name)?.let { return it } }

@@ -149,6 +149,39 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             }
         }
 
+        @TestMetadata("compiler/testData/javac/diagnostics/tests/inners")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class Inners extends AbstractJavacDiagnosticsTest {
+            public void testAllFilesPresentInInners() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/inners"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("CurrentPackageAndInner.kt")
+            public void testCurrentPackageAndInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/CurrentPackageAndInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("ImportThriceNestedClass.kt")
+            public void testImportThriceNestedClass() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ImportThriceNestedClass.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InnerInInner.kt")
+            public void testInnerInInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/InnerInInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("ThriceNestedClass.kt")
+            public void testThriceNestedClass() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ThriceNestedClass.kt");
+                doTest(fileName);
+            }
+        }
+
         @TestMetadata("compiler/testData/javac/diagnostics/tests/qualifiedExpression")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)
@@ -304,6 +337,39 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("TopLevelClassVsPackage2.kt")
             public void testTopLevelClassVsPackage2() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/TopLevelClassVsPackage2.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+        }
+
+        @TestMetadata("compiler/testData/javac/diagnostics/tests/inners")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class Inners extends AbstractJavacDiagnosticsTest {
+            public void testAllFilesPresentInInners() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/inners"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("CurrentPackageAndInner.kt")
+            public void testCurrentPackageAndInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/CurrentPackageAndInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("ImportThriceNestedClass.kt")
+            public void testImportThriceNestedClass() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ImportThriceNestedClass.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InnerInInner.kt")
+            public void testInnerInInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/InnerInInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("ThriceNestedClass.kt")
+            public void testThriceNestedClass() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ThriceNestedClass.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
         }

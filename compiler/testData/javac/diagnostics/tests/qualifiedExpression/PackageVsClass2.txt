@@ -19,7 +19,7 @@ package a {
 }
 
 package test {
-    public val x: [ERROR : Type for a.b()]
+    public val x: a.b!
     public fun foo(): kotlin.Unit
 
     public open class a {
@@ -37,5 +37,13 @@ package test {
 
         // Static members
         public open fun getA(): a.a!
+    }
+
+    public open class d {
+        public constructor d()
+        public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+        public open fun getB(): a.b!
+        public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+        public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
     }
 }
