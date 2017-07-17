@@ -76,6 +76,24 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTest(fileName);
             }
 
+            @TestMetadata("CurrentPackageAndExplicitNestedImport.kt")
+            public void testCurrentPackageAndExplicitNestedImport() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/CurrentPackageAndExplicitNestedImport.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("CurrentPackageAndNestedAsteriskImport.kt")
+            public void testCurrentPackageAndNestedAsteriskImport() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/CurrentPackageAndNestedAsteriskImport.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("ImportGenericVsPackage.kt")
+            public void testImportGenericVsPackage() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/ImportGenericVsPackage.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("ImportProtectedClass.kt")
             public void testImportProtectedClass() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/ImportProtectedClass.kt");
@@ -94,15 +112,39 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTest(fileName);
             }
 
+            @TestMetadata("NestedAndTopLevelClassClash.kt")
+            public void testNestedAndTopLevelClassClash() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/NestedAndTopLevelClassClash.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("NestedClassClash.kt")
             public void testNestedClassClash() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/NestedClassClash.kt");
                 doTest(fileName);
             }
 
+            @TestMetadata("PackageExplicitAndStartImport.kt")
+            public void testPackageExplicitAndStartImport() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/PackageExplicitAndStartImport.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("PackagePrivateAndPublicNested.kt")
+            public void testPackagePrivateAndPublicNested() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/PackagePrivateAndPublicNested.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("TopLevelClassVsPackage.kt")
             public void testTopLevelClassVsPackage() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/TopLevelClassVsPackage.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("TopLevelClassVsPackage2.kt")
+            public void testTopLevelClassVsPackage2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/TopLevelClassVsPackage2.kt");
                 doTest(fileName);
             }
         }
@@ -193,6 +235,24 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTestWithoutJavacWrapper(fileName);
             }
 
+            @TestMetadata("CurrentPackageAndExplicitNestedImport.kt")
+            public void testCurrentPackageAndExplicitNestedImport() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/CurrentPackageAndExplicitNestedImport.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("CurrentPackageAndNestedAsteriskImport.kt")
+            public void testCurrentPackageAndNestedAsteriskImport() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/CurrentPackageAndNestedAsteriskImport.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("ImportGenericVsPackage.kt")
+            public void testImportGenericVsPackage() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/ImportGenericVsPackage.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
             @TestMetadata("ImportProtectedClass.kt")
             public void testImportProtectedClass() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/ImportProtectedClass.kt");
@@ -211,15 +271,39 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTestWithoutJavacWrapper(fileName);
             }
 
+            @TestMetadata("NestedAndTopLevelClassClash.kt")
+            public void testNestedAndTopLevelClassClash() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/NestedAndTopLevelClassClash.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
             @TestMetadata("NestedClassClash.kt")
             public void testNestedClassClash() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/NestedClassClash.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
 
+            @TestMetadata("PackageExplicitAndStartImport.kt")
+            public void testPackageExplicitAndStartImport() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/PackageExplicitAndStartImport.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("PackagePrivateAndPublicNested.kt")
+            public void testPackagePrivateAndPublicNested() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/PackagePrivateAndPublicNested.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
             @TestMetadata("TopLevelClassVsPackage.kt")
             public void testTopLevelClassVsPackage() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/TopLevelClassVsPackage.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("TopLevelClassVsPackage2.kt")
+            public void testTopLevelClassVsPackage2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/imports/TopLevelClassVsPackage2.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
         }
