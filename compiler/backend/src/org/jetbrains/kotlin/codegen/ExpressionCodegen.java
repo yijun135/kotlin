@@ -2822,7 +2822,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         }
         else if (opToken == KtTokens.EQEQ || opToken == KtTokens.EXCLEQ ||
                  opToken == KtTokens.EQEQEQ || opToken == KtTokens.EXCLEQEQEQ) {
-            return generateEquals(expression.getLeft(), expression.getRight(), opToken);
+            return generateEquals(expression.getLeft(), expression.getRight(), opToken, null);
         }
         else if (opToken == KtTokens.LT || opToken == KtTokens.LTEQ ||
                  opToken == KtTokens.GT || opToken == KtTokens.GTEQ) {
@@ -2867,44 +2867,87 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         return StackValue.or(gen(expression.getLeft()), gen(expression.getRight()));
     }
 
-    private StackValue generateEquals(@Nullable KtExpression left, @Nullable KtExpression right, @NotNull IElementType opToken) {
+    private StackValue genLazyUnlessProvided(@Nullable StackValue pregenerated, @NotNull KtExpression expr, @NotNull Type type) {
+        return pregenerated != null ? StackValue.coercion(pregenerated, type) : genLazy(expr, type);
+    }
+
+    private StackValue genUnlessProvided(@Nullable StackValue pregenerated, @NotNull KtExpression expr) {
+        if (pregenerated != null) {
+            pregenerated.put(pregenerated.type, v);
+            return pregenerated;
+        }
+        else {
+            return gen(expr);
+        }
+    }
+
+    private StackValue genUnlessProvided(@Nullable StackValue pregenerated, @NotNull KtExpression expr, @NotNull Type type) {
+        if (pregenerated != null) {
+            pregenerated.put(type, v);
+            return pregenerated;
+        }
+        else {
+            gen(expr, type);
+            return StackValue.onStack(type);
+        }
+    }
+
+    private StackValue generateEquals(
+            @Nullable KtExpression left,
+            @Nullable KtExpression right,
+            @NotNull IElementType opToken,
+            @Nullable StackValue pregeneratedLeft
+    ) {
         Type leftType = expressionType(left);
         Type rightType = expressionType(right);
 
-        if (KtPsiUtil.isNullConstant(left)) {
+        if (pregeneratedLeft == null && KtPsiUtil.isNullConstant(left)) {
             return genCmpWithNull(right, opToken);
         }
 
-        if (KtPsiUtil.isNullConstant(right)) {
+        if (pregeneratedLeft == null && KtPsiUtil.isNullConstant(right)) {
             return genCmpWithNull(left, opToken);
         }
 
-        if (isIntZero(left, leftType) && isIntPrimitive(rightType)) {
+        if (pregeneratedLeft == null && isIntZero(left, leftType) && isIntPrimitive(rightType)) {
             return genCmpWithZero(right, opToken);
         }
 
-        if (isIntZero(right, rightType) && isIntPrimitive(leftType)) {
+        if (pregeneratedLeft == null && isIntZero(right, rightType) && isIntPrimitive(leftType)) {
             return genCmpWithZero(left, opToken);
         }
 
-        if (left instanceof KtSafeQualifiedExpression && isPrimitive(rightType)) {
+        if (pregeneratedLeft == null && left instanceof KtSafeQualifiedExpression && isPrimitive(rightType)) {
             return genCmpSafeCallToPrimitive((KtSafeQualifiedExpression) left, right, rightType, opToken);
         }
+
         if (isPrimitive(leftType) && right instanceof KtSafeQualifiedExpression) {
-            return genCmpPrimitiveToSafeCall(left, leftType, (KtSafeQualifiedExpression) right, opToken);
+            return genCmpPrimitiveToSafeCall(left, leftType, (KtSafeQualifiedExpression) right, opToken, pregeneratedLeft);
         }
 
         if (BoxedToPrimitiveEquality.isApplicable(opToken, leftType, rightType)) {
-            return BoxedToPrimitiveEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType,
-                                                   myFrameMap);
+            return BoxedToPrimitiveEquality.create(
+                    opToken,
+                    genLazyUnlessProvided(pregeneratedLeft, left, leftType), leftType,
+                    genLazy(right, rightType), rightType,
+                    myFrameMap
+            );
         }
 
         if (PrimitiveToBoxedEquality.isApplicable(opToken, leftType, rightType)) {
-            return PrimitiveToBoxedEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType);
+            return PrimitiveToBoxedEquality.create(
+                    opToken,
+                    genLazyUnlessProvided(pregeneratedLeft, left, leftType), leftType,
+                    genLazy(right, rightType), rightType
+            );
         }
 
         if (PrimitiveToObjectEquality.isApplicable(opToken, leftType, rightType)) {
-            return PrimitiveToObjectEquality.create(opToken, genLazy(left, leftType), leftType, genLazy(right, rightType), rightType);
+            return PrimitiveToObjectEquality.create(
+                    opToken,
+                    genLazyUnlessProvided(pregeneratedLeft, left, leftType), leftType,
+                    genLazy(right, rightType), rightType
+            );
         }
 
 
@@ -2916,23 +2959,29 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         if (opToken == KtTokens.EQEQEQ || opToken == KtTokens.EXCLEQEQEQ) {
             // TODO: always casting to the type of the left operand in case of primitives looks wrong
             Type operandType = isPrimitive(leftType) ? leftType : OBJECT_TYPE;
-            return StackValue.cmp(opToken, operandType, genLazy(left, leftType), genLazy(right, rightType));
+            return StackValue.cmp(
+                    opToken,
+                    operandType,
+                    genLazyUnlessProvided(pregeneratedLeft, left, leftType),
+                    genLazy(right, rightType)
+            );
         }
 
-        return genEqualsForExpressionsPreferIEEE754Arithmetic(left, right, opToken, leftType, rightType, null);
+        return genEqualsForExpressionsPreferIEEE754Arithmetic(left, right, opToken, leftType, rightType, pregeneratedLeft);
     }
 
     private StackValue genCmpPrimitiveToSafeCall(
             @NotNull KtExpression left,
             @NotNull Type leftType,
             @NotNull KtSafeQualifiedExpression right,
-            @NotNull IElementType opToken
+            @NotNull IElementType opToken,
+            @Nullable StackValue pregeneratedLeft
     ) {
         Label rightIsNull = new Label();
         return new PrimitiveToSafeCallEquality(
                 opToken,
                 leftType,
-                genLazy(left, leftType),
+                genLazyUnlessProvided(pregeneratedLeft, left, leftType),
                 generateSafeQualifiedExpression(right, rightIsNull),
                 expressionType(right.getReceiverExpression()),
                 rightIsNull
@@ -2993,7 +3042,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
 
         return genEqualsForExpressionsOnStack(
                 opToken,
-                pregeneratedLeft != null ? StackValue.coercion(pregeneratedLeft, leftType) : genLazy(left, leftType),
+                genLazyUnlessProvided(pregeneratedLeft, left, leftType),
                 genLazy(right, rightType)
         );
     }
@@ -3009,12 +3058,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
     ) {
         Type leftType = left754Type.isNullable ? AsmUtil.boxType(left754Type.type) : left754Type.type;
 
-        if (pregeneratedLeft != null)  {
-            StackValue.coercion(pregeneratedLeft, leftType).put(leftType, v);
-        }
-        else {
-            gen(left, leftType);
-        }
+        genUnlessProvided(pregeneratedLeft, left, leftType);
         Type rightType = right754Type.isNullable ? AsmUtil.boxType(right754Type.type) : right754Type.type;
         gen(right, rightType);
 
@@ -3124,11 +3168,17 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
     }
 
     private StackValue genCmpWithZero(KtExpression exp, IElementType opToken) {
-        return StackValue.compareIntWithZero(gen(exp), (KtTokens.EQEQ == opToken || KtTokens.EQEQEQ == opToken) ? IFNE : IFEQ);
+        return StackValue.compareIntWithZero(
+                gen(exp),
+                (KtTokens.EQEQ == opToken || KtTokens.EQEQEQ == opToken) ? IFNE : IFEQ
+        );
     }
 
     private StackValue genCmpWithNull(KtExpression exp, IElementType opToken) {
-        return StackValue.compareWithNull(gen(exp), (KtTokens.EQEQ == opToken || KtTokens.EQEQEQ == opToken) ? IFNONNULL : IFNULL);
+        return StackValue.compareWithNull(
+                gen(exp),
+                (KtTokens.EQEQ == opToken || KtTokens.EQEQEQ == opToken) ? IFNONNULL : IFNULL
+        );
     }
 
     private StackValue generateElvis(@NotNull KtBinaryExpression expression) {
@@ -3996,22 +4046,23 @@ The "returned" value of try expression with no finally is either the last expres
 
     private StackValue generateExpressionMatch(StackValue expressionToMatch, KtExpression subjectExpression, KtExpression patternExpression) {
         if (expressionToMatch != null) {
-            Type subjectType = expressionToMatch.type;
-            markStartLineNumber(patternExpression);
-            KotlinType condJetType = bindingContext.getType(patternExpression);
-            Type condType;
-            if (isNumberPrimitiveOrBoolean(subjectType)) {
-                assert condJetType != null;
-                condType = asmType(condJetType);
-                if (!isNumberPrimitiveOrBoolean(condType)) {
-                    subjectType = boxType(subjectType);
-                }
-            }
-            else {
-                condType = OBJECT_TYPE;
-            }
-
-            return genEqualsForExpressionsPreferIEEE754Arithmetic(subjectExpression, patternExpression, KtTokens.EQEQ, subjectType, condType, expressionToMatch);
+            return generateEquals(subjectExpression, patternExpression, KtTokens.EQEQ, expressionToMatch);
+            //Type subjectType = expressionToMatch.type;
+            //markStartLineNumber(patternExpression);
+            //KotlinType condJetType = bindingContext.getType(patternExpression);
+            //Type condType;
+            //if (isNumberPrimitiveOrBoolean(subjectType)) {
+            //    assert condJetType != null;
+            //    condType = asmType(condJetType);
+            //    if (!isNumberPrimitiveOrBoolean(condType)) {
+            //        subjectType = boxType(subjectType);
+            //    }
+            //}
+            //else {
+            //    condType = OBJECT_TYPE;
+            //}
+            //
+            //return genEqualsForExpressionsPreferIEEE754Arithmetic(subjectExpression, patternExpression, KtTokens.EQEQ, subjectType, condType, expressionToMatch);
         }
         else {
             return gen(patternExpression);
