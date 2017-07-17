@@ -13978,6 +13978,12 @@ public class JsCodegenBoxTestGenerated extends AbstractJsCodegenBoxTest {
                 doTest(fileName);
             }
 
+            @TestMetadata("smartcastBoxedLongEqPrimitive.kt")
+            public void testSmartcastBoxedLongEqPrimitive() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/primitiveTypes/equalityWithObject/smartcastBoxedLongEqPrimitive.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("compiler/testData/codegen/box/primitiveTypes/equalityWithObject/generated")
             @TestDataPath("$PROJECT_ROOT")
             @RunWith(JUnit3RunnerWithInners.class)
