@@ -87,7 +87,6 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
     fun createMockKotlinClassifier(classifier: KtClassOrObject,
                                    classId: ClassId) = MockKotlinClassifier(classId.asSingleFqName(),
                                                                             classifier,
-                                                                            classifier.typeParameters.isNotEmpty(),
                                                                             this,
                                                                             javac)
             .apply { classifiers[classId] = this }
@@ -131,7 +130,6 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
 
 class MockKotlinClassifier(override val fqName: FqName,
                            private val classOrObject: KtClassOrObject,
-                           val hasTypeParameters: Boolean,
                            private val cache: KotlinClassifiersCache,
                            private val javac: JavacWrapper) : VirtualFileBoundJavaClass {
 
@@ -226,6 +224,12 @@ class MockKotlinClassifier(override val fqName: FqName,
 
     override fun findInnerClass(name: Name) =
             innerClasses.find { it.name == name }
+
+    val typeParametersNumber: Int
+        get() = classOrObject.typeParameters.size
+
+    val hasTypeParameters: Boolean
+        get() = typeParametersNumber > 0
 
 }
 

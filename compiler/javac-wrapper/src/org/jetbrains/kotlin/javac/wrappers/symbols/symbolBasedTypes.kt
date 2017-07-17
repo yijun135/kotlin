@@ -103,7 +103,7 @@ class SymbolBasedClassifierType<out T : TypeMirror>(
         get() = when {
             typeMirror !is DeclaredType -> false
             (typeMirror.asElement() as TypeElement).typeParameters.isEmpty() -> false
-            else -> typeMirror.typeArguments.isEmpty()
+            else -> typeMirror.typeArguments.isEmpty() || (typeMirror.asElement() as TypeElement).typeParameters.size != typeMirror.typeArguments.size
         }
 
     override val classifierQualifiedName: String

@@ -190,6 +190,12 @@ class TreeBasedGenericClassifierType(
                 .apply { addAll(super.typeArguments) }
 
     override val isRaw: Boolean
-        get() = false
+        get() = classifier.let {
+            when (it) {
+                is MockKotlinClassifier -> tree.arguments.size != it.typeParametersNumber
+                else -> tree.arguments.size != (classifier as? JavaClass)?.typeParameters?.size
+            }
+        }
+
 
 }
