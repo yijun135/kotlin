@@ -22,6 +22,7 @@ dependencies {
     testCompile(project(":plugins:uast-kotlin"))
     testCompile(project(":kotlin-test:kotlin-test-jvm"))
     testCompile(projectTests(":jps-plugin"))
+    testCompileOnly(ideaSdkDeps("jps-builders"))
     testCompile(ideaSdkDeps("jps-build-test", subdir = "jps/test"))
     testCompile(ideaPluginDeps("*.jar", plugin = "android", subdir = "lib/jps"))
     testRuntime(project(":jps-plugin"))
