@@ -1,0 +1,16 @@
+var log = ""
+
+fun foo() {
+    log += "foo"
+}
+
+fun Unit.bar() = jsTypeOf(this.asDynamic()) == "object"
+
+fun Any.baz() = jsTypeOf(this.asDynamic()) == "object"
+
+fun box(): String {
+    if (!foo().bar()) return "fail1"
+    if (!foo().baz()) return "fail2"
+
+    return "OK"
+}

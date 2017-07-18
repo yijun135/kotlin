@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.SourceElement;
 import org.jetbrains.kotlin.js.backend.ast.*;
+import org.jetbrains.kotlin.js.backend.ast.metadata.BoxingKind;
 import org.jetbrains.kotlin.js.backend.ast.metadata.MetadataProperties;
 import org.jetbrains.kotlin.js.backend.ast.metadata.SideEffectKind;
 import org.jetbrains.kotlin.js.translate.context.Namer;
@@ -159,30 +160,44 @@ public final class JsAstUtils {
 
     @NotNull
     public static JsExpression charToBoxedChar(@NotNull JsExpression expression) {
-        JsInvocation invocation = invokeKotlinFunction("toBoxedChar", unnestBoxing(expression));
-        invocation.setSource(expression.getSource());
-        return withBoxingMetadata(invocation);
+        if (expression instanceof JsInvocation) {
+            JsInvocation invocation = (JsInvocation) expression;
+            BoxingKind existingKind = MetadataProperties.getBoxing(invocation);
+            switch (existingKind) {
+                case UNBOXING:
+                    return invocation.getArguments().get(0);
+                case BOXING:
+                    return expression;
+                case NONE:
+                    break;
+            }
+        }
+
+        JsInvocation result = invokeKotlinFunction("toBoxedChar", expression);
+        result.setSource(expression.getSource());
+        MetadataProperties.setBoxing(result, BoxingKind.BOXING);
+        return result;
     }
 
     @NotNull
     public static JsExpression boxedCharToChar(@NotNull JsExpression expression) {
-        JsInvocation invocation = invokeKotlinFunction("unboxChar", unnestBoxing(expression));
-        invocation.setSource(expression.getSource());
-        return withBoxingMetadata(invocation);
-    }
-
-    @NotNull
-    private static JsExpression unnestBoxing(@NotNull JsExpression expression) {
-        if (expression instanceof JsInvocation && MetadataProperties.getBoxing((JsInvocation) expression)) {
-            return ((JsInvocation) expression).getArguments().get(0);
+        if (expression instanceof JsInvocation) {
+            JsInvocation invocation = (JsInvocation) expression;
+            BoxingKind existingKind = MetadataProperties.getBoxing(invocation);
+            switch (existingKind) {
+                case BOXING:
+                    return invocation.getArguments().get(0);
+                case UNBOXING:
+                    return expression;
+                case NONE:
+                    break;
+            }
         }
-        return expression;
-    }
 
-    @NotNull
-    private static JsInvocation withBoxingMetadata(@NotNull JsInvocation call) {
-        MetadataProperties.setBoxing(call, true);
-        return call;
+        JsInvocation result = invokeKotlinFunction("unboxChar", expression);
+        result.setSource(expression.getSource());
+        MetadataProperties.setBoxing(result, BoxingKind.UNBOXING);
+        return result;
     }
 
     @NotNull

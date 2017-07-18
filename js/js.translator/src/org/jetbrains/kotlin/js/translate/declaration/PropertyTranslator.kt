@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.js.translate.general.Translation
 import org.jetbrains.kotlin.js.translate.utils.BindingUtils
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils.pureFqn
 import org.jetbrains.kotlin.js.translate.utils.JsDescriptorUtils
+import org.jetbrains.kotlin.js.translate.utils.TranslationUtils
 import org.jetbrains.kotlin.js.translate.utils.TranslationUtils.*
 import org.jetbrains.kotlin.js.translate.utils.finalElement
 import org.jetbrains.kotlin.js.translate.utils.jsAstUtils.addParameter
@@ -173,7 +174,7 @@ fun TranslationContext.translateDelegateOrInitializerExpression(expression: KtPr
         CallTranslator.translate(innerContext, provideDelegateCall, initializer)
     }
     else {
-        initializer
+        TranslationUtils.coerce(this, initializer, propertyDescriptor.type)
     }
 }
 
