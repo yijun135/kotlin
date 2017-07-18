@@ -175,9 +175,21 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTest(fileName);
             }
 
+            @TestMetadata("InheritedKotlinInner.kt")
+            public void testInheritedKotlinInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedKotlinInner.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("InnerAndInheritedInner.kt")
             public void testInnerAndInheritedInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InnerAndInheritedInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("ManyInheritedClasses.kt")
+            public void testManyInheritedClasses() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/ManyInheritedClasses.kt");
                 doTest(fileName);
             }
 
@@ -283,6 +295,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("InnerWithTypeParameter.kt")
             public void testInnerWithTypeParameter() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/InnerWithTypeParameter.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("NestedWithInner.kt")
+            public void testNestedWithInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/NestedWithInner.kt");
                 doTest(fileName);
             }
 
@@ -445,9 +463,21 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTestWithoutJavacWrapper(fileName);
             }
 
+            @TestMetadata("InheritedKotlinInner.kt")
+            public void testInheritedKotlinInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedKotlinInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
             @TestMetadata("InnerAndInheritedInner.kt")
             public void testInnerAndInheritedInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InnerAndInheritedInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("ManyInheritedClasses.kt")
+            public void testManyInheritedClasses() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/ManyInheritedClasses.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
 
@@ -553,6 +583,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("InnerWithTypeParameter.kt")
             public void testInnerWithTypeParameter() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/InnerWithTypeParameter.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("NestedWithInner.kt")
+            public void testNestedWithInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/NestedWithInner.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
 
