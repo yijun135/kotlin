@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.resolve;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.descriptors.*;
 import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.renderer.AnnotationArgumentsRenderingPolicy;
@@ -100,9 +101,7 @@ public class MemberComparator implements Comparator<DeclarationDescriptor> {
         if (o1 instanceof TypeAliasDescriptor && o2 instanceof TypeAliasDescriptor) {
             TypeAliasDescriptor ta1 = (TypeAliasDescriptor) o1;
             TypeAliasDescriptor ta2 = (TypeAliasDescriptor) o2;
-            String r1 = RENDERER.renderType(ta1.getUnderlyingType());
-            String r2 = RENDERER.renderType(ta2.getUnderlyingType());
-            int underlyingTypesCompareTo = r1.compareTo(r2);
+            int underlyingTypesCompareTo = compareTypes(ta1.getUnderlyingType(), ta2.getUnderlyingType());
             if (underlyingTypesCompareTo != 0) {
                 return underlyingTypesCompareTo;
             }
@@ -115,9 +114,7 @@ public class MemberComparator implements Comparator<DeclarationDescriptor> {
             ReceiverParameterDescriptor c2ReceiverParameter = c2.getExtensionReceiverParameter();
             assert (c1ReceiverParameter != null) == (c2ReceiverParameter != null);
             if (c1ReceiverParameter != null) {
-                String r1 = RENDERER.renderType(c1ReceiverParameter.getType());
-                String r2 = RENDERER.renderType(c2ReceiverParameter.getType());
-                int receiversCompareTo = r1.compareTo(r2);
+                int receiversCompareTo = compareTypes(c1ReceiverParameter.getType(), c2ReceiverParameter.getType());
                 if (receiversCompareTo != 0) {
                     return receiversCompareTo;
                 }
@@ -126,9 +123,7 @@ public class MemberComparator implements Comparator<DeclarationDescriptor> {
             List<ValueParameterDescriptor> c1ValueParameters = c1.getValueParameters();
             List<ValueParameterDescriptor> c2ValueParameters = c2.getValueParameters();
             for (int i = 0; i < Math.min(c1ValueParameters.size(), c2ValueParameters.size()); i++) {
-                String p1 = RENDERER.renderType(c1ValueParameters.get(i).getType());
-                String p2 = RENDERER.renderType(c2ValueParameters.get(i).getType());
-                int parametersCompareTo = p1.compareTo(p2);
+                int parametersCompareTo = compareTypes(c1ValueParameters.get(i).getType(), c2ValueParameters.get(i).getType());
                 if (parametersCompareTo != 0) {
                     return parametersCompareTo;
                 }
@@ -149,9 +144,7 @@ public class MemberComparator implements Comparator<DeclarationDescriptor> {
                     return boundsCountCompareTo;
                 }
                 for (int j = 0; j < c1Bounds.size(); j++) {
-                    String b1 = RENDERER.renderType(c1Bounds.get(j));
-                    String b2 = RENDERER.renderType(c2Bounds.get(j));
-                    int boundCompareTo = b1.compareTo(b2);
+                    int boundCompareTo = compareTypes(c1Bounds.get(j), c2Bounds.get(j));
                     if (boundCompareTo != 0) {
                         return boundCompareTo;
                     }
@@ -199,5 +192,12 @@ public class MemberComparator implements Comparator<DeclarationDescriptor> {
         Name secondModuleName = DescriptorUtils.getContainingModule(o2).getName();
 
         return firstModuleName.compareTo(secondModuleName);
+    }
+
+    private static int compareTypes(@NotNull KotlinType type1, @NotNull KotlinType type2) {
+        String r1 = RENDERER.renderType(type1);
+        String r2 = RENDERER.renderType(type2);
+
+        return r1.compareTo(r2);
     }
 }
