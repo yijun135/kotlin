@@ -58,6 +58,8 @@ class LazyExplicitImportScope(
     }
 
     override fun getContributedDescriptors(kindFilter: DescriptorKindFilter, nameFilter: (Name) -> Boolean): Collection<DeclarationDescriptor> {
+        if (!nameFilter(aliasName)) return emptyList()
+
         val descriptors = SmartList<DeclarationDescriptor>()
         descriptors.addIfNotNull(getContributedClassifier(aliasName, NoLookupLocation.WHEN_GET_ALL_DESCRIPTORS))
         descriptors.addAll(getContributedFunctions(aliasName, NoLookupLocation.WHEN_GET_ALL_DESCRIPTORS))
