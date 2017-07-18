@@ -30,7 +30,7 @@ dependencies {
 
     compile(ideaSdkCoreDeps("intellij-core", "util"))
 
-    compileOnly(ideaSdkDeps("openapi", "idea", "velocity", "boot", "gson", "swingx-core", "jsr305"))
+    compileOnly(ideaSdkDeps("openapi", "idea", "velocity", "boot", "gson", "swingx-core", "jsr305", "forms_rt"))
 
     compile(ideaPluginDeps("idea-junit", plugin = "junit"))
     compile(ideaPluginDeps("IntelliLang", plugin = "IntelliLang"))
@@ -53,6 +53,7 @@ dependencies {
     testCompile(project(":idea:idea-test-framework")) { isTransitive = false }
 
     testCompileOnly(ideaPluginDeps("gradle-base-services", "gradle-tooling-extension-impl", "gradle-wrapper", plugin = "gradle"))
+    testCompileOnly(ideaPluginDeps("Groovy", plugin = "Groovy"))
     testCompileOnly(ideaPluginDeps("maven", "maven-server-api", plugin = "maven"))
 
     testCompileOnly(ideaSdkDeps("groovy-all", "velocity", "gson", "jsr305"))
@@ -70,7 +71,7 @@ dependencies {
 
     // deps below are test runtime deps, but made test compile to split compilation and running to reduce mem req
     testCompile(project(":plugins:android-extensions-compiler"))
-    testCompile(project(":plugins:android-extensions-idea"))
+    testCompile(project(":plugins:android-extensions-idea")) { isTransitive = false }
     testCompile(project(":plugins:allopen-ide")) { isTransitive = false }
     testCompile(project(":plugins:allopen-cli"))
     testCompile(project(":plugins:noarg-ide")) { isTransitive = false }
