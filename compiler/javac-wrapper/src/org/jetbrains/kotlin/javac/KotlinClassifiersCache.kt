@@ -81,7 +81,7 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
 
         val resolutionScope = javac.classifierResolver.createResolutionScope(enclosingClasses, asteriskImports, packageName, imports)
 
-        return resolutionScope.findClass(firstSegment, pathSegments).apply { supertypesCache[classOrObject] = this }
+        return (resolutionScope.findClass(firstSegment, pathSegments) as? JavaClass).apply { supertypesCache[classOrObject] = this }
     }
 
     fun createMockKotlinClassifier(classifier: KtClassOrObject,

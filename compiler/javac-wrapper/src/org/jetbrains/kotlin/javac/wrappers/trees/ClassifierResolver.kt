@@ -29,11 +29,17 @@ import org.jetbrains.kotlin.name.Name
 class ClassifierResolver(private val javac: JavacWrapper) {
 
     private val cache = hashMapOf<Tree, JavaClassifier?>()
+    private val beingResolved = hashSetOf<Tree>()
 
     fun resolve(treePath: TreePath): JavaClassifier? = with (treePath) {
         if (cache.containsKey(leaf)) return cache[leaf]
+        if (treePath.leaf in beingResolved) return null
+        beingResolved.add(treePath.leaf)
 
-        return tryToResolve().apply { cache[leaf] = this }
+        return tryToResolve().apply {
+            cache[leaf] = this
+            beingResolved.remove(treePath.leaf)
+        }
     }
 
     private val TreePath.enclosingClasses: List<JavaClass>
@@ -109,20 +115,14 @@ class ClassifierResolver(private val javac: JavacWrapper) {
                     }
         }
 
-        val javaClass = createResolutionScope(enclosingClasses, asteriskImports, packageName, imports).findClass(firstSegment, pathSegments)
+        tryToGetTypeParameterFromMethod()?.let { return it }
 
-        return javaClass ?: tryToResolveTypeParameter()
+        return createResolutionScope(enclosingClasses, asteriskImports, packageName, imports).findClass(firstSegment, pathSegments)
     }
 
-    private fun TreePath.tryToResolveTypeParameter() =
-            flatMap {
-                when (it) {
-                    is JCTree.JCClassDecl -> it.typarams
-                    is JCTree.JCMethodDecl -> it.typarams
-                    else -> emptyList<JCTree.JCTypeParameter>()
-                }
-            }
-                    .find { it.toString().substringBefore(" ") == leaf.toString() }
+    private fun TreePath.tryToGetTypeParameterFromMethod(): TreeBasedTypeParameter? =
+            (find { it is JCTree.JCMethodDecl } as? JCTree.JCMethodDecl)
+                    ?.typarams?.find { it.name.toString().substringBefore(" ") == leaf.toString() }
                     ?.let {
                         TreeBasedTypeParameter(it,
                                                javac.getTreePath(it, compilationUnit),
@@ -149,7 +149,7 @@ interface Scope {
     val parent: Scope?
     val javac: JavacWrapper
 
-    fun findClass(name: String, pathSegments: List<String>): JavaClass?
+    fun findClass(name: String, pathSegments: List<String>): JavaClassifier?
 }
 
 private class GlobalScope(override val javac: JavacWrapper) : Scope {
@@ -173,10 +173,9 @@ private class ImportOnDemandScope(override val javac: JavacWrapper,
 
     override val parent: Scope? get() = scope()
 
-    override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
+    override fun findClass(name: String, pathSegments: List<String>): JavaClassifier? {
         asteriskImports()
-                .toSet()
-                .mapNotNull { findByFqName("$it$name".split("."), javac) }
+                .mapNotNullTo(hashSetOf()) { findByFqName("$it$name".split("."), javac) }
                 .takeIf { it.isNotEmpty() }
                 ?.let {
                     return it.singleOrNull()?.let { javaClass ->
@@ -195,7 +194,7 @@ private class PackageScope(override val javac: JavacWrapper,
 
     override val parent: Scope? get() = scope()
 
-    override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
+    override fun findClass(name: String, pathSegments: List<String>): JavaClassifier? {
         findJavaOrKotlinClass(classId(packageName(), name), javac)?.let { javaClass ->
             return getJavaClassFromPathSegments(javaClass, pathSegments)
         }
@@ -211,7 +210,7 @@ private class SingleTypeImportScope(override val javac: JavacWrapper,
 
     override val parent: Scope? get() = scope()
 
-    override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
+    override fun findClass(name: String, pathSegments: List<String>): JavaClassifier? {
         val imports = imports().toSet().takeIf { it.isNotEmpty() } ?: return parent?.findClass(name, pathSegments)
 
         imports.singleOrNull() ?: return null
@@ -228,11 +227,16 @@ private class CurrentClassAndInnerScope(override val javac: JavacWrapper,
 
     override val parent: Scope? get() = scope()
 
-    override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
+    override fun findClass(name: String, pathSegments: List<String>): JavaClassifier? {
         enclosingClasses.forEach {
-            it.findInner(Name.identifier(name))?.let { javaClass ->
+            val identifier = Name.identifier(name)
+            if (it is TreeBasedClass) {
+                it.typeParameters.find { it.name == identifier }?.let { return it }
+            }
+            it.findInner(identifier)?.let { javaClass ->
                 return getJavaClassFromPathSegments(javaClass, pathSegments)
             }
+            if (it.fqName?.shortName() == identifier && pathSegments.size == 1) return it
         }
 
         return parent?.findClass(name, pathSegments)
@@ -284,7 +288,6 @@ fun JavaClass.findInner(pathSegments: List<String>): JavaClass? =
 
 fun JavaClass.findInner(name: Name): JavaClass? {
     findInnerClass(name)?.let { return it }
-    if (fqName?.shortName() == name) return this
 
     supertypes.mapNotNull { it.classifier as? JavaClass }
             .forEach { javaClass -> javaClass.findInner(name)?.let { return it } }
