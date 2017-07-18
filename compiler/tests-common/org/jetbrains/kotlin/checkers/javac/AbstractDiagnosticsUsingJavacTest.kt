@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.checkers.javac
 import com.intellij.openapi.util.io.FileUtil
 import org.jetbrains.kotlin.checkers.AbstractDiagnosticsTest
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
@@ -26,6 +27,10 @@ import java.io.File
 abstract class AbstractDiagnosticsUsingJavacTest : AbstractDiagnosticsTest() {
 
     override fun analyzeAndCheck(testDataFile: File, files: List<TestFile>) {
+        if (InTextDirectivesUtils.isDirectiveDefined(testDataFile.readText(), "// JAVAC_SKIP")) {
+            println("${testDataFile.name} test is skipped")
+            return
+        }
         val groupedByModule = files.groupBy(TestFile::module)
         val allKtFiles = groupedByModule.values.flatMap { getKtFiles(it, true) }
 

@@ -53,4 +53,15 @@ class TreeBasedTypeParameter(
             }
         }
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is TreeBasedTypeParameter) return false
+        return other.name == name && other.upperBounds == upperBounds
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        upperBounds.forEach { result = 37 * result + it.hashCode() }
+        return result
+    }
+
 }
