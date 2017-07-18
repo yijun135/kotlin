@@ -122,7 +122,7 @@ class ClassifierResolver(private val javac: JavacWrapper) {
 
     private fun TreePath.tryToGetTypeParameterFromMethod(): TreeBasedTypeParameter? =
             (find { it is JCTree.JCMethodDecl } as? JCTree.JCMethodDecl)
-                    ?.typarams?.find { it.name.toString().substringBefore(" ") == leaf.toString() }
+                    ?.typarams?.find { it.name.toString() == leaf.toString() }
                     ?.let {
                         TreeBasedTypeParameter(it,
                                                javac.getTreePath(it, compilationUnit),

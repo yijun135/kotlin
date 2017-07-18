@@ -149,6 +149,45 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             }
         }
 
+        @TestMetadata("compiler/testData/javac/diagnostics/tests/inheritance")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class Inheritance extends AbstractJavacDiagnosticsTest {
+            public void testAllFilesPresentInInheritance() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/inheritance"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("InheritedInner.kt")
+            public void testInheritedInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InheritedInnerAndSupertypeWithSameName.kt")
+            public void testInheritedInnerAndSupertypeWithSameName() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInnerAndSupertypeWithSameName.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InheritedInnerUsageInInner.kt")
+            public void testInheritedInnerUsageInInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInnerUsageInInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InnerAndInheritedInner.kt")
+            public void testInnerAndInheritedInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InnerAndInheritedInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("SameInnersInSupertypeAndSupertypesSupertype.kt")
+            public void testSameInnersInSupertypeAndSupertypesSupertype() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SameInnersInSupertypeAndSupertypesSupertype.kt");
+                doTest(fileName);
+            }
+        }
+
         @TestMetadata("compiler/testData/javac/diagnostics/tests/inners")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)
@@ -217,6 +256,45 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("visibleClassVsQualifiedClass.kt")
             public void testVisibleClassVsQualifiedClass() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/qualifiedExpression/visibleClassVsQualifiedClass.kt");
+                doTest(fileName);
+            }
+        }
+
+        @TestMetadata("compiler/testData/javac/diagnostics/tests/typeParameters")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class TypeParameters extends AbstractJavacDiagnosticsTest {
+            public void testAllFilesPresentInTypeParameters() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/typeParameters"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("ComplexCase.kt")
+            public void testComplexCase() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/ComplexCase.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InheritedInnerAndTypeParameterWithSameNames.kt")
+            public void testInheritedInnerAndTypeParameterWithSameNames() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/InheritedInnerAndTypeParameterWithSameNames.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InnerWithTypeParameter.kt")
+            public void testInnerWithTypeParameter() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/InnerWithTypeParameter.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("SeveralInnersWithTypeParameters.kt")
+            public void testSeveralInnersWithTypeParameters() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/SeveralInnersWithTypeParameters.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("TypeParametersInInnerAndOuterWithSameNames.kt")
+            public void testTypeParametersInInnerAndOuterWithSameNames() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/TypeParametersInInnerAndOuterWithSameNames.kt");
                 doTest(fileName);
             }
         }
@@ -341,6 +419,45 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             }
         }
 
+        @TestMetadata("compiler/testData/javac/diagnostics/tests/inheritance")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class Inheritance extends AbstractJavacDiagnosticsTest {
+            public void testAllFilesPresentInInheritance() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/inheritance"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("InheritedInner.kt")
+            public void testInheritedInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InheritedInnerAndSupertypeWithSameName.kt")
+            public void testInheritedInnerAndSupertypeWithSameName() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInnerAndSupertypeWithSameName.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InheritedInnerUsageInInner.kt")
+            public void testInheritedInnerUsageInInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInnerUsageInInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InnerAndInheritedInner.kt")
+            public void testInnerAndInheritedInner() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InnerAndInheritedInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("SameInnersInSupertypeAndSupertypesSupertype.kt")
+            public void testSameInnersInSupertypeAndSupertypesSupertype() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SameInnersInSupertypeAndSupertypesSupertype.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+        }
+
         @TestMetadata("compiler/testData/javac/diagnostics/tests/inners")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)
@@ -409,6 +526,45 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("visibleClassVsQualifiedClass.kt")
             public void testVisibleClassVsQualifiedClass() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/qualifiedExpression/visibleClassVsQualifiedClass.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+        }
+
+        @TestMetadata("compiler/testData/javac/diagnostics/tests/typeParameters")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class TypeParameters extends AbstractJavacDiagnosticsTest {
+            public void testAllFilesPresentInTypeParameters() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/typeParameters"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("ComplexCase.kt")
+            public void testComplexCase() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/ComplexCase.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InheritedInnerAndTypeParameterWithSameNames.kt")
+            public void testInheritedInnerAndTypeParameterWithSameNames() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/InheritedInnerAndTypeParameterWithSameNames.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InnerWithTypeParameter.kt")
+            public void testInnerWithTypeParameter() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/InnerWithTypeParameter.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("SeveralInnersWithTypeParameters.kt")
+            public void testSeveralInnersWithTypeParameters() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/SeveralInnersWithTypeParameters.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("TypeParametersInInnerAndOuterWithSameNames.kt")
+            public void testTypeParametersInInnerAndOuterWithSameNames() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/TypeParametersInInnerAndOuterWithSameNames.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
         }
