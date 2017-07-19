@@ -18,8 +18,10 @@ package org.jetbrains.kotlin.javac
 
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.SearchScope
+import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.Visibility
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.load.java.JavaVisibilities
 import org.jetbrains.kotlin.load.java.structure.*
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -27,6 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.load.java.structure.impl.VirtualFileBoundJavaClass
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
 class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
                              private val javac: JavacWrapper) {
@@ -143,7 +146,12 @@ class MockKotlinClassifier(override val fqName: FqName,
         get() = throw UnsupportedOperationException("Should not be called")
 
     override val visibility: Visibility
-        get() = throw UnsupportedOperationException("Should not be called")
+        get() = when (classOrObject.visibilityModifierType()) {
+            KtTokens.PUBLIC_KEYWORD -> Visibilities.PUBLIC
+            KtTokens.PRIVATE_KEYWORD -> Visibilities.PRIVATE
+            KtTokens.PROTECTED_KEYWORD -> Visibilities.PROTECTED
+            else -> JavaVisibilities.PACKAGE_VISIBILITY
+        }
 
     override val typeParameters: List<JavaTypeParameter>
         get() = throw UnsupportedOperationException("Should not be called")

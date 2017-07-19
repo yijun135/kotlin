@@ -94,7 +94,10 @@ class JavacWrapper(
     }
 
     init {
-        arguments?.toList()?.let { JavacOptionsMapper.map(Options.instance(context), it) }
+        Options.instance(context).let { options ->
+            JavacOptionsMapper.setUTF8Encoding(options)
+            arguments?.toList()?.let { JavacOptionsMapper.map(options, it) }
+        }
     }
 
     private val javac = object : JavaCompiler(context) {

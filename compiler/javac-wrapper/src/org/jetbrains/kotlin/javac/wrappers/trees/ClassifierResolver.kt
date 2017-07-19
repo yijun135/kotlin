@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.javac.wrappers.trees
 import com.sun.source.tree.Tree
 import com.sun.source.util.TreePath
 import com.sun.tools.javac.tree.JCTree
+import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.javac.JavacWrapper
 import org.jetbrains.kotlin.load.java.structure.JavaClass
 import org.jetbrains.kotlin.load.java.structure.JavaClassifier
@@ -236,7 +237,7 @@ private class CurrentClassAndInnerScope(override val javac: JavacWrapper,
             it.findInner(identifier)?.let { javaClass ->
                 return getJavaClassFromPathSegments(javaClass, pathSegments)
             }
-            if (it.fqName?.shortName() == identifier && pathSegments.size == 1) return it
+            if (it.name == identifier && pathSegments.size == 1) return it
         }
 
         return parent?.findClass(name, pathSegments)
@@ -287,10 +288,27 @@ fun JavaClass.findInner(pathSegments: List<String>): JavaClass? =
         pathSegments.fold(this) { javaClass, it -> javaClass.findInner(Name.identifier(it)) ?: return null }
 
 fun JavaClass.findInner(name: Name): JavaClass? {
-    findInnerClass(name)?.let { return it }
+    val found = hashSetOf<JavaClass>()
+    val checkedSupertypes = hashSetOf<JavaClass>()
 
-    supertypes.mapNotNull { it.classifier as? JavaClass }
-            .forEach { javaClass -> javaClass.findInner(name)?.let { return it } }
+    fun JavaClass.find() {
+        findInnerClass(name)?.let {
+            if (it.visibility != Visibilities.PRIVATE) {
+                found.add(it)
+                supertypes.mapNotNullTo(checkedSupertypes) { it.classifier as? JavaClass }
+                return
+            }
+        }
+        supertypes.mapNotNull { it.classifier as? JavaClass }
+                .forEach { javaClass ->
+                    if (javaClass !in checkedSupertypes) {
+                        javaClass.find()
+                        checkedSupertypes.add(javaClass)
+                    }
+                }
+    }
 
-    return null
+    find()
+
+    return found.singleOrNull()
 }
