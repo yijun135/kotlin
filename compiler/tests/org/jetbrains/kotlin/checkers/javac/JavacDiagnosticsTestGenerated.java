@@ -181,9 +181,21 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTest(fileName);
             }
 
+            @TestMetadata("InheritanceWithKotlinClasses.kt")
+            public void testInheritanceWithKotlinClasses() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritanceWithKotlinClasses.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("InheritedInner.kt")
             public void testInheritedInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("InheritedInner2.kt")
+            public void testInheritedInner2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInner2.kt");
                 doTest(fileName);
             }
 
@@ -242,6 +254,18 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
         public static class Inners extends AbstractJavacDiagnosticsTest {
             public void testAllFilesPresentInInners() throws Exception {
                 KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/inners"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("ComplexCase.kt")
+            public void testComplexCase() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ComplexCase.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("ComplexCase2.kt")
+            public void testComplexCase2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ComplexCase2.kt");
+                doTest(fileName);
             }
 
             @TestMetadata("CurrentPackageAndInner.kt")
@@ -314,6 +338,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
         public static class TypeParameters extends AbstractJavacDiagnosticsTest {
             public void testAllFilesPresentInTypeParameters() throws Exception {
                 KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/typeParameters"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("Clash.kt")
+            public void testClash() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/Clash.kt");
+                doTest(fileName);
             }
 
             @TestMetadata("ComplexCase.kt")
@@ -505,9 +535,21 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTestWithoutJavacWrapper(fileName);
             }
 
+            @TestMetadata("InheritanceWithKotlinClasses.kt")
+            public void testInheritanceWithKotlinClasses() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritanceWithKotlinClasses.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
             @TestMetadata("InheritedInner.kt")
             public void testInheritedInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("InheritedInner2.kt")
+            public void testInheritedInner2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/InheritedInner2.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
 
@@ -566,6 +608,18 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
         public static class Inners extends AbstractJavacDiagnosticsTest {
             public void testAllFilesPresentInInners() throws Exception {
                 KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/inners"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("ComplexCase.kt")
+            public void testComplexCase() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ComplexCase.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("ComplexCase2.kt")
+            public void testComplexCase2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/ComplexCase2.kt");
+                doTestWithoutJavacWrapper(fileName);
             }
 
             @TestMetadata("CurrentPackageAndInner.kt")
@@ -638,6 +692,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
         public static class TypeParameters extends AbstractJavacDiagnosticsTest {
             public void testAllFilesPresentInTypeParameters() throws Exception {
                 KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/javac/diagnostics/tests/typeParameters"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+            }
+
+            @TestMetadata("Clash.kt")
+            public void testClash() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/typeParameters/Clash.kt");
+                doTestWithoutJavacWrapper(fileName);
             }
 
             @TestMetadata("ComplexCase.kt")
