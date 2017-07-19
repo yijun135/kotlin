@@ -70,8 +70,8 @@ extra["JDK_16"] = jdkPath("1.6")
 extra["JDK_17"] = jdkPath("1.7")
 extra["JDK_18"] = jdkPath("1.8")
 
-extra["compilerJar"] = project.file("$distLibDir/kotlin-compiler.jar")
-extra["embeddableCompilerJar"] = project.file("$distLibDir/kotlin-compiler-embeddable.jar")
+extra["compilerBaseName"] = "kotlin-compiler"
+extra["embeddableCompilerBaseName"] = "kotlin-compiler-embeddable"
 //extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
 //extra["bootstrapCompilerFile"] = bootstrapCfg.files.first().canonicalPath
 

@@ -28,18 +28,11 @@ val otherDepsCfg = configurations.create("other-deps")
 val proguardLibraryJarsCfg = configurations.create("library-jars")
 val mainCfg = configurations.create("default")
 val packedCfg = configurations.create("packed")
-val embeddableCfg = configurations.create("embeddable")
 //val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
 
-val outputBeforeSrinkJar = "$buildDir/libs/kotlin-compiler-before-shrink.jar"
-val outputJar = rootProject.extra["compilerJar"].toString()
-val outputEmbeddableJar = rootProject.extra["embeddableCompilerJar"].toString()
-//val outputJarWithBootstrapRuntime = rootProject.extra["compilerJarWithBootstrapRuntime"].toString()
+val compilerBaseName: String by rootProject.extra
 
-val kotlinEmbeddableRootPackage = "org.jetbrains.kotlin"
-
-artifacts.add(mainCfg.name, file(outputJar))
-artifacts.add(embeddableCfg.name, file(outputEmbeddableJar))
+val outputJar = File(buildDir, "libs", "$compilerBaseName.jar")
 
 val javaHome = System.getProperty("java.home")
 
@@ -66,21 +59,13 @@ dependencies {
 //    proguardLibraryJarsCfg(project(":prepare:runtime", configuration = "default").apply { isTransitive = false })
 //    proguardLibraryJarsCfg(project(":prepare:reflect", configuration = "default").apply { isTransitive = false })
 //    proguardLibraryJarsCfg(project(":core:script.runtime").apply { isTransitive = false })
-//    embeddableCfg(project(":prepare:runtime", configuration = "default"))
-//    embeddableCfg(project(":prepare:reflect", configuration = "default"))
-//    embeddableCfg(projectDepIntransitive(":core:script.runtime"))
-    embeddableCfg(projectDepIntransitive(":build-common"))
-//    embeddableCfg(projectDepIntransitive(":kotlin-test:kotlin-test-jvm"))
-//    embeddableCfg(projectDepIntransitive(":kotlin-stdlib"))
-//    withBootstrapRuntimeCfg(kotlinDep("stdlib"))
-//    withBootstrapRuntimeCfg(kotlinDep("script-runtime"))
-//    withBootstrapRuntimeCfg(kotlinDep("reflect"))
 }
 
 val packCompilerTask = task<ShadowJar>("internal.pack-compiler") {
-    configurations = listOf(mainCfg)
+    configurations = listOf(packedCfg)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveName = if (shrink) outputBeforeSrinkJar else outputJar
+    destinationDir = File(buildDir, "libs")
+    baseName = compilerBaseName + "-before-shrink"
     dependsOn(protobufFullTask)
     setupRuntimeJar("Kotlin Compiler")
     (rootProject.extra["compilerModules"] as Array<String>).forEach {
@@ -99,12 +84,13 @@ val proguardTask = task<ProGuardTask>("internal.proguard-compiler") {
     dependsOn(packCompilerTask)
     configuration("$rootDir/compiler/compiler.pro")
 
-    inputs.files(outputBeforeSrinkJar)
+    inputs.files(packCompilerTask.outputs.files.singleFile)
     outputs.file(outputJar)
 
+    // TODO: remove after dropping compatibility with ant build
     doFirst {
-        System.setProperty("kotlin-compiler-jar-before-shrink", outputBeforeSrinkJar.toString())
-        System.setProperty("kotlin-compiler-jar", outputJar.toString())
+        System.setProperty("kotlin-compiler-jar-before-shrink", packCompilerTask.outputs.files.singleFile.canonicalPath)
+        System.setProperty("kotlin-compiler-jar", outputJar.canonicalPath)
     }
 
     proguardLibraryJarsCfg.files.forEach { jar ->
@@ -113,35 +99,16 @@ val proguardTask = task<ProGuardTask>("internal.proguard-compiler") {
     printconfiguration("$buildDir/compiler.pro.dump")
 }
 
-val mainTask = task("dist") {
-    dependsOn(if (shrink) proguardTask else packCompilerTask)
-}
-
-val embeddableTask = task<ShadowJar>("prepare-embeddable-compiler") {
-    archiveName = outputEmbeddableJar
-    configurations = listOf(embeddableCfg)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn(mainTask, ":build-common:assemble", ":core:script.runtime:assemble") //, ":kotlin-test:kotlin-test-jvm:assemble", ":kotlin-stdlib:assemble")
-    from(files(outputJar))
-    from(embeddableCfg.files)
-    relocate("com.google.protobuf", "org.jetbrains.kotlin.protobuf" )
-    relocate("com.intellij", "$kotlinEmbeddableRootPackage.com.intellij")
-    relocate("com.google", "$kotlinEmbeddableRootPackage.com.google")
-    relocate("com.sampullara", "$kotlinEmbeddableRootPackage.com.sampullara")
-    relocate("org.apache", "$kotlinEmbeddableRootPackage.org.apache")
-    relocate("org.jdom", "$kotlinEmbeddableRootPackage.org.jdom")
-    relocate("org.fusesource", "$kotlinEmbeddableRootPackage.org.fusesource") {
-        // TODO: remove "it." after #KT-12848 get addressed
-        exclude("org.fusesource.jansi.internal.CLibrary")
+dist {
+    if (shrink) {
+        from(proguardTask)
+    } else {
+        from(packCompilerTask)
+        rename("-before-shrink", "")
     }
-    relocate("org.picocontainer", "$kotlinEmbeddableRootPackage.org.picocontainer")
-    relocate("jline", "$kotlinEmbeddableRootPackage.jline")
-    relocate("gnu", "$kotlinEmbeddableRootPackage.gnu")
-    relocate("javax.inject", "$kotlinEmbeddableRootPackage.javax.inject")
 }
 
-defaultTasks(mainTask.name, embeddableTask.name)
-
-artifacts.add(mainCfg.name, File(outputJar))
-artifacts.add(packedCfg.name, File(if (shrink) outputJar else outputBeforeSrinkJar))
-
+artifacts.add(mainCfg.name, proguardTask.outputs.files.singleFile) {
+    builtBy(proguardTask)
+    classifier = ""
+}
