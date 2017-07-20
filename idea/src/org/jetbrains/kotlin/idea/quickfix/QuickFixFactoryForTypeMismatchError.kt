@@ -115,15 +115,23 @@ class QuickFixFactoryForTypeMismatchError : KotlinIntentionActionsFactory() {
             expressionTypeDeclaration?.let { actions.add(LetImplementInterfaceFix(it, expectedType, expressionType)) }
         }
 
+        fun KtExpression.getTopMostQualifiedIfAny(): KtExpression {
+            var element = this
+            while (element.parent is KtQualifiedExpression) {
+                element = element.parent as KtQualifiedExpression
+            }
+            return element
+        }
+
         // We don't want to cast a cast or type-asserted expression:
         if (diagnosticElement !is KtBinaryExpressionWithTypeRHS && diagnosticElement.parent !is KtBinaryExpressionWithTypeRHS) {
-            actions.add(CastExpressionFix(diagnosticElement, expectedType))
+            actions.add(CastExpressionFix(diagnosticElement.getTopMostQualifiedIfAny(), expectedType))
         }
 
         if (!expectedType.isMarkedNullable && org.jetbrains.kotlin.types.TypeUtils.isNullableType(expressionType)) {
             val nullableExpected = expectedType.makeNullable()
             if (expressionType.isSubtypeOf(nullableExpected)) {
-                actions.add(AddExclExclCallFix(diagnosticElement))
+                actions.add(AddExclExclCallFix(diagnosticElement.getTopMostQualifiedIfAny()))
             }
         }
 
