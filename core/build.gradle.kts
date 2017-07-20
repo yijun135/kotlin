@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":core:builtins"))
     compile(project("util.runtime"))
     compile(protobufLite())

@@ -1,7 +1,60 @@
 
+import java.io.File
+import proguard.gradle.ProGuardTask
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.gradle.api.file.DuplicatesStrategy
+import org.gradle.api.internal.plugins.DslObject
+import org.gradle.api.publication.maven.internal.deployer.MavenRemoteRepository
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath("com.github.jengelman.gradle.plugins:shadow:1.2.3")
+        classpath("net.sf.proguard:proguard-gradle:5.3.1")
+    }
+}
+
 apply { plugin("kotlin") }
+apply { plugin("maven") }
+
+
+// Set to false to disable proguard run on kotlin-compiler.jar. Speeds up the build
+val shrink = true
+val bootstrapBuild = false
+
+val compilerManifestClassPath =
+        if (bootstrapBuild) "kotlin-runtime-internal-bootstrap.jar kotlin-reflect-internal-bootstrap.jar kotlin-script-runtime-internal-bootstrap.jar"
+        else "kotlin-runtime.jar kotlin-reflect.jar kotlin-script-runtime.jar"
+
+//val ideaSdkCoreCfg = configurations.create("ideaSdk-core")
+//val otherDepsCfg = configurations.create("other-deps")
+val packedJars by configurations.creating
+val proguardLibraryJarsCfg = configurations.create("library-jars")
+val mainCfg = configurations.create("default_")
+val packedCfg = configurations.create("packed")
+//val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
+
+val compilerBaseName: String by rootProject.extra
+val packedJarClassifier = "before-shrink"
+
+val outputJar = File(buildDir, "libs", "$compilerBaseName.jar")
+
+val javaHome = System.getProperty("java.home")
+
+val buildLocalRepoPath: File by rootProject.extra
+
+val compilerModules: Array<String> by rootProject.extra
+val otherCompilerModules = compilerModules.filter { it != path }
 
 dependencies {
+    val compile by configurations
+    val compileOnly by configurations
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
     compileOnly(project(":compiler:cli"))
     compileOnly(project(":compiler:daemon-common"))
     compileOnly(project(":compiler:incremental-compilation-impl"))
@@ -24,12 +77,15 @@ dependencies {
     testCompile(project(":kotlin-reflect"))
     testCompile(project(":plugins:android-extensions-compiler"))
     testCompile(project(":ant"))
-    (rootProject.extra["compilerModules"] as Array<String>).forEach {
+    otherCompilerModules.forEach {
         testCompile(project(it))
     }
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))
     testRuntime(project(":prepare:compiler", configuration = "default"))
+
+    buildVersion()
+
 }
 
 configureKotlinProjectSources(

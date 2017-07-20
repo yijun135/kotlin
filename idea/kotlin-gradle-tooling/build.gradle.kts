@@ -4,6 +4,7 @@ import org.gradle.jvm.tasks.Jar
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":kotlin-stdlib"))
     compile(project(":compiler:cli-common"))
     compile(ideaSdkDeps("gradle-tooling-api",

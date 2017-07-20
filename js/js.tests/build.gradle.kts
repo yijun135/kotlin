@@ -2,6 +2,10 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
+
     testCompile(project(":compiler.tests-common"))
     testCompile(project(":compiler:frontend"))
     testCompile(project(":compiler:cli"))

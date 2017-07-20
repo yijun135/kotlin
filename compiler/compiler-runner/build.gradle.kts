@@ -2,6 +2,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":build-common"))
     compile(project(":compiler:cli-common"))
     compile(project(":compiler:preloader"))

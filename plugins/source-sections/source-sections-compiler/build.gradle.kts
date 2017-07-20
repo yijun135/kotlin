@@ -4,6 +4,11 @@ import org.gradle.jvm.tasks.Jar
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
+    val compileOnly by configurations
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
     compile(project(":compiler:frontend"))
     compile(project(":compiler:frontend.script"))
     compile(project(":compiler:plugin-api"))

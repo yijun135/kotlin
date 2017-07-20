@@ -4,6 +4,7 @@ import org.gradle.jvm.tasks.Jar
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(commonDep("org.apache.ant", "ant"))
     compile(project(":compiler:preloader"))
     compile(kotlinDep("stdlib"))

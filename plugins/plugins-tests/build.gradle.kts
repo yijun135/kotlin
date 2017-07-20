@@ -2,6 +2,11 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
+    val compileOnly by configurations
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
     testCompile(project(":compiler:util"))
     testCompile(project(":compiler:backend"))
     testCompile(project(":compiler:cli"))

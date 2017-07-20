@@ -15,6 +15,8 @@ buildscript {
     }
 }
 
+apply { plugin("maven") }
+
 // Set to false to disable proguard run on kotlin-compiler.jar. Speeds up the build
 val shrink = true
 val bootstrapBuild = false
@@ -26,7 +28,7 @@ val compilerManifestClassPath =
 val ideaSdkCoreCfg = configurations.create("ideaSdk-core")
 val otherDepsCfg = configurations.create("other-deps")
 val proguardLibraryJarsCfg = configurations.create("library-jars")
-val mainCfg = configurations.create("default")
+val mainCfg = configurations.create("default_")
 val packedCfg = configurations.create("packed")
 //val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
 
@@ -112,3 +114,5 @@ artifacts.add(mainCfg.name, proguardTask.outputs.files.singleFile) {
     builtBy(proguardTask)
     classifier = ""
 }
+
+

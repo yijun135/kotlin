@@ -2,6 +2,12 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
+    val compileOnly by configurations
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
+
     testRuntime(ideaSdkDeps("*.jar"))
 
     compile(project(":kotlin-stdlib"))

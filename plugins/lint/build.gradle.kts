@@ -5,6 +5,7 @@ apply {
 }
 
 dependencies {
+    val compile by configurations
     compile(project(":compiler:frontend"))
     compile(project(":idea"))
     compile(project(":idea:idea-core"))

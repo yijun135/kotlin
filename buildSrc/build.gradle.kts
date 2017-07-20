@@ -16,6 +16,7 @@ apply {
 }
 
 dependencies {
+    val compile by configurations
     compile(kotlinModule("stdlib", version = project.extra["kotlinVersion"] as String))
     compile(gradleApi())
     compile(gradleScriptKotlinApi())

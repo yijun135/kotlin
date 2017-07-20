@@ -3,6 +3,7 @@ import org.gradle.jvm.tasks.Jar
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":plugins:sam-with-receiver-cli"))
     compile(project(":plugins:annotation-based-compiler-plugins-ide-support"))
     compile(project(":compiler:util"))

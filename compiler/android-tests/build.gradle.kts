@@ -4,11 +4,18 @@ apply {
 }
 
 dependencies {
+    val compile by configurations
+    val compileOnly by configurations
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
+
     compile(project(":compiler:util"))
     compile(project(":compiler:cli"))
     compile(project(":compiler.tests-common"))
     compile(project(":compiler:frontend"))
     compile(project(":compiler:backend"))
+
     testCompile(project(":compiler:incremental-compilation-impl"))
     testCompile(project(":core"))
     testCompile(project(":compiler:frontend.java"))

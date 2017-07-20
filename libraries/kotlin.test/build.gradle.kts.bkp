@@ -33,6 +33,7 @@ configure<JavaPluginConvention> {
 }
 
 dependencies {
+    val compile by configurations
     compile(project(":core:builtins"))
     compile("junit:junit:4.11")
 }

@@ -12,6 +12,7 @@ val builtinsSerialized = File(rootProject.extra["distDir"].toString(), "builtins
 val builtinsJar = File(buildDir, "builtins.jar")
 
 dependencies {
+    val compile by configurations
     compile(protobufLite())
     compile(files(builtinsSerialized))
 }

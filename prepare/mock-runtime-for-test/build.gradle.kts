@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":kotlin-stdlib"))
 }
 

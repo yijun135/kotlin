@@ -4,6 +4,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":core"))
     compile(project(":core::util.runtime"))
     compile(project(":compiler:util"))

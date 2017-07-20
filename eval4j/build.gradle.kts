@@ -1,6 +1,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":kotlin-stdlib"))
     compile(project(":kotlin-reflect"))
     compile(project(":compiler:backend"))

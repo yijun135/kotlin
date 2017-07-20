@@ -1,6 +1,12 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
+    val compileOnly by configurations
+    val testCompile by configurations
+    val testCompileOnly by configurations
+    val testRuntime by configurations
+
     compile(kotlinDep("reflect"))
     compile(project(":compiler:util"))
     compile(project(":compiler:light-classes"))

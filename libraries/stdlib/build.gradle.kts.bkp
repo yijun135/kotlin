@@ -30,6 +30,7 @@ configure<JavaPluginConvention> {
 val builtinsProjectName = ":core:builtins"
 
 dependencies {
+    val compile by configurations
     compile(project(builtinsProjectName))
 }
 

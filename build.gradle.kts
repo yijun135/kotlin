@@ -48,6 +48,7 @@ dependencies {
     bootstrapCompileCfg(kotlinDep("compiler-embeddable"))
 }
 
+val commonBuildDir = File(rootDir, "build")
 val distDir = "$rootDir/dist"
 val distLibDir = "$distDir/kotlinc/lib"
 val ideaPluginDir = "$distDir/artifacts/Kotlin"
@@ -74,6 +75,8 @@ extra["compilerBaseName"] = "kotlin-compiler"
 extra["embeddableCompilerBaseName"] = "kotlin-compiler-embeddable"
 //extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
 //extra["bootstrapCompilerFile"] = bootstrapCfg.files.first().canonicalPath
+
+extra["buildLocalRepoPath"] = File(buildDir, "repo")
 
 extra["versions.protobuf-java"] = "2.6.1"
 extra["versions.javax.inject"] = "1"
@@ -150,13 +153,14 @@ fun Project.allprojectsRecursive(body: Project.() -> Unit) {
 
 allprojects {
 
-    setBuildDir("$rootDir/build/${project.name}")
+    setBuildDir(File(commonBuildDir, project.name))
 
     repositories {
         for (repo in (rootProject.extra["repos"] as List<String>)) {
             maven { setUrl(repo) }
         }
         mavenCentral()
+        jcenter()
     }
 
     tasks.withType<KotlinCompile> {

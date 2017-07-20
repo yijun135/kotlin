@@ -2,6 +2,7 @@
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(project(":kotlin-stdlib"))
     compile(project(":core:util.runtime"))
     compile(project(":compiler:backend"))

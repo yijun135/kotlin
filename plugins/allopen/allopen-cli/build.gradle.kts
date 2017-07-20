@@ -4,6 +4,7 @@ import org.gradle.jvm.tasks.Jar
 apply { plugin("kotlin") }
 
 dependencies {
+    val compile by configurations
     compile(ideaSdkCoreDeps("intellij-core"))
     compile(project(":compiler:plugin-api"))
     compile(project(":compiler:frontend"))
