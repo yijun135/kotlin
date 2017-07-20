@@ -28,6 +28,8 @@ open class AndroidExtensionsExtension : Configurable<AndroidExtensionsExtension>
 
     open var isExperimental: Boolean = false
 
+    open var defaultCacheImplementation: String = "hashMap"
+
     override fun configure(closure: Closure<*>): AndroidExtensionsExtension {
         // ConfigureUtil is not used here to prevent infinite recursion
         closure.resolveStrategy = Closure.DELEGATE_FIRST
