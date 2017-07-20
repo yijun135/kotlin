@@ -2,14 +2,17 @@
 import org.gradle.api.tasks.compile.JavaCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.serialization.builtins.BuiltInsSerializer
+import org.gradle.jvm.tasks.Jar
 import java.io.File
 
 apply { plugin("kotlin") }
 
 val builtinsSrc = File(rootDir, "core", "builtins", "src")
 val builtinsNative = File(rootDir, "core", "builtins", "native")
+// TODO: rewrite dependent projects on using build results instead of the fixed location
 val builtinsSerialized = File(rootProject.extra["distDir"].toString(), "builtins")
-val builtinsJar = File(buildDir, "builtins.jar")
+
+val builtins by configurations.creating
 
 dependencies {
     val compile by configurations
@@ -45,3 +48,10 @@ tasks.withType<KotlinCompile> {
     dependsOn(serialize)
 }
 
+val builtinsJar by task<Jar> {
+    dependsOn(serialize)
+    from(builtinsSerialized) { include("kotlin/**") }
+    destinationDir = File(buildDir, "libs")
+}
+
+artifacts.add(builtins.name, builtinsJar)

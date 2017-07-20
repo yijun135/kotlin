@@ -38,6 +38,10 @@ fun Project.dist(body: Copy.() -> Unit) {
     }
 }
 
+fun Project.publish() {
+
+}
+
 fun Project.ideaPlugin(subdir: String = "lib", body: Copy.() -> Unit) {
     task<Copy>("idea-plugin") {
         dependsOnTaskIfExists("assemble")
@@ -135,9 +139,25 @@ fun DependencyHandler.protobufFull(): ProjectDependency =
         project(protobufLiteProject, configuration = "relocated").apply { isTransitive = false }
 val protobufFullTask = "$protobufLiteProject:prepare-relocated-protobuf"
 
-fun Project.getCompiledClasses(): SourceSetOutput? = the<JavaPluginConvention>().sourceSets.getByName("main").output
-fun Project.getSources(): SourceDirectorySet? = the<JavaPluginConvention>().sourceSets.getByName("main").allSource
-fun Project.getResourceFiles(): SourceDirectorySet? = the<JavaPluginConvention>().sourceSets.getByName("main").resources
+inline fun<T: Any> Project.withJavaPlugin(crossinline body: () -> T?): T? {
+    var res: T? = null
+    pluginManager.withPlugin("java") {
+        res = body()
+    }
+    return res
+}
+
+fun Project.getCompiledClasses(): SourceSetOutput? = withJavaPlugin {
+    the<JavaPluginConvention>().sourceSets.getByName("main").output
+}
+
+fun Project.getSources(): SourceDirectorySet? = withJavaPlugin {
+    the<JavaPluginConvention>().sourceSets.getByName("main").allSource
+}
+
+fun Project.getResourceFiles(): SourceDirectorySet? = withJavaPlugin {
+    the<JavaPluginConvention>().sourceSets.getByName("main").resources
+}
 
 
 private fun Project.configureKotlinProjectSourceSet(srcs: Iterable<File>,

@@ -14,7 +14,6 @@ dependencies {
     testCompile(project(":js:js.serializer"))
     testCompile(project(":js:js.dce"))
     testCompile(ideaSdkDeps("openapi", "idea"))
-    testRuntime(project(":prepare:compiler", configuration = "default"))
     testRuntime(project(":kotlin-stdlib"))
     testRuntime(project(":compiler:backend-common"))
     testRuntime(ideaSdkDeps("*.jar"))

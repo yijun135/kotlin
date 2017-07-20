@@ -18,36 +18,52 @@ buildscript {
 }
 
 apply { plugin("kotlin") }
-apply { plugin("maven") }
+
+plugins {
+    maven
+}
+//apply { plugin("maven") }
 
 
 // Set to false to disable proguard run on kotlin-compiler.jar. Speeds up the build
 val shrink = true
-val bootstrapBuild = false
 
 val compilerManifestClassPath =
-        if (bootstrapBuild) "kotlin-runtime-internal-bootstrap.jar kotlin-reflect-internal-bootstrap.jar kotlin-script-runtime-internal-bootstrap.jar"
-        else "kotlin-runtime.jar kotlin-reflect.jar kotlin-script-runtime.jar"
+        "kotlin-runtime.jar kotlin-reflect.jar kotlin-script-runtime.jar"
 
-//val ideaSdkCoreCfg = configurations.create("ideaSdk-core")
-//val otherDepsCfg = configurations.create("other-deps")
-val packedJars by configurations.creating
-val proguardLibraryJarsCfg = configurations.create("library-jars")
-val mainCfg = configurations.create("default_")
-val packedCfg = configurations.create("packed")
-//val withBootstrapRuntimeCfg = configurations.create("withBootstrapRuntime")
+val fatJarContents by configurations.creating
+val proguardLibraryJars by configurations.creating
+val fatJar by configurations.creating
+val compilerJar by configurations.creating
+val embeddableCompilerJar by configurations.creating
 
 val compilerBaseName: String by rootProject.extra
-val packedJarClassifier = "before-shrink"
+val embeddableCompilerBaseName: String by rootProject.extra
 
-val outputJar = File(buildDir, "libs", "$compilerBaseName.jar")
-
-val javaHome = System.getProperty("java.home")
+val javaHome = File(System.getProperty("java.home"))
 
 val buildLocalRepoPath: File by rootProject.extra
 
 val compilerModules: Array<String> by rootProject.extra
 val otherCompilerModules = compilerModules.filter { it != path }
+
+val kotlinEmbeddableRootPackage = "org.jetbrains.kotlin"
+
+val packagesToRelocate =
+        listOf("com.intellij",
+               "com.google",
+               "com.sampullara",
+               "org.apache",
+               "org.jdom",
+               "org.picocontainer",
+               "jline",
+               "gnu",
+               "javax.inject",
+               "org.fusesource")
+
+fun firstFromJavaHomeThatExists(vararg paths: String): File =
+        paths.mapNotNull { File(javaHome, it).takeIf { it.exists() } }.firstOrNull()
+        ?: throw GradleException("Cannot find under '$javaHome' neither of: ${paths.joinToString()}")
 
 dependencies {
     val compile by configurations
@@ -79,13 +95,35 @@ dependencies {
     testCompile(project(":ant"))
     otherCompilerModules.forEach {
         testCompile(project(it))
+        fatJarContents(project(it)) { isTransitive = false }
     }
     testRuntime(ideaSdkCoreDeps("*.jar"))
     testRuntime(ideaSdkDeps("*.jar"))
-    testRuntime(project(":prepare:compiler", configuration = "default"))
+//    testRuntime(project(":prepare:compiler", configuration = "default"))
 
     buildVersion()
 
+    fatJarContents(project(":core:builtins", configuration = "builtins"))
+    fatJarContents(ideaSdkCoreDeps(*(rootProject.extra["ideaCoreSdkJars"] as Array<String>)))
+    fatJarContents(ideaSdkDeps("jna-platform", "oromatcher"))
+    fatJarContents(ideaSdkDeps("jps-model.jar", subdir = "jps"))
+    fatJarContents(commonDep("javax.inject"))
+    fatJarContents(commonDep("jline"))
+    fatJarContents(protobufFull())
+    fatJarContents(commonDep("com.github.spullara.cli-parser", "cli-parser"))
+    fatJarContents(commonDep("com.google.code.findbugs", "jsr305"))
+    fatJarContents(commonDep("io.javaslang", "javaslang"))
+    fatJarContents(preloadedDeps("json-org"))
+
+    proguardLibraryJars(files(firstFromJavaHomeThatExists("lib/rt.jar", "../Classes/classes.jar"),
+                              firstFromJavaHomeThatExists("lib/jsse.jar", "../Classes/jsse.jar"),
+                              firstFromJavaHomeThatExists("../lib/tools.jar", "../Classes/tools.jar")))
+    proguardLibraryJars(kotlinDep("stdlib"))
+    proguardLibraryJars(kotlinDep("script-runtime"))
+    proguardLibraryJars(kotlinDep("reflect"))
+//    proguardLibraryJars(project(":prepare:runtime", configuration = "default").apply { isTransitive = false })
+//    proguardLibraryJars(project(":prepare:reflect", configuration = "default").apply { isTransitive = false })
+//    proguardLibraryJars(project(":core:script.runtime").apply { isTransitive = false })
 }
 
 configureKotlinProjectSources(
@@ -111,5 +149,77 @@ tasks.withType<Test> {
     jvmArgs("-ea", "-XX:+HeapDumpOnOutOfMemoryError", "-Xmx1200m", "-XX:+UseCodeCacheFlushing", "-XX:ReservedCodeCacheSize=128m", "-Djna.nosys=true")
     maxHeapSize = "1200m"
     ignoreFailures = true
+}
+
+val packCompiler by task<ShadowJar> {
+    configurations = listOf(fatJar)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    destinationDir = File(buildDir, "libs")
+    baseName = compilerBaseName
+    classifier = "before-proguard"
+    dependsOn(protobufFullTask)
+
+    setupRuntimeJar("Kotlin Compiler")
+    from(getCompiledClasses())
+    from(fatJarContents)
+
+    manifest.attributes.put("Class-Path", compilerManifestClassPath)
+    manifest.attributes.put("Main-Class", "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")
+}
+
+val proguard by task<ProGuardTask> {
+    dependsOn(packCompiler)
+    configuration("$rootDir/compiler/compiler.pro")
+
+    val outputJar = File(buildDir, "libs", "$compilerBaseName-after-proguard.jar")
+
+    inputs.files(packCompiler.outputs.files.singleFile)
+    outputs.file(outputJar)
+
+    // TODO: remove after dropping compatibility with ant build
+    doFirst {
+        System.setProperty("kotlin-compiler-jar-before-shrink", packCompiler.outputs.files.singleFile.canonicalPath)
+        System.setProperty("kotlin-compiler-jar", outputJar.canonicalPath)
+    }
+
+    libraryjars(proguardLibraryJars)
+    printconfiguration("$buildDir/compiler.pro.dump")
+}
+
+val embeddable by task<ShadowJar> {
+    destinationDir = File(buildDir, "libs")
+    baseName = embeddableCompilerBaseName
+    configurations = listOf(embeddableCompilerJar)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(proguard)
+    from(proguard)
+    relocate("com.google.protobuf", "org.jetbrains.kotlin.protobuf")
+    packagesToRelocate.forEach {
+        relocate(it, "$kotlinEmbeddableRootPackage.$it")
+    }
+    relocate("org.fusesource", "$kotlinEmbeddableRootPackage.org.fusesource") {
+        // TODO: remove "it." after #KT-12848 get addressed
+        exclude("org.fusesource.jansi.internal.CLibrary")
+    }
+}
+
+dist {
+    if (shrink) {
+        from(proguard)
+    } else {
+        from(packCompiler)
+    }
+    rename(".*", compilerBaseName + ".jar")
+}
+
+artifacts.add(compilerJar.name, proguard.outputs.files.singleFile) {
+    builtBy(proguard)
+    classifier = ""
+    name = compilerBaseName
+}
+artifacts.add(embeddableCompilerJar.name, embeddable.outputs.files.singleFile) {
+    builtBy(embeddable)
+    classifier = ""
+    name = embeddableCompilerBaseName
 }
 

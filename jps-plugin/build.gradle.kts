@@ -31,7 +31,6 @@ dependencies {
     (rootProject.extra["compilerModules"] as Array<String>).forEach {
         testRuntime(project(it))
     }
-    testRuntime(project(":prepare:compiler", configuration = "default"))
 }
 
 configureKotlinProjectSourcesDefault()

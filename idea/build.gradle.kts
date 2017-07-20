@@ -93,8 +93,6 @@ dependencies {
         testCompile(project(it))
     }
 
-    testCompile(project(":prepare:compiler", configuration = "default"))
-
     buildVersion()
 }
 

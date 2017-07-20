@@ -76,7 +76,7 @@ extra["embeddableCompilerBaseName"] = "kotlin-compiler-embeddable"
 //extra["compilerJarWithBootstrapRuntime"] = project.file("$distDir/kotlin-compiler-with-bootstrap-runtime.jar")
 //extra["bootstrapCompilerFile"] = bootstrapCfg.files.first().canonicalPath
 
-extra["buildLocalRepoPath"] = File(buildDir, "repo")
+extra["buildLocalRepoPath"] = File(commonBuildDir, "repo")
 
 extra["versions.protobuf-java"] = "2.6.1"
 extra["versions.javax.inject"] = "1"
