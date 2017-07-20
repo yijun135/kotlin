@@ -19,6 +19,8 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.addKotlinSourceRoot
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
+import org.jetbrains.kotlin.script.KotlinScriptDefinitionProvider
+import org.jetbrains.kotlin.script.StandardScriptDefinition
 import org.jetbrains.kotlin.test.ConfigurationKind
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.jetbrains.kotlin.test.TestJdkKind
@@ -41,14 +43,17 @@ abstract class AbstractKotlinUastTest : AbstractUastTest() {
 
     private lateinit var compilerConfiguration: CompilerConfiguration
     private var kotlinCoreEnvironment: KotlinCoreEnvironment? = null
+    protected open val fileExtension = ".kt"
 
     override fun getVirtualFile(testName: String): VirtualFile {
         val projectDir = TEST_KOTLIN_MODEL_DIR
-        val testFile = File(TEST_KOTLIN_MODEL_DIR, testName.substringBefore('/') + ".kt")
+        val testFile = File(TEST_KOTLIN_MODEL_DIR, testName.substringBefore('/') + fileExtension)
 
         super.initializeEnvironment(testFile)
 
         initializeKotlinEnvironment()
+
+        KotlinScriptDefinitionProvider.getInstance(project)?.addScriptDefinition(StandardScriptDefinition)
 
         val trace = CliLightClassGenerationSupport.NoScopeRecordCliBindingTrace()
 

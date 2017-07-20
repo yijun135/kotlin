@@ -128,6 +128,61 @@ sealed class LightClassDataProviderForFileFacade constructor(
 }
 
 
+sealed class LightClassDataProviderForScript constructor(
+        protected val project: Project, protected val scriptFqName: FqName
+) : CachedValueProvider<LightClassDataHolder.ForScript> {
+    abstract fun findFile(): KtFile?
+
+    private fun computeLightClassData(file: KtFile): LightClassDataHolder.ForScript {
+        return LightClassGenerationSupport.getInstance(project).createDataHolderForScript(file) {
+            constructionContext ->
+            buildLightClass(scriptFqName.parent(), listOf(file), ClassFilterForScript, constructionContext) generate@ {
+                state, files ->
+                val representativeFile = files.first()
+                val fileClassInfo = NoResolveFileClassesProvider.getFileClassInfo(representativeFile)
+                if (!fileClassInfo.withJvmMultifileClass) {
+                    val codegen = state.factory.forPackage(representativeFile.packageFqName, files)
+                    codegen.generate(CompilationErrorHandler.THROW_EXCEPTION)
+                    state.factory.done()
+                    return@generate
+                }
+
+                val codegen = state.factory.forMultifileClass(scriptFqName, files)
+                codegen.generate(CompilationErrorHandler.THROW_EXCEPTION)
+                state.factory.done()
+            }
+        }
+    }
+
+    override fun compute(): CachedValueProvider.Result<LightClassDataHolder.ForScript>? {
+        val file = findFile() ?: return null
+        return CachedValueProvider.Result.create(
+                computeLightClassData(file),
+                PsiModificationTracker.OUT_OF_CODE_BLOCK_MODIFICATION_COUNT
+        )
+    }
+
+    override fun toString(): String = this::class.java.name + " for $scriptFqName"
+
+    // create delegate by relevant files in project source using LightClassGenerationSupport
+    class ByProjectSource(
+            project: Project,
+            scriptFqName: FqName,
+            private val searchScope: GlobalSearchScope
+    ) : LightClassDataProviderForScript(project, scriptFqName) {
+        override fun findFile() = LightClassGenerationSupport.getInstance(project).findFileForScript(scriptFqName, searchScope)
+    }
+
+    // create delegate by single file
+    class ByFile(
+            project: Project,
+            scriptFqName: FqName,
+            private val file: KtFile
+    ) : LightClassDataProviderForScript(project, scriptFqName) {
+        override fun findFile() = file
+    }
+}
+
 interface StubComputationTracker {
     fun onStubComputed(javaFileStub: PsiJavaFileStub, context: LightClassConstructionContext)
 }
@@ -180,4 +235,11 @@ object ClassFilterForFacade : GenerationState.GenerateClassFilter() {
     override fun shouldGenerateClass(processingClassOrObject: KtClassOrObject) = KtPsiUtil.isLocal(processingClassOrObject)
     override fun shouldGeneratePackagePart(ktFile: KtFile) = true
     override fun shouldGenerateScript(script: KtScript) = false
+}
+
+object ClassFilterForScript : GenerationState.GenerateClassFilter() {
+    override fun shouldAnnotateClass(processingClassOrObject: KtClassOrObject) = shouldGenerateClass(processingClassOrObject)
+    override fun shouldGenerateClass(processingClassOrObject: KtClassOrObject) = KtPsiUtil.isLocal(processingClassOrObject)
+    override fun shouldGeneratePackagePart(ktFile: KtFile) = true
+    override fun shouldGenerateScript(script: KtScript) = true
 }

@@ -346,7 +346,7 @@ public abstract class MemberCodegen<T extends KtPureElement/* TODO: & KtDeclarat
 
             for (MemberCodegen<?> codegen = this; codegen != null; codegen = codegen.getParentCodegen()) {
                 ClassDescriptor outerClass = codegen.classForInnerClassRecord();
-                if (outerClass != null) {
+                if (outerClass != null && outerClass != classDescriptor) {
                     innerClasses.add(outerClass);
                 }
             }
