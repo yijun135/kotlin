@@ -1,0 +1,25 @@
+UFile (package = )
+    UClass (name = SimpleScript)
+        UAnnotationMethod (name = getBarOrNull)
+            UParameter (name = flag)
+                UAnnotation (fqName = null)
+            UBlockExpression
+                UReturnExpression
+                    UIfExpression
+                        USimpleNameReferenceExpression (identifier = flag)
+                        UCallExpression (kind = UastCallKind(name='constructor_call'), argCount = 0))
+                            UIdentifier (Identifier (Bar))
+                            USimpleNameReferenceExpression (identifier = <init>)
+                        ULiteralExpression (value = null)
+        UAnnotationMethod (name = SimpleScript)
+            UParameter (name = p)
+                UAnnotation (fqName = null)
+            UBlockExpression
+                UCallExpression (kind = UastCallKind(name='method_call'), argCount = 1))
+                    UIdentifier (Identifier (println))
+                    USimpleNameReferenceExpression (identifier = println)
+                    ULiteralExpression (value = "Hello World!")
+                UCallExpression (kind = UastCallKind(name='method_call'), argCount = 1))
+                    UIdentifier (Identifier (println))
+                    USimpleNameReferenceExpression (identifier = println)
+                    ULiteralExpression (value = "Goodbye World!")

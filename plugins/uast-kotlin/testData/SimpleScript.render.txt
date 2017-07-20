@@ -1,0 +1,9 @@
+public final class SimpleScript : kotlin.script.templates.standard.ScriptTemplateWithArgs {
+    public final fun getBarOrNull(flag: boolean) : SimpleScript.Bar {
+        return if (flag) <init>() else null
+    }
+    public fun SimpleScript(p: java.lang.String[]) {
+        println("Hello World!")
+        println("Goodbye World!")
+    }
+}

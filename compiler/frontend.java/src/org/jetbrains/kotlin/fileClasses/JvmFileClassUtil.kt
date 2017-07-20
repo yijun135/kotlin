@@ -22,6 +22,8 @@ import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PackageFragmentDescriptor
 import org.jetbrains.kotlin.load.java.descriptors.getImplClassNameForDeserialized
 import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils
+import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils.getPackagePartFqName
+import org.jetbrains.kotlin.load.kotlin.PackagePartClassUtils.getPackageScriptFqName
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
@@ -46,12 +48,19 @@ object JvmFileClassUtil {
     private fun getFileClassInfoForAnnotation(file: KtFile, jvmFileClassAnnotations: ParsedJvmFileClassAnnotations): JvmFileClassInfo =
             if (jvmFileClassAnnotations.multipleFiles)
                 JvmMultifileClassPartInfo(getHiddenPartFqName(file, jvmFileClassAnnotations),
+                                          getPackageScriptFqName(file.packageFqName, file.name),
                                           getFacadeFqName(file, jvmFileClassAnnotations))
             else
-                JvmSimpleFileClassInfo(getFacadeFqName(file, jvmFileClassAnnotations), true)
+                JvmSimpleFileClassInfo(
+                        getFacadeFqName(file, jvmFileClassAnnotations),
+                        getPackageScriptFqName(file.packageFqName, file.name),
+                        true)
 
     @JvmStatic fun getDefaultFileClassInfo(file: KtFile): JvmFileClassInfo =
-            JvmSimpleFileClassInfo(PackagePartClassUtils.getPackagePartFqName(file.packageFqName, file.name), false)
+            JvmSimpleFileClassInfo(
+                    getPackagePartFqName(file.packageFqName, file.name),
+                    getPackageScriptFqName(file.packageFqName, file.name),
+                    false)
 
     private fun getFacadeFqName(file: KtFile, jvmFileClassAnnotations: ParsedJvmFileClassAnnotations): FqName =
             file.packageFqName.child(Name.identifier(jvmFileClassAnnotations.name))

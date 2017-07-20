@@ -37,3 +37,18 @@ class KotlinFileFacadeFqNameIndex private constructor() : StringStubIndexExtensi
         @JvmStatic fun getInstance(): KotlinFileFacadeFqNameIndex = INSTANCE
     }
 }
+
+class KotlinScriptFqNameIndex private constructor() : StringStubIndexExtension<KtFile>() {
+    override fun getKey(): StubIndexKey<String, KtFile> = KEY
+
+    override fun get(key: String, project: Project, scope: GlobalSearchScope) =
+            StubIndex.getElements(KEY, key, project, scope, KtFile::class.java)
+
+    companion object {
+        private val KEY = KotlinIndexUtil.createIndexKey(KotlinScriptFqNameIndex::class.java)
+
+        @JvmField val INSTANCE: KotlinScriptFqNameIndex = KotlinScriptFqNameIndex()
+
+        @JvmStatic fun getInstance(): KotlinScriptFqNameIndex = INSTANCE
+    }
+}

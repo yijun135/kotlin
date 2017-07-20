@@ -82,6 +82,18 @@ class IDELightClassGenerationSupport(private val project: Project) : LightClassG
         )
     }
 
+    override fun createDataHolderForScript(files: Collection<KtFile>, builder: LightClassBuilder): LightClassDataHolder.ForScript {
+        assert(!files.isEmpty()) { "No files in facade" }
+
+        val sortedFiles = files.sortedWith(scopeFileComparator)
+
+        return LazyLightClassDataHolder.ForScript(
+                builder,
+                exactContextProvider = { IDELightClassContexts.contextForScript(sortedFiles) },
+                dummyContextProvider = { IDELightClassContexts.lightContextForScript(sortedFiles) }
+        )
+    }
+
     override fun findClassOrObjectDeclarations(fqName: FqName, searchScope: GlobalSearchScope): Collection<KtClassOrObject> {
         return runReadAction {
             KotlinFullClassNameIndex.getInstance().get(fqName.asString(), project, sourceAndClassFiles(searchScope, project))
@@ -202,6 +214,12 @@ class IDELightClassGenerationSupport(private val project: Project) : LightClassG
         }
     }
 
+    override fun findFilesForScript(scriptFqName: FqName, scope: GlobalSearchScope): Collection<KtFile> {
+        return runReadAction {
+            KotlinScriptFqNameIndex.INSTANCE.get(scriptFqName.asString(), project, scope)
+        }
+    }
+
     override fun resolveToDescriptor(declaration: KtDeclaration): DeclarationDescriptor? {
         try {
             return declaration.resolveToDescriptor()
@@ -235,6 +253,10 @@ class IDELightClassGenerationSupport(private val project: Project) : LightClassG
             val (fqName, moduleInfo) = key
             createLightClassForFileFacade(fqName, files, moduleInfo)
         }
+    }
+
+    override fun getScriptClassesInPackage(packageFqName: FqName, scope: GlobalSearchScope): Collection<PsiClass> {
+        TODO("")
     }
 
     private fun getLightClassForDecompiledClassOrObject(decompiledClassOrObject: KtClassOrObject): KtLightClassForDecompiledDeclaration? {

@@ -21,12 +21,23 @@ import org.jetbrains.kotlin.name.FqName
 interface JvmFileClassInfo {
     val fileClassFqName: FqName
     val facadeClassFqName: FqName
+    val scriptClassFqName: FqName
     val withJvmName: Boolean
     val withJvmMultifileClass: Boolean
 }
 
 class JvmSimpleFileClassInfo(
         override val fileClassFqName: FqName,
+        override val scriptClassFqName: FqName,
+        override val withJvmName: Boolean
+) : JvmFileClassInfo {
+    override val facadeClassFqName: FqName get() = fileClassFqName
+    override val withJvmMultifileClass: Boolean get() = false
+}
+
+class JvmScriptFileClassInfo(
+        override val fileClassFqName: FqName,
+        override val scriptClassFqName: FqName,
         override val withJvmName: Boolean
 ) : JvmFileClassInfo {
     override val facadeClassFqName: FqName get() = fileClassFqName
@@ -35,6 +46,7 @@ class JvmSimpleFileClassInfo(
 
 class JvmMultifileClassPartInfo(
         override val fileClassFqName: FqName,
+        override val scriptClassFqName: FqName,
         override val facadeClassFqName: FqName
 ) : JvmFileClassInfo {
     override val withJvmName: Boolean get() = true

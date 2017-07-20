@@ -51,6 +51,11 @@ object PackagePartClassUtils {
         return packageFqName.child(Name.identifier(partClassName))
     }
 
+    @JvmStatic fun getPackageScriptFqName(packageFqName: FqName, fileName: String): FqName {
+        val scriptClassName = NameUtils.getPackagePartClassNamePrefix(FileUtil.getNameWithoutExtension(fileName))
+        return packageFqName.child(Name.identifier(scriptClassName))
+    }
+
     @JvmStatic fun getFilesWithCallables(files: Collection<KtFile>): List<KtFile> =
             files.filter { fileHasTopLevelCallables(it) }
 
