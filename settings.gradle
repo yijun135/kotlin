@@ -1,4 +1,5 @@
 // modules
+include 'buildSrc'
 include "build-common"
 include "compiler"
 include "compiler:util"
