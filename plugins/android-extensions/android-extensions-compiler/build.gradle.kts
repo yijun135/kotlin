@@ -11,9 +11,10 @@ dependencies {
     compile(project(":compiler:frontend"))
     compile(project(":compiler:frontend.java"))
     compile(project(":compiler:backend"))
+    compile(ideaPluginDeps("layoutlib", plugin = "android"))
 }
 
-configureKotlinProjectSourcesDefault()
+configureKotlinProjectSources("android-extensions-compiler/src", "android-extensions-runtime/src", sourcesBaseDir = File(rootDir, "plugins", "android-extensions"))
 configureKotlinProjectNoTests()
 
 val jar: Jar by tasks

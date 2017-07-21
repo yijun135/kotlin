@@ -11,8 +11,6 @@ dependencies {
     testCompile(project(":compiler:backend"))
     testCompile(project(":compiler:cli"))
     testCompile(project(":compiler.tests-common"))
-    testCompile(project(":plugins:java-model-wrappers"))
-    testCompile(project(":plugins:annotation-processing"))
     testCompile(project(":plugins:android-extensions-compiler"))
     testCompile(project(":plugins:android-extensions-idea"))
     testCompile(project(":plugins:allopen-ide")) { isTransitive = false }

@@ -21,3 +21,4 @@ workspace.xml
 .gradle/
 build/
 !**/src/**/build
+*.iml

@@ -12,10 +12,11 @@ dependencies {
     compile(project(":j2k"))
     compile(project(":idea:ide-common"))
     compile(project(":idea:idea-jps-common"))
+    compile(project(":plugins:android-extensions-compiler"))
     compile(ideaSdkCoreDeps("intellij-core", "util"))
     compile(ideaSdkDeps("openapi", "idea"))
     compile(ideaPluginDeps("gradle-tooling-api", "gradle", plugin = "gradle"))
-    compile(preloadedDeps("uast-common", "kotlinx-coroutines-core"))
+    compile(preloadedDeps("uast-common", "kotlinx-coroutines-core", "kotlinx-coroutines-jdk8"))
     buildVersion()
 }
 

@@ -121,6 +121,8 @@ dependencies {
     proguardLibraryJars(kotlinDep("stdlib"))
     proguardLibraryJars(kotlinDep("script-runtime"))
     proguardLibraryJars(kotlinDep("reflect"))
+    proguardLibraryJars(preloadedDeps("kotlinx-coroutines-core"))
+
 //    proguardLibraryJars(project(":prepare:runtime", configuration = "default").apply { isTransitive = false })
 //    proguardLibraryJars(project(":prepare:reflect", configuration = "default").apply { isTransitive = false })
 //    proguardLibraryJars(project(":core:script.runtime").apply { isTransitive = false })

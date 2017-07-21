@@ -6,6 +6,7 @@ dependencies {
     compile(project(":compiler:util"))
     compile(project(":compiler:frontend"))
     compile(kotlinDep("reflect"))
+    compile(preloadedDeps("kotlinx-coroutines-core"))
 }
 
 configureKotlinProjectSourcesDefault()
