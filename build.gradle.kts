@@ -126,6 +126,7 @@ allprojects {
 
 applyFrom("libraries/commonConfiguration.gradle")
 applyFrom("libraries/gradlePluginsConfiguration.gradle")
+applyFrom("libraries/configureGradleTools.gradle")
 
 val importedAntTasksPrefix = "imported-ant-update-"
 
@@ -191,6 +192,13 @@ task<Copy>("dist-plugin") {
     dependsOn(compilerCopyTask)
     dependsOnTaskIfExistsRec("idea-plugin")
     into("$ideaPluginDir/lib")
+}
+
+val clean by tasks
+clean.apply {
+    doLast {
+        delete("${buildDir}/repo")
+    }
 }
 
 fun jdkPath(version: String): String {
