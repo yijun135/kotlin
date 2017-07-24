@@ -111,11 +111,17 @@ public final class ReferenceTranslator {
         }
 
         if (DescriptorUtils.isObject(descriptor) || DescriptorUtils.isEnumEntry(descriptor)) {
+            ClassDescriptor classDescriptor = (ClassDescriptor) descriptor;
             if (!context.isFromCurrentModule(descriptor)) {
-                return getLazyReferenceToObject((ClassDescriptor) descriptor, context);
+                if (KotlinBuiltIns.isUnit(classDescriptor.getDefaultType())) {
+                    return context.getInnerReference(descriptor);
+                }
+                else {
+                    return getLazyReferenceToObject(classDescriptor, context);
+                }
             }
             else {
-                JsExpression functionRef = JsAstUtils.pureFqn(context.getNameForObjectInstance((ClassDescriptor) descriptor), null);
+                JsExpression functionRef = JsAstUtils.pureFqn(context.getNameForObjectInstance(classDescriptor), null);
                 return new JsInvocation(functionRef);
             }
         }
