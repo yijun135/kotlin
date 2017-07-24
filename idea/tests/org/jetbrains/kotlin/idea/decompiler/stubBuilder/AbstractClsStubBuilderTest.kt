@@ -47,10 +47,12 @@ abstract class AbstractClsStubBuilderTest : LightCodeInsightFixtureTestCase() {
         val psiFile = myFixture.file
         val stubTreeFromDecompiledText = KtFileStubBuilder().buildStubTree(psiFile)
         val expectedText = stubTreeFromDecompiledText.serializeToString()
-        Assert.assertEquals(expectedText, stubTreeFromCls.serializeToString())
+
         if (txtFile != null) {
             KotlinTestUtils.assertEqualsToFile(txtFile, expectedText)
         }
+
+        Assert.assertEquals(expectedText, stubTreeFromCls.serializeToString())
     }
 
     private fun getClassFileToDecompile(sourcePath: String): VirtualFile {
