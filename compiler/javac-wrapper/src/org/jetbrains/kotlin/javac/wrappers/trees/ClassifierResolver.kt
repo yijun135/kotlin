@@ -61,7 +61,8 @@ class ClassifierResolver(private val javac: JavacWrapper) {
             val classes = arrayListOf<JavaClass>().apply { add(outermostClass) }
 
             for (it in outerClasses.drop(1)) {
-                outermostClass = outermostClass.findInnerClass(Name.identifier(it)) ?: return classes
+                outermostClass = outermostClass.findInnerClass(Name.identifier(it))
+                                 ?: throw AssertionError("Couldn't find a class ($it) that is surely defined in ${outermostClass.fqName?.asString()}")
                 classes.add(outermostClass)
             }
 
@@ -130,10 +131,10 @@ class ClassifierResolver(private val javac: JavacWrapper) {
                                                javac)
                     }
 
-    fun createResolutionScope(enclosingClasses: List<JavaClass>,
-                              asteriskImports: () -> List<String>,
-                              packageName: String,
-                              imports: () -> List<String>): Scope {
+    internal fun createResolutionScope(enclosingClasses: List<JavaClass>,
+                                       asteriskImports: () -> List<String>,
+                                       packageName: String,
+                                       imports: () -> List<String>): Scope {
 
         val globalScope = { GlobalScope(javac, packageName) }
         val importOnDemandScope = { ImportOnDemandScope(javac, globalScope, asteriskImports, packageName) }
@@ -146,9 +147,9 @@ class ClassifierResolver(private val javac: JavacWrapper) {
 
 }
 
-abstract class Scope(private val scope: () -> Scope?,
-                     protected val javac: JavacWrapper,
-                     protected val packageName: String) {
+internal abstract class Scope(private val scope: () -> Scope?,
+                              protected val javac: JavacWrapper,
+                              protected val packageName: String) {
     protected val parent: Scope?
         get() = scope()
 
@@ -167,7 +168,7 @@ abstract class Scope(private val scope: () -> Scope?,
         pathSegments.forEachIndexed { index, _ ->
             if (index == pathSegments.lastIndex) return null
             val packageFqName = pathSegments.dropLast(index + 1).joinToString(separator = ".")
-            findPackage(packageFqName, javac)?.let { pack ->
+            findPackage(packageFqName)?.let { pack ->
                 val className = pathSegments.takeLast(index + 1)
                 return findJavaOrKotlinClass(ClassId(pack, Name.identifier(className.first())))?.let { javaClass ->
                     getJavaClassFromPathSegments(javaClass, className)
@@ -212,7 +213,7 @@ abstract class Scope(private val scope: () -> Scope?,
                 supertypes.mapNotNull { it.classifier as? JavaClass }.forEach { addAll(it.collectAllSupertypes()) }
             }
 
-    private fun findPackage(packageName: String, javac: JavacWrapper): FqName? {
+    private fun findPackage(packageName: String): FqName? {
         val fqName = FqName(packageName)
         javac.hasKotlinPackage(fqName)?.let { return it }
 
@@ -295,12 +296,12 @@ private class CurrentClassAndInnerScope(javac: JavacWrapper,
     override fun findClass(name: String, pathSegments: List<String>): JavaClassifier? {
         val identifier = Name.identifier(name)
         enclosingClasses.forEach {
-            if (it is TreeBasedClass) {
-                it.typeParameters.find { it.name == identifier }?.let { return it }
-            }
-            it.findInnerOrNested(identifier)?.let { javaClass ->
-                return getJavaClassFromPathSegments(javaClass, pathSegments)
-            }
+            (it as? TreeBasedClass)?.typeParameters
+                    ?.find { typeParameter -> typeParameter.name == identifier }
+                    ?.let { typeParameter -> return typeParameter }
+
+            it.findInnerOrNested(identifier)?.let { javaClass -> return getJavaClassFromPathSegments(javaClass, pathSegments) }
+
             if (it.name == identifier && pathSegments.size == 1) return it
         }
 
