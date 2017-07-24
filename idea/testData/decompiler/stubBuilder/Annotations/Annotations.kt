@@ -28,6 +28,8 @@
     enum class En { Entry1, @a @b(E.E2) Entry2, @a @c Entry3 }
 
     fun types(param: @a @b(E.E1) LongRange): @a @b(E.E2) Unit {}
+
+    fun @receiver:a Int.foo() {}
 }
 
 @Target(AnnotationTarget.PROPERTY, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION,
