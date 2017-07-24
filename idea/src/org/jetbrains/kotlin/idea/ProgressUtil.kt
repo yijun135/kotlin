@@ -22,6 +22,18 @@ import com.intellij.openapi.progress.util.ProgressIndicatorUtils
 import com.intellij.openapi.project.Project
 
 
+fun <T : Any> runInReadActionWithWriteActionPriorityWhileNotComplete(f: () -> T): T {
+    var r: T? = null
+
+    while (!ProgressIndicatorUtils.runInReadActionWithWriteActionPriority {
+        r = f()
+    }) {
+        ProgressIndicatorUtils.yieldToPendingWriteActions()
+    }
+
+    return r!!
+}
+
 fun <T : Any> runInReadActionWithWriteActionPriority(f: () -> T): T {
     var r: T? = null
     val complete = ProgressIndicatorUtils.runInReadActionWithWriteActionPriority {

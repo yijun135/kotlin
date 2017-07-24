@@ -28,6 +28,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.configuration.ui.notifications.ConfigureKotlinNotification
+import org.jetbrains.kotlin.idea.runInReadActionWithWriteActionPriorityWhileNotComplete
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.idea.util.projectStructure.allModules
 import org.jetbrains.kotlin.idea.versions.getKotlinJvmRuntimeMarkerClass
@@ -112,7 +113,7 @@ fun getModulesWithKotlinFiles(project: Project): Collection<Module> {
 
     return project.allModules()
             .filter { module ->
-                runReadAction {
+                runInReadActionWithWriteActionPriorityWhileNotComplete {
                     FileTypeIndex.containsFileOfType(KotlinFileType.INSTANCE, module.getModuleScope(true))
                 }
             }
