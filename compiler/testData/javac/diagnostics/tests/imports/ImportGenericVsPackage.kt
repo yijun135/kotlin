@@ -15,7 +15,7 @@ import a.x;
 
 public class test {
 
-    public x getX() { return null; }
+    public x<?> getX() { return null; }
 
 }
 

@@ -235,6 +235,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTest(fileName);
             }
 
+            @TestMetadata("NoAmbiguity2.kt")
+            public void testNoAmbiguity2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/NoAmbiguity2.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("SameInnersInSupertypeAndSupertypesSupertype.kt")
             public void testSameInnersInSupertypeAndSupertypesSupertype() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SameInnersInSupertypeAndSupertypesSupertype.kt");
@@ -244,6 +250,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("SuperTypeWithSameInner.kt")
             public void testSuperTypeWithSameInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SuperTypeWithSameInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("SupertypeInnerAndTypeParameterWithSameNames.kt")
+            public void testSupertypeInnerAndTypeParameterWithSameNames() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SupertypeInnerAndTypeParameterWithSameNames.kt");
                 doTest(fileName);
             }
         }
@@ -283,6 +295,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("InnerInInner.kt")
             public void testInnerInInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/InnerInInner.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("Nested.kt")
+            public void testNested() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/Nested.kt");
                 doTest(fileName);
             }
 
@@ -589,6 +607,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
                 doTestWithoutJavacWrapper(fileName);
             }
 
+            @TestMetadata("NoAmbiguity2.kt")
+            public void testNoAmbiguity2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/NoAmbiguity2.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
             @TestMetadata("SameInnersInSupertypeAndSupertypesSupertype.kt")
             public void testSameInnersInSupertypeAndSupertypesSupertype() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SameInnersInSupertypeAndSupertypesSupertype.kt");
@@ -598,6 +622,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("SuperTypeWithSameInner.kt")
             public void testSuperTypeWithSameInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SuperTypeWithSameInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("SupertypeInnerAndTypeParameterWithSameNames.kt")
+            public void testSupertypeInnerAndTypeParameterWithSameNames() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inheritance/SupertypeInnerAndTypeParameterWithSameNames.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
         }
@@ -637,6 +667,12 @@ public class JavacDiagnosticsTestGenerated extends AbstractJavacDiagnosticsTest 
             @TestMetadata("InnerInInner.kt")
             public void testInnerInInner() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/InnerInInner.kt");
+                doTestWithoutJavacWrapper(fileName);
+            }
+
+            @TestMetadata("Nested.kt")
+            public void testNested() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/javac/diagnostics/tests/inners/Nested.kt");
                 doTestWithoutJavacWrapper(fileName);
             }
 

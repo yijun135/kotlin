@@ -69,9 +69,7 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
                         else null
                     }
         }
-        val packageName = {
-            ktFile.packageFqName.asString()
-        }
+        val packageName = ktFile.packageFqName.asString()
         val imports = {
             ktFile.importDirectives
                     .mapNotNull {
@@ -88,7 +86,7 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
     }
 
     fun createMockKotlinClassifier(classifier: KtClassOrObject,
-                                   classId: ClassId) = MockKotlinClassifier(classId.asSingleFqName(),
+                                   classId: ClassId) = MockKotlinClassifier(classId,
                                                                             classifier,
                                                                             this,
                                                                             javac)
@@ -131,10 +129,13 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
 
 }
 
-class MockKotlinClassifier(override val fqName: FqName,
+class MockKotlinClassifier(val classId: ClassId,
                            private val classOrObject: KtClassOrObject,
                            private val cache: KotlinClassifiersCache,
                            private val javac: JavacWrapper) : VirtualFileBoundJavaClass {
+
+    override val fqName: FqName
+        get() = classId.asSingleFqName()
 
     override val isAbstract: Boolean
         get() = throw UnsupportedOperationException("Should not be called")
@@ -147,7 +148,7 @@ class MockKotlinClassifier(override val fqName: FqName,
 
     override val visibility: Visibility
         get() = when (classOrObject.visibilityModifierType()) {
-            KtTokens.PUBLIC_KEYWORD -> Visibilities.PUBLIC
+            null, KtTokens.PUBLIC_KEYWORD -> Visibilities.PUBLIC
             KtTokens.PRIVATE_KEYWORD -> Visibilities.PRIVATE
             KtTokens.PROTECTED_KEYWORD -> Visibilities.PROTECTED
             else -> JavaVisibilities.PACKAGE_VISIBILITY

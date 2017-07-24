@@ -127,7 +127,7 @@ class JavacWrapper(
 
     private val javaClassDeclarations = compilationUnits.flatMap { unit ->
         unit.typeDecls.map { classDeclaration ->
-            val packageName = unit.packageName?.toString() ?: "<root>"
+            val packageName = unit.packageName?.toString() ?: ""
             val className = (classDeclaration as JCTree.JCClassDecl).simpleName.toString()
             val classId = classId(packageName, className)
             classId to Pair(classDeclaration, unit)
