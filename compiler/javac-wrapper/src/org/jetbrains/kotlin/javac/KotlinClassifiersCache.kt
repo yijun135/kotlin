@@ -44,7 +44,8 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
             }.toMap()
 
     private val classifiers = hashMapOf<ClassId, JavaClass>()
-    private val supertypesCache = hashMapOf<KtClassOrObject, JavaClass?>()
+    private val supertypesCache = hashMapOf<KtClassOrObject, HashMap<String, JavaClass?>>()
+    private val beingResolved = hashSetOf<Pair<String, KtClassOrObject>>()
 
     fun getKotlinClassifier(classId: ClassId) = classifiers[classId] ?: createClassifier(classId)
 
@@ -52,8 +53,16 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
                          classOrObject: KtClassOrObject,
                          javac: JavacWrapper): JavaClass? {
         if (supertypesCache.containsKey(classOrObject)) {
-            return supertypesCache[classOrObject]
+            val cachedSupertypes = supertypesCache[classOrObject]!!
+            if (cachedSupertypes.containsKey(name)) {
+                return cachedSupertypes[name]
+            }
         }
+
+        val toResolve = name to classOrObject
+        if (toResolve in beingResolved) return null
+        beingResolved.add(toResolve)
+
         val pathSegments = name.split(".")
         val firstSegment = pathSegments.first()
 
@@ -82,7 +91,15 @@ class KotlinClassifiersCache(sourceFiles: Collection<KtFile>,
 
         val resolutionScope = javac.classifierResolver.createResolutionScope(enclosingClasses, asteriskImports, packageName, imports)
 
-        return (resolutionScope.findClass(firstSegment, pathSegments) as? JavaClass).apply { supertypesCache[classOrObject] = this }
+        return (resolutionScope.findClass(firstSegment, pathSegments) as? JavaClass).apply {
+            if (supertypesCache.containsKey(classOrObject)) {
+                supertypesCache[classOrObject]!!.put(name, this)
+            }
+            else {
+                supertypesCache[classOrObject] = hashMapOf(name to this)
+            }
+            beingResolved.remove(toResolve)
+        }
     }
 
     fun createMockKotlinClassifier(classifier: KtClassOrObject,

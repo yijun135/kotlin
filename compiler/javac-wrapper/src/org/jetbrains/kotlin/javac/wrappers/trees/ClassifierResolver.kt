@@ -155,12 +155,12 @@ abstract class Scope(private val scope: () -> Scope?,
     abstract fun findClass(name: String, pathSegments: List<String>): JavaClassifier?
 
     protected fun getJavaClassFromPathSegments(javaClass: JavaClass,
-                                     pathSegments: List<String>) =
+                                               pathSegments: List<String>) =
             if (pathSegments.size == 1) {
                 javaClass
             }
             else {
-                javaClass.findInner(pathSegments.drop(1))
+                javaClass.findInnerOrNested(pathSegments.drop(1))
             }
 
     protected fun findByFqName(pathSegments: List<String>): JavaClass? {
@@ -180,42 +180,37 @@ abstract class Scope(private val scope: () -> Scope?,
 
     protected fun findJavaOrKotlinClass(classId: ClassId) = javac.findClass(classId) ?: javac.getKotlinClassifier(classId)
 
-    protected fun JavaClass.findInner(name: Name): JavaClass? {
-        val found = hashSetOf<JavaClass>()
-        val checkedSupertypes = hashSetOf<JavaClass>()
-
-        fun JavaClass.find() {
-            findInnerClass(name)?.let {
-                when (it.visibility) {
-                    Visibilities.PRIVATE -> {}
-                    JavaVisibilities.PACKAGE_VISIBILITY -> {
-                        val classId = (it as? MockKotlinClassifier)?.classId ?: it.computeClassId()
-                        if (classId?.packageFqName?.asString() == packageName) {
-                            found.add(it)
-                            supertypes.mapNotNullTo(checkedSupertypes) { it.classifier as? JavaClass }
-                            return
-                        }
-                    }
-                    else -> {
-                        found.add(it)
-                        supertypes.mapNotNullTo(checkedSupertypes) { it.classifier as? JavaClass }
-                        return
-                    }
-                }
-            }
-            supertypes.mapNotNull { it.classifier as? JavaClass }
-                    .forEach { javaClass ->
-                        if (javaClass !in checkedSupertypes) {
-                            javaClass.find()
-                            checkedSupertypes.add(javaClass)
-                        }
-                    }
+    protected fun JavaClass.findInnerOrNested(name: Name, checkedSupertypes: HashSet<JavaClass> = hashSetOf()): JavaClass? {
+        findVisibleInnerOrNestedClass(name)?.let {
+            checkedSupertypes.addAll(collectAllSupertypes())
+            return it
         }
 
-        find()
-
-        return found.singleOrNull()
+        return supertypes
+                .mapNotNull {
+                    (it.classifier as? JavaClass)?.let { supertype ->
+                        if (supertype !in checkedSupertypes) {
+                            supertype.findInnerOrNested(name, checkedSupertypes)
+                        } else null
+                    }
+                }.singleOrNull()
     }
+
+    private fun JavaClass.findVisibleInnerOrNestedClass(name: Name) = findInnerClass(name)?.let { innerOrNestedClass ->
+        when (innerOrNestedClass.visibility) {
+            Visibilities.PRIVATE -> null
+            JavaVisibilities.PACKAGE_VISIBILITY -> {
+                val classId = (innerOrNestedClass as? MockKotlinClassifier)?.classId ?: innerOrNestedClass.computeClassId()
+                if (classId?.packageFqName?.asString() == packageName) innerOrNestedClass else null
+            }
+            else -> innerOrNestedClass
+        }
+    }
+
+    private fun JavaClass.collectAllSupertypes(): Set<JavaClass> =
+            hashSetOf(this).apply {
+                supertypes.mapNotNull { it.classifier as? JavaClass }.forEach { addAll(it.collectAllSupertypes()) }
+            }
 
     private fun findPackage(packageName: String, javac: JavacWrapper): FqName? {
         val fqName = FqName(packageName)
@@ -224,8 +219,8 @@ abstract class Scope(private val scope: () -> Scope?,
         return javac.findPackage(fqName)?.fqName
     }
 
-    private fun JavaClass.findInner(pathSegments: List<String>): JavaClass? =
-            pathSegments.fold(this) { javaClass, it -> javaClass.findInner(Name.identifier(it)) ?: return null }
+    private fun JavaClass.findInnerOrNested(pathSegments: List<String>): JavaClass? =
+            pathSegments.fold(this) { javaClass, it -> javaClass.findInnerOrNested(Name.identifier(it)) ?: return null }
 
 }
 
@@ -303,7 +298,7 @@ private class CurrentClassAndInnerScope(javac: JavacWrapper,
             if (it is TreeBasedClass) {
                 it.typeParameters.find { it.name == identifier }?.let { return it }
             }
-            it.findInner(identifier)?.let { javaClass ->
+            it.findInnerOrNested(identifier)?.let { javaClass ->
                 return getJavaClassFromPathSegments(javaClass, pathSegments)
             }
             if (it.name == identifier && pathSegments.size == 1) return it
