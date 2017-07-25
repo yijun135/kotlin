@@ -231,7 +231,10 @@ class Analyzer(private val context: Context) : JsVisitor() {
                         return leftNode
                     }
 
-                    // lhs = Kotlin.defineInlineFunction('fqn', function() { ... })
+                    // lhs = Kotlin.defineInlineFunction('fqn', <function declaration>)
+                    // where <function declaration> is one of
+                    //   - function() { ... }
+                    //   - wrapFunction(function() { ... })
                     if (context.isDefineInlineFunction(function) && rhs.arguments.size == 2) {
                         tryExtractFunction(rhs.arguments[1])?.let { (inlineableFunction, additionalDeps) ->
                             leftNode.functions += inlineableFunction
