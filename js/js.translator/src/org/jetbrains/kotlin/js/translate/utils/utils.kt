@@ -215,19 +215,8 @@ val PsiElement.finalElement: PsiElement
         else -> this
     }
 
-fun TranslationContext.addFunctionButNotExport(descriptor: FunctionDescriptor, expression: JsExpression): JsName {
-    val name = getInnerNameForDescriptor(descriptor)
-    when (expression) {
-        is JsFunction -> {
-            expression.name = name
-            addDeclarationStatement(expression.makeStmt())
-        }
-        else -> {
-            addDeclarationStatement(JsAstUtils.newVar(name, expression))
-        }
-    }
-    return name
-}
+fun TranslationContext.addFunctionButNotExport(descriptor: FunctionDescriptor, expression: JsExpression): JsName =
+        addFunctionButNotExport(getInnerNameForDescriptor(descriptor), expression)
 
 fun TranslationContext.addFunctionButNotExport(name: JsName, expression: JsExpression): JsName {
     when (expression) {
