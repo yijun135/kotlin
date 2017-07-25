@@ -200,7 +200,8 @@ class KotlinCoreEnvironment private constructor(
         classpathRootsResolver = ClasspathRootsResolver(
                 PsiManager.getInstance(project), messageCollector,
                 configuration.getList(JVMConfigurationKeys.ADDITIONAL_JAVA_MODULES),
-                this::contentRootToVirtualFile
+                this::contentRootToVirtualFile,
+                configuration.getBoolean(CLIConfigurationKeys.ALLOW_KOTLIN_PACKAGE)
         )
 
         val (initialRoots, javaModules) =

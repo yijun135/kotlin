@@ -50,7 +50,8 @@ internal class ClasspathRootsResolver(
         private val psiManager: PsiManager,
         private val messageCollector: MessageCollector?,
         private val additionalModules: List<String>,
-        private val contentRootToVirtualFile: (JvmContentRoot) -> VirtualFile?
+        private val contentRootToVirtualFile: (JvmContentRoot) -> VirtualFile?,
+        private val allowNoStdlibModule: Boolean
 ) {
     val javaModuleFinder = CliJavaModuleFinder(VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.JRT_PROTOCOL))
     val javaModuleGraph = JavaModuleGraph(javaModuleFinder)
@@ -163,6 +164,7 @@ internal class ClasspathRootsResolver(
             }
             return
         }
+        val sourceModule = sourceModules.singleOrNull()
 
         for (module in modules) {
             val existing = javaModuleFinder.findModule(module.name)
@@ -180,13 +182,13 @@ internal class ClasspathRootsResolver(
         if (javaModuleFinder.allObservableModules.none()) return
 
         val addAllModulePathToRoots = "ALL-MODULE-PATH" in additionalModules
-        if (addAllModulePathToRoots && sourceModules.isNotEmpty()) {
+        if (addAllModulePathToRoots && sourceModule != null) {
             report(ERROR, "-Xadd-modules=ALL-MODULE-PATH can only be used when compiling the unnamed module")
             return
         }
 
         val rootModules = when {
-            sourceModules.isNotEmpty() -> listOf(sourceModules.single().name) + additionalModules
+            sourceModule != null -> listOf(sourceModule.name) + additionalModules
             addAllModulePathToRoots -> modules.map(JavaModule::name)
             else -> computeDefaultRootModules() + additionalModules
         }
@@ -216,6 +218,15 @@ internal class ClasspathRootsResolver(
                         if (module.isBinary) JavaRoot.RootType.BINARY else JavaRoot.RootType.SOURCE
                 ))
             }
+        }
+
+        if (!allowNoStdlibModule && sourceModule != null && "kotlin.stdlib" !in allDependencies) {
+            report(
+                    ERROR,
+                    "The Kotlin standard library is not found in the module graph. " +
+                    "Please ensure you have the 'requires kotlin.stdlib' clause in your module definition",
+                    sourceModule.moduleInfoFile
+            )
         }
     }
 
