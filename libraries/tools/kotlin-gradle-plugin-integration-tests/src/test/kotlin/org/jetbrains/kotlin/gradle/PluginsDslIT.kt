@@ -38,8 +38,8 @@ object MavenLocalUrlProvider : BaseGradleIT() {
 class PluginsDslIT : BaseGradleIT() {
 
     companion object {
-        protected const val GRADLE_VERSION = "4.0"
-        protected const val DIRECTORY_PREFIX = "pluginsDsl"
+        private const val GRADLE_VERSION = "4.0"
+        private const val DIRECTORY_PREFIX = "pluginsDsl"
 
         private const val MAVEN_LOCAL_URL_PLACEHOLDER = "<mavenLocalUrl>"
         private const val PLUGIN_MARKER_VERSION_PLACEHOLDER = "<pluginMarkerVersion>"
