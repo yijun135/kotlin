@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.idea.core.util
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.project.Project
 import kotlinx.coroutines.experimental.CoroutineDispatcher
 import kotlin.coroutines.experimental.AbstractCoroutineContextElement
 import kotlin.coroutines.experimental.CoroutineContext
@@ -29,11 +30,32 @@ public object EDT : CoroutineDispatcher() {
     }
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
+        val project = context[ProjectElement.Key]?.project
+        if (project?.isDisposed == true) {
+            return
+        }
+
         val modalityState = context[ModalityStateElement.Key]?.modalityState ?: ModalityState.defaultModalityState()
-        ApplicationManager.getApplication().invokeLater(block, modalityState)
+        ApplicationManager.getApplication().invokeLater(block.abortIfDisposed(project), modalityState)
+    }
+
+    private fun Runnable.abortIfDisposed(project: Project?): Runnable {
+        if (project == null) return this
+
+        return Runnable {
+            if (project.isDisposed) return@Runnable
+            else run()
+        }
     }
 
     class ModalityStateElement(val modalityState: ModalityState) : AbstractCoroutineContextElement(Key) {
         companion object Key : CoroutineContext.Key<ModalityStateElement>
     }
+
+    class ProjectElement(val project: Project) : AbstractCoroutineContextElement(Key) {
+        companion object Key : CoroutineContext.Key<ProjectElement>
+    }
+
+    operator fun plus(project: Project): CoroutineContext = this + EDT.ProjectElement(project)
 }
+
