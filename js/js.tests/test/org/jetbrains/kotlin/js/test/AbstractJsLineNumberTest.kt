@@ -160,8 +160,7 @@ abstract class AbstractJsLineNumberTest : KotlinTestWithEnvironment() {
             return TestFile(temporaryFile.absolutePath, currentModule)
         }
 
-        override fun createModule(name: String, dependencies: List<String>, friends: List<String>): TestModule? =
-                TestModule(name, dependencies)
+        override fun createModule(name: String, dependencies: List<String>, friends: List<String>) = TestModule(name, dependencies)
 
         override fun close() {
             FileUtil.delete(tmpDir)
