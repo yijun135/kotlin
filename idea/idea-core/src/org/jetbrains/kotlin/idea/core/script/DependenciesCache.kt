@@ -16,10 +16,13 @@
 
 package org.jetbrains.kotlin.idea.core.script
 
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.Extensions
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElementFinder
+import com.intellij.psi.PsiManager
 import com.intellij.psi.search.NonClasspathDirectoriesScope
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
@@ -49,7 +52,7 @@ internal class DependenciesCache(private val project: Project) {
         NonClasspathDirectoriesScope(allLibrarySourcesCache.get())
     }
 
-    fun onChange() {
+    private fun onChange(file: VirtualFile?) {
         allScriptsClasspathCache.clear()
         allScriptsClasspathScope.clear()
         allLibrarySourcesCache.clear()
@@ -61,11 +64,31 @@ internal class DependenciesCache(private val project: Project) {
                         .single()
 
         kotlinScriptDependenciesClassFinder.clearCache()
+        updateHighlighting(file)
+    }
+
+    private fun updateHighlighting(file: VirtualFile?) {
+        ScriptDependenciesModificationTracker.getInstance(project).incModificationCount()
+
+        if (file != null) {
+            file.let { PsiManager.getInstance(project).findFile(it) }?.let { psiFile ->
+                DaemonCodeAnalyzer.getInstance(project).restart(psiFile)
+            }
+        }
+        else {
+            assert(ApplicationManager.getApplication().isUnitTestMode)
+            DaemonCodeAnalyzer.getInstance(project).restart()
+        }
+    }
+
+    fun hasNotCachedRoots(scriptDependencies: ScriptDependencies): Boolean {
+        return !allScriptsClasspathCache.get().containsAll(ScriptDependenciesManager.toVfsRoots(scriptDependencies.classpath)) ||
+               !allLibrarySourcesCache.get().containsAll(ScriptDependenciesManager.toVfsRoots(scriptDependencies.sources))
     }
 
     fun clear() {
         cacheLock.write(cache::clear)
-        onChange()
+        onChange(null)
     }
 
     fun save(virtualFile: VirtualFile, new: ScriptDependencies): Boolean {
@@ -75,11 +98,22 @@ internal class DependenciesCache(private val project: Project) {
             cache[path] = new
             old
         }
-        return new != old
+        val changed = new != old
+        if (changed) {
+            onChange(virtualFile)
+        }
+
+        return changed
     }
 
-    fun delete(virtualFile: VirtualFile): Boolean = cacheLock.write {
-        cache.remove(virtualFile.path) != null
+    fun delete(virtualFile: VirtualFile): Boolean {
+        val changed = cacheLock.write {
+            cache.remove(virtualFile.path) != null
+        }
+        if (changed) {
+            onChange(virtualFile)
+        }
+        return changed
     }
 }
 

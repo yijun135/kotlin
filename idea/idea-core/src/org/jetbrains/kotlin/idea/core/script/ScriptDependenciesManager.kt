@@ -90,9 +90,8 @@ class ScriptDependenciesManager(
         fun updateScriptDependenciesSynchronously(virtualFile: VirtualFile, project: Project) {
             with(getInstance(project)) {
                 val scriptDefinition = KotlinScriptDefinitionProvider.getInstance(project)!!.findScriptDefinition(virtualFile)!!
-                val updated = cacheUpdater.updateSync(virtualFile, scriptDefinition)
-                assert(updated)
-                cacheUpdater.onChange()
+                cacheUpdater.updateSync(virtualFile, scriptDefinition)
+                cacheUpdater.notifyRootsChanged()
             }
         }
 
