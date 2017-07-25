@@ -21,6 +21,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import kotlin.Pair;
+import kotlin.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.cfg.WhenMissingCase;
 import org.jetbrains.kotlin.config.LanguageFeature;
@@ -99,6 +100,8 @@ public interface Errors {
 
     DiagnosticFactory2<PsiElement, DeclarationDescriptor, String> DEPRECATION = DiagnosticFactory2.create(WARNING);
     DiagnosticFactory2<PsiElement, DeclarationDescriptor, String> DEPRECATION_ERROR = DiagnosticFactory2.create(ERROR);
+    DiagnosticFactory3<PsiElement, TypeAliasDescriptor, DeclarationDescriptor, String> TYPEALIAS_EXPANSION_DEPRECATION = DiagnosticFactory3.create(WARNING);
+    DiagnosticFactory3<PsiElement, TypeAliasDescriptor, DeclarationDescriptor, String> TYPEALIAS_EXPANSION_DEPRECATION_ERROR = DiagnosticFactory3.create(ERROR);
     DiagnosticFactory3<PsiElement, DeclarationDescriptor, SinceKotlinInfo.Version, Pair<LanguageVersion, String>> SINCE_KOTLIN_INFO_DEPRECATION = DiagnosticFactory3.create(WARNING);
     DiagnosticFactory3<PsiElement, DeclarationDescriptor, SinceKotlinInfo.Version, Pair<LanguageVersion, String>> SINCE_KOTLIN_INFO_DEPRECATION_ERROR = DiagnosticFactory3.create(ERROR);
 
