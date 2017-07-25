@@ -24,6 +24,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElementFinder
 import com.intellij.psi.PsiManager
 import com.intellij.psi.search.NonClasspathDirectoriesScope
+import kotlinx.coroutines.experimental.launch
+import org.jetbrains.kotlin.idea.core.util.EDT
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -70,14 +72,16 @@ internal class DependenciesCache(private val project: Project) {
     private fun updateHighlighting(file: VirtualFile?) {
         ScriptDependenciesModificationTracker.getInstance(project).incModificationCount()
 
-        if (file != null) {
-            file.let { PsiManager.getInstance(project).findFile(it) }?.let { psiFile ->
-                DaemonCodeAnalyzer.getInstance(project).restart(psiFile)
+        launch(EDT) {
+            if (file != null) {
+                file.let { PsiManager.getInstance(project).findFile(it) }?.let { psiFile ->
+                    DaemonCodeAnalyzer.getInstance(project).restart(psiFile)
+                }
             }
-        }
-        else {
-            assert(ApplicationManager.getApplication().isUnitTestMode)
-            DaemonCodeAnalyzer.getInstance(project).restart()
+            else {
+                assert(ApplicationManager.getApplication().isUnitTestMode)
+                DaemonCodeAnalyzer.getInstance(project).restart()
+            }
         }
     }
 
