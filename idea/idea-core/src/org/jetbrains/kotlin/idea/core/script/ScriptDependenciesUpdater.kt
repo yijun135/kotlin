@@ -212,9 +212,7 @@ internal class ScriptDependenciesUpdater(
     }
 
     fun notifyRootsChanged() {
-        launch(EDT) {
-            if (project.isDisposed) return@launch
-
+        launch(EDT + project) {
             runWriteAction {
                 ProjectRootManagerEx.getInstanceEx(project)?.makeRootsChange(EmptyRunnable.getInstance(), false, true)
                 ScriptDependenciesModificationTracker.getInstance(project).incModificationCount()
