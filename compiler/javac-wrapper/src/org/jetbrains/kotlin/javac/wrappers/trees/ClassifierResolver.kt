@@ -58,7 +58,8 @@ class ClassifierResolver(private val javac: JavacWrapper) {
             val outermostClassId = classId(packageName, outermostClassName)
             var outermostClass = javac.findClass(outermostClassId) ?: return emptyList()
 
-            val classes = arrayListOf<JavaClass>().apply { add(outermostClass) }
+            val classes = arrayListOf<JavaClass>()
+            classes.add(outermostClass)
 
             for (it in outerClasses.drop(1)) {
                 outermostClass = outermostClass.findInnerClass(Name.identifier(it))
@@ -136,10 +137,10 @@ class ClassifierResolver(private val javac: JavacWrapper) {
                                        packageName: String,
                                        imports: () -> List<String>): Scope {
 
-        val globalScope = { GlobalScope(javac, packageName) }
-        val importOnDemandScope = { ImportOnDemandScope(javac, globalScope, asteriskImports, packageName) }
-        val packageScope = { PackageScope(javac, importOnDemandScope, packageName) }
-        val singleTypeImportScope = { SingleTypeImportScope(javac, packageScope, imports, packageName) }
+        val globalScope = GlobalScope(javac, packageName)
+        val importOnDemandScope = ImportOnDemandScope(javac, globalScope, asteriskImports, packageName)
+        val packageScope = PackageScope(javac, importOnDemandScope, packageName)
+        val singleTypeImportScope = SingleTypeImportScope(javac, packageScope, imports, packageName)
         val currentClassAndInnerScope = CurrentClassAndInnerScope(javac, singleTypeImportScope, enclosingClasses, packageName)
 
         return currentClassAndInnerScope
@@ -147,12 +148,9 @@ class ClassifierResolver(private val javac: JavacWrapper) {
 
 }
 
-internal abstract class Scope(private val scope: () -> Scope?,
+internal abstract class Scope(protected val parent: Scope?,
                               protected val javac: JavacWrapper,
                               protected val packageName: String) {
-    protected val parent: Scope?
-        get() = scope()
-
     abstract fun findClass(name: String, pathSegments: List<String>): JavaClassifier?
 
     protected fun getJavaClassFromPathSegments(javaClass: JavaClass,
@@ -226,7 +224,7 @@ internal abstract class Scope(private val scope: () -> Scope?,
 }
 
 private class GlobalScope(javac: JavacWrapper,
-                          packageName: String) : Scope({ null }, javac, packageName) {
+                          packageName: String) : Scope(null, javac, packageName) {
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClass? {
         findByFqName(pathSegments)?.let { return it }
@@ -239,7 +237,7 @@ private class GlobalScope(javac: JavacWrapper,
 }
 
 private class ImportOnDemandScope(javac: JavacWrapper,
-                                  scope: () -> Scope?,
+                                  scope: Scope?,
                                   private val asteriskImports: () -> List<String>,
                                   packageName: String) : Scope(scope, javac, packageName) {
 
@@ -259,7 +257,7 @@ private class ImportOnDemandScope(javac: JavacWrapper,
 }
 
 private class PackageScope(javac: JavacWrapper,
-                           scope: () -> Scope?,
+                           scope: Scope?,
                            packageName: String) : Scope(scope, javac, packageName) {
 
     override fun findClass(name: String, pathSegments: List<String>): JavaClassifier? {
@@ -273,7 +271,7 @@ private class PackageScope(javac: JavacWrapper,
 }
 
 private class SingleTypeImportScope(javac: JavacWrapper,
-                                    scope: () -> Scope?,
+                                    scope: Scope?,
                                     private val imports: () -> List<String>,
                                     packageName: String) : Scope(scope, javac, packageName) {
 
@@ -289,7 +287,7 @@ private class SingleTypeImportScope(javac: JavacWrapper,
 }
 
 private class CurrentClassAndInnerScope(javac: JavacWrapper,
-                                        scope: () -> Scope?,
+                                        scope: Scope?,
                                         private val enclosingClasses: List<JavaClass>,
                                         packageName: String) : Scope(scope, javac, packageName) {
 
