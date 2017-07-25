@@ -22,7 +22,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.StandardFileSystems
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.io.URLUtil
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.annotations.TestOnly
+import org.jetbrains.kotlin.idea.core.util.EDT
 import org.jetbrains.kotlin.script.KotlinScriptDefinitionProvider
 import org.jetbrains.kotlin.script.ScriptDependenciesProvider
 import org.jetbrains.kotlin.script.makeScriptDefsFromTemplatesProviderExtensions
@@ -90,8 +92,14 @@ class ScriptDependenciesManager(
         fun updateScriptDependenciesSynchronously(virtualFile: VirtualFile, project: Project) {
             with(getInstance(project)) {
                 val scriptDefinition = KotlinScriptDefinitionProvider.getInstance(project)!!.findScriptDefinition(virtualFile)!!
-                cacheUpdater.updateSync(virtualFile, scriptDefinition)
-                cacheUpdater.notifyRootsChanged()
+                if (scriptDefinition.dependencyResolver.shouldUpdateAsynchronously) {
+                    launch(EDT) {
+                        cacheUpdater.updateAsync(virtualFile, scriptDefinition)!!.join()
+                    }
+                }
+                else {
+                    cacheUpdater.updateSync(virtualFile, scriptDefinition)
+                }
             }
         }
 

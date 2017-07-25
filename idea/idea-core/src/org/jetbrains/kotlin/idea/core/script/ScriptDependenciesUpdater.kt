@@ -28,10 +28,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.asCoroutineDispatcher
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.*
+import org.jetbrains.kotlin.idea.core.util.EDT
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.script.*
 import java.util.concurrent.ConcurrentHashMap
@@ -101,30 +99,31 @@ internal class ScriptDependenciesUpdater(
     private fun updateForFile(file: VirtualFile): Boolean {
         val scriptDef = scriptDefinitionProvider.findScriptDefinition(file) ?: return false
 
-        return when (scriptDef.dependencyResolver) {
-            is AsyncDependenciesResolver, is LegacyResolverWrapper -> {
-                updateAsync(file, scriptDef)
-                return false
-            }
-            else -> updateSync(file, scriptDef)
+        if (scriptDef.dependencyResolver.shouldUpdateAsynchronously) {
+            updateAsync(file, scriptDef)
+            return false
+        }
+        else {
+            return updateSync(file, scriptDef)
         }
     }
 
-    private fun updateAsync(
+    internal fun updateAsync(
             file: VirtualFile,
             scriptDefinition: KotlinScriptDefinition
-    ) {
+    ): Job? {
         val path = file.path
         val lastRequest = requests[path]
 
         if (!shouldSendNewRequest(file, lastRequest)) {
-            return
+            return null
         }
 
         lastRequest?.cancel()
 
-        requests[path] = sendRequest(file, scriptDefinition).stampBy(file)
-        return
+        val newRequest = sendRequest(file, scriptDefinition).stampBy(file)
+        requests[path] = newRequest
+        return newRequest.job?.actualJob
     }
 
     private fun shouldSendNewRequest(file: VirtualFile, previousRequest: ModStampedRequest?): Boolean {
@@ -196,7 +195,7 @@ internal class ScriptDependenciesUpdater(
     }
 
 
-    fun updateSync(file: VirtualFile, scriptDef: KotlinScriptDefinition): Boolean {
+    internal fun updateSync(file: VirtualFile, scriptDef: KotlinScriptDefinition): Boolean {
         val newDeps = contentLoader.loadContentsAndResolveDependencies(scriptDef, file) ?: ScriptDependencies.Empty
         return saveNewDependencies(newDeps, file)
     }
@@ -213,21 +212,13 @@ internal class ScriptDependenciesUpdater(
     }
 
     fun notifyRootsChanged() {
-        val rootsChangesRunnable = {
-            runWriteAction {
-                if (project.isDisposed) return@runWriteAction
+        launch(EDT) {
+            if (project.isDisposed) return@launch
 
+            runWriteAction {
                 ProjectRootManagerEx.getInstanceEx(project)?.makeRootsChange(EmptyRunnable.getInstance(), false, true)
                 ScriptDependenciesModificationTracker.getInstance(project).incModificationCount()
             }
-        }
-
-        val application = ApplicationManager.getApplication()
-        if (application.isUnitTestMode) {
-            rootsChangesRunnable.invoke()
-        }
-        else {
-            application.invokeLater(rootsChangesRunnable, ModalityState.defaultModalityState())
         }
     }
 
@@ -258,6 +249,8 @@ internal class ScriptDependenciesUpdater(
     }
 }
 
+internal val DependenciesResolver.shouldUpdateAsynchronously: Boolean
+    get() = this is AsyncDependenciesResolver || this is LegacyResolverWrapper
 
 private data class TimeStamp(private val stamp: Long) {
     operator fun compareTo(other: TimeStamp) = this.stamp.compareTo(other.stamp)
