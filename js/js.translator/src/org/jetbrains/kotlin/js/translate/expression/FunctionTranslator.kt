@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.js.backend.ast.*
 import org.jetbrains.kotlin.js.backend.ast.metadata.descriptor
 import org.jetbrains.kotlin.js.backend.ast.metadata.functionDescriptor
 import org.jetbrains.kotlin.js.backend.ast.metadata.hasDefaultValue
+import org.jetbrains.kotlin.js.descriptorUtils.shouldBeExported
 import org.jetbrains.kotlin.js.inline.util.FunctionWithWrapper
 import org.jetbrains.kotlin.js.translate.context.Namer
 import org.jetbrains.kotlin.js.translate.context.TranslationContext
@@ -33,7 +34,6 @@ import org.jetbrains.kotlin.js.translate.utils.requiresStateMachineTransformatio
 import org.jetbrains.kotlin.psi.KtDeclarationWithBody
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.descriptorUtil.hasDefaultValue
-import org.jetbrains.kotlin.resolve.descriptorUtil.isEffectivelyPublicApi
 import org.jetbrains.kotlin.resolve.source.getPsi
 
 fun TranslationContext.translateAndAliasParameters(
@@ -103,7 +103,7 @@ fun TranslationContext.wrapWithInlineMetadata(
         function: JsFunction, descriptor: FunctionDescriptor
 ): JsExpression {
     val sourceInfo = descriptor.source.getPsi()
-    return if (descriptor.isInline && descriptor.isEffectivelyPublicApi) {
+    return if (descriptor.isInline && descriptor.shouldBeExported(config)) {
         val metadata = InlineMetadata.compose(function, descriptor, this)
         metadata.functionWithMetadata(outerContext, sourceInfo)
     }
