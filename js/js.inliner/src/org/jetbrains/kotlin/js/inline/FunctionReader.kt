@@ -48,8 +48,7 @@ private val JS_IDENTIFIER_PART = "$JS_IDENTIFIER_START\\p{Pc}\\p{Mc}\\p{Mn}\\d"
 private val JS_IDENTIFIER="[$JS_IDENTIFIER_START][$JS_IDENTIFIER_PART]*"
 private val DEFINE_MODULE_PATTERN = ("($JS_IDENTIFIER)\\.defineModule\\(\\s*(['\"])([^'\"]+)\\2\\s*,\\s*(\\w+)\\s*\\)").toRegex().toPattern()
 private val DEFINE_MODULE_FIND_PATTERN = ".defineModule("
-//private val WRAP_FUNCTION_PATTERN = Regex("var\\s+($JS_IDENTIFIER)\\s*=\\s*$JS_IDENTIFIER\\s*\\.\\s*wrapFunction\\s*;").toPattern()
-private val WRAP_FUNCTION_PATTERN = Regex("var\\s+($JS_IDENTIFIER)\\s*=\\s*$JS_IDENTIFIER\\.wrapFunction\\s*;").toPattern()
+private val WRAP_FUNCTION_PATTERN = Regex("var\\s+($JS_IDENTIFIER)\\s*=\\s*($JS_IDENTIFIER)\\.wrapFunction\\s*;").toPattern()
 
 class FunctionReader(
         private val reporter: JsConfig.Reporter,
@@ -100,8 +99,8 @@ class FunctionReader(
                 val moduleVariable = preciseMatcher.group(4)
                 val kotlinVariable = preciseMatcher.group(1)
 
-                val wrapFunctionVariable = WRAP_FUNCTION_PATTERN.matcher(content)?.let { matcher ->
-                    if (matcher.find()) matcher.group(1) else null
+                val wrapFunctionVariable = WRAP_FUNCTION_PATTERN.matcher(content).let { matcher ->
+                    if (matcher.find() && matcher.group(2) == kotlinVariable) matcher.group(1) else null
                 }
 
                 val sourceMap = sourceMapContent?.let {
@@ -203,16 +202,10 @@ class FunctionReader(
         }
 
         val sourcePart = ShallowSubSequence(source, offset, source.length)
-        var wrapFunctionMatcher = wrapFunctionRegex.matcher(sourcePart)
-        var isWrapped = wrapFunctionMatcher.lookingAt()
-        if (!isWrapped) {
-            info.wrapFunctionRegex?.let {
-                wrapFunctionMatcher = it.matcher(sourcePart)
-                isWrapped = wrapFunctionMatcher.lookingAt()
-            }
-        }
+        val wrapFunctionMatcher = info.wrapFunctionRegex?.matcher(sourcePart)
+        val isWrapped = wrapFunctionMatcher?.lookingAt() == true
         if (isWrapped) {
-            offset += wrapFunctionMatcher.end()
+            offset += wrapFunctionMatcher!!.end()
         }
 
         val position = info.offsetToSourceMapping[offset]
@@ -317,8 +310,6 @@ private fun replaceExternalNames(node: JsNode, replacements: Map<String, JsExpre
 
     visitor.accept(node)
 }
-
-private val wrapFunctionRegex = Regex("\\s*[a-zA-Z_$][a-zA-Z0-9_$]*\\s*\\.\\s*wrapFunction\\s*\\(\\s*").toPattern()
 
 private class ShallowSubSequence(private val underlying: CharSequence, private val start: Int, end: Int) : CharSequence {
     override val length: Int = end - start
