@@ -69,7 +69,7 @@ object DefaultAnalyzerFacade : AnalyzerFacade() {
     ): AnalysisResult {
         val moduleInfo = SourceModuleInfo(moduleName, capabilities, dependOnBuiltIns)
         val project = files.firstOrNull()?.project ?: throw AssertionError("No files to analyze")
-        val resolver = setupResolverForProject(
+        val resolver = ResolverForProjectImpl   (
                 "sources for metadata serializer",
                 ProjectContext(project), listOf(moduleInfo), { DefaultAnalyzerFacade },
                 { ModuleContent(files, GlobalSearchScope.allScope(project)) },
