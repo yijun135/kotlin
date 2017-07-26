@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.serialization.deserialization.MetadataPackageFragmen
  * A facade that is used to analyze platform independent modules in multi-platform projects.
  * See [TargetPlatform.Default]
  */
-object DefaultAnalyzerFacade : AnalyzerFacade<PlatformAnalysisParameters>() {
+object DefaultAnalyzerFacade : AnalyzerFacade() {
     private val languageVersionSettings = LanguageVersionSettingsImpl(
             LanguageVersion.LATEST_STABLE, ApiVersion.LATEST_STABLE,
             specificFeatures = mapOf(LanguageFeature.MultiPlatformProjects to LanguageFeature.State.ENABLED)
