@@ -285,10 +285,8 @@ class Kapt3KotlinGradleSubplugin : KotlinGradleSubplugin<KotlinCompile> {
         kaptTask.classesDir = classesOutputDir
 
         javaSourceSet?.output?.apply {
-            if (!tryAddClassesDir { project.files(classesOutputDir).builtBy(kaptTask) }) {
-                project.logger.warn(
-                        "$sourceSetName: Could not register kapt generated classes directory. " +
-                        "Generated classes may be missing in the resulting JAR file.")
+            if (tryAddClassesDir { project.files(classesOutputDir).builtBy(kaptTask) }) {
+                kotlinCompile.attachClassesDir { classesOutputDir }
             }
         }
 
