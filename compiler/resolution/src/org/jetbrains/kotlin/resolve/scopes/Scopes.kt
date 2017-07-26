@@ -113,6 +113,8 @@ interface ImportingScope : HierarchicalScope {
         override fun printStructure(p: Printer) {
             p.println("ImportingScope.Empty")
         }
+
+        override fun definitelyDoesNotContainName(name: Name) = true
     }
 }
 
