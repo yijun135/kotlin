@@ -65,8 +65,7 @@ class CodeToInlineBuilder(
 
         insertExplicitReceivers(codeToInline, bindingContext)
 
-        // NB: we must check in codeToInline, otherwise we get AE from addPostInsertionAction
-        if (mainExpression != null && mainExpression in codeToInline) {
+        if (mainExpression != null) {
             val functionLiteralExpression = mainExpression.unpackFunctionLiteral(true)
             if (functionLiteralExpression != null) {
                 val functionLiteralParameterTypes = getParametersForFunctionLiteral(functionLiteralExpression, bindingContext)
