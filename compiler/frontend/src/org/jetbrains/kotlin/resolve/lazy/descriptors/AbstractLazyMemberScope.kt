@@ -219,6 +219,10 @@ protected constructor(
         return result.toList()
     }
 
+    val names by lazy(LazyThreadSafetyMode.PUBLICATION) { declarationProvider.getNames() }
+
+    override fun definitelyDoesNotContainName(name: Name): Boolean = name !in names
+
     abstract fun recordLookup(name: Name, from: LookupLocation)
 
     // Do not change this, override in concrete subclasses:
