@@ -49,6 +49,8 @@ class AllUnderImportScope(
         excludedImportNames.mapNotNull { if (it.parent() == fqName) it.shortName() else null }.toSet()
     }
 
+    override fun definitelyDoesNotContainName(name: Name) = scopes.all { it.definitelyDoesNotContainName(name) }
+
     override fun getContributedDescriptors(kindFilter: DescriptorKindFilter, nameFilter: (Name) -> Boolean): List<DeclarationDescriptor> {
         val nameFilterToUse = if (excludedNames.isEmpty()) { // optimization
             nameFilter

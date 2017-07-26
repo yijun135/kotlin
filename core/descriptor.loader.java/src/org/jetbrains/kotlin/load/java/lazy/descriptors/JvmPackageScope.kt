@@ -76,6 +76,10 @@ class JvmPackageScope(
         addAll(javaScope.getVariableNames())
     }
 
+    override fun getClassifierNames() = kotlinScopes.flatMapTo(mutableSetOf()) { it.getClassifierNames() }.apply {
+        addAll(javaScope.getClassifierNames())
+    }
+
     override fun printScopeStructure(p: Printer) {
         p.println(this::class.java.simpleName, " {")
         p.pushIndent()

@@ -17,6 +17,7 @@
 package org.jetbrains.kotlin.descriptors
 
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 
 interface PackageViewDescriptor : DeclarationDescriptor {
@@ -29,6 +30,7 @@ interface PackageViewDescriptor : DeclarationDescriptor {
     val module: ModuleDescriptor
 
     val fragments: List<PackageFragmentDescriptor>
+    val allNames: Set<Name> get() = memberScope.getClassifierNames() + memberScope.getVariableNames() + memberScope.getFunctionNames()
 
     fun isEmpty(): Boolean = fragments.isEmpty()
 }

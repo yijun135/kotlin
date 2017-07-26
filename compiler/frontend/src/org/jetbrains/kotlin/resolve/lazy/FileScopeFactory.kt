@@ -216,6 +216,8 @@ class FileScopeFactory(
                 ).filter { it !is PackageViewDescriptor } // subpackages of the current package not accessible by the short name
             }
 
+            override fun definitelyDoesNotContainName(name: Name) = scope.definitelyDoesNotContainName(name)
+
             override fun toString() = "Scope for current package (${filteringKind.name})"
 
             override fun printStructure(p: Printer) {

@@ -76,6 +76,10 @@ abstract class DeserializedMemberScope protected constructor(
 
     override fun getFunctionNames() = functionNamesLazy
     override fun getVariableNames() = variableNamesLazy
+    override fun getClassifierNames() = classNames + typeAliasNames
+
+    override fun definitelyDoesNotContainName(name: Name) =
+            name !in functionNamesLazy && name !in variableNamesLazy && name !in classNames && name !in typeAliasNames
 
     private inline fun <M : MessageLite> Collection<M>.groupByName(
             getNameIndex: (M) -> Int

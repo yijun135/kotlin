@@ -32,6 +32,7 @@ interface MemberScope : ResolutionScope {
      */
     fun getFunctionNames(): Set<Name>
     fun getVariableNames(): Set<Name>
+    fun getClassifierNames(): Set<Name>
 
     /**
      * Is supposed to be used in tests and debug only
@@ -45,6 +46,7 @@ interface MemberScope : ResolutionScope {
 
         override fun getFunctionNames() = emptySet<Name>()
         override fun getVariableNames() = emptySet<Name>()
+        override fun getClassifierNames() = emptySet<Name>()
     }
 
     companion object {

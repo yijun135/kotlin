@@ -192,7 +192,8 @@ class LazyImportResolver(
         return importedScopesProvider(directive) ?: ImportingScope.Empty
     }
 
-    fun definitelyDoesNotContainName(name: Name) = indexedImports.importsForName(name).isEmpty()
+    fun definitelyDoesNotContainName(name: Name) =
+            indexedImports.importsForName(name).map(this::getImportScope).all { it.definitelyDoesNotContainName(name) }
 }
 
 class LazyImportScope(
